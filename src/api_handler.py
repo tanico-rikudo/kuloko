@@ -12,6 +12,7 @@ import requests
 import json
 
 from datetime import datetime as dt
+from datetime import  timedelta, timezone
 
 
 config_ini = configparser.ConfigParser()
@@ -27,6 +28,10 @@ class InvalidArgumentError(Exception):
     pass
 
 
+def to_jst_dt(timestamp_utc, offset=0):
+    dt_utc = dt.strptime(timestamp_utc + "+0000", '%Y-%m-%dT%H:%M:%S.%fZ%z')
+    dt_jst = dt_utc.astimezone(timezone(timedelta(hours=offset)))
+    return dt_jst
 
 class API:
 
@@ -53,6 +58,7 @@ class API:
 
     def set_config(self):
         self.allow_sym = eval(self.config.get('ALLOW_SYM'))
+        self.tz_offset = self.config.getint('TIMEZONE_OFFSET_HOUR')
         logger.info('[DONE]Set Config from loaded config')
 
     def get_url(self, url_type, sym):
@@ -105,7 +111,7 @@ class Orderbook(API):
         for _side in ['asks','bids']:
                 raw_data['data'][_side]= raw_data['data'][_side][:depth]
         
-        responsetime_dt = dt.strptime(raw_data['responsetime'],'%Y-%m-%dT%H:%M:%S.%fZ')
+        responsetime_dt = to_jst_dt(raw_data['responsetime'],self.tz_offset)
 
         if return_type is 'raw':
             return raw_data
@@ -168,7 +174,7 @@ class Ticks(API):
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data['data'][0][_item])
-            data["timestamp"] = dt.strptime(raw_data['data'][0]["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ')
+            data["timestamp"] = to_jst_dt(raw_data['data'][0]["timestamp"],self.tz_offset)
             return data
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
@@ -179,8 +185,8 @@ class Trade(API):
 
     def fetch(self, return_type='json', since_time=None, *args, **kwargs):
         tick = self.fetch_data("trade",self.sym)
-        latest_time = dt.strptime(tick['data']['list'][0]["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ')
-        since_time = dt.strptime(tick['data']['list'][-1]["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ') if since_time is None else since_time
+        latest_time = to_jst_dt(tick['data']['list'][0]["timestamp"],self.tz_offset)
+        since_time = to_jst_dt(tick['data']['list'][-1]["timestamp"],self.tz_offset) if since_time is None else since_time
         data = self.convert_shape(tick, return_type, since_time)
         logger.info("[DONE] Fetch trade.  Return_type={0}".format(return_type))
         return data, latest_time
@@ -193,7 +199,7 @@ class Trade(API):
         elif return_type in ['json','dataframe']:
             data = []
             for _trade in raw_data['data']['list']:
-                _trade["timestamp"] = dt.strptime(_trade["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ')
+                _trade["timestamp"] = to_jst_dt(_trade["timestamp"],self.tz_offset)
                 if _trade["timestamp"] > since_time:
                     _trade['price'] = float(_trade['price'])   
                     _trade['size'] = float(_trade['size'])
