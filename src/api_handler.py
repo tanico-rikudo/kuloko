@@ -13,6 +13,7 @@ import json
 
 from datetime import datetime as dt
 from datetime import  timedelta, timezone
+from .util import daylib
 
 
 config_ini = configparser.ConfigParser()
@@ -21,6 +22,8 @@ config_ini.read('./ini/config.ini', encoding='utf-8')
 logging.config.fileConfig('./ini/logconfig.ini')
 logger = logging.getLogger("KULOKO")
 
+dl = daylib.daylib()
+
 class RequestError(Exception):
     pass
 
@@ -28,16 +31,11 @@ class InvalidArgumentError(Exception):
     pass
 
 
-def to_jst_dt(timestamp_utc, offset=0):
-    dt_utc = dt.strptime(timestamp_utc + "+0000", '%Y-%m-%dT%H:%M:%S.%fZ%z')
-    dt_jst = dt_utc.astimezone(timezone(timedelta(hours=offset)))
-    return dt_jst
-
 class API:
 
     def __init__(self,sym):
         self.sym=sym
-        self.load_config(sym)
+        self.load_config()
         self.set_config()
         self.load_urls()
         pass
@@ -52,9 +50,9 @@ class API:
         print(self.url_parts)
         logger.info('[DONE]Set URL parts')
 
-    def load_config(self, sym):
-        self.config = config_ini[sym]
-        logger.info('[DONE]Load Config. Symbol={0}'.format(sym))
+    def load_config(self):
+        self.config = config_ini[self.sym]
+        logger.info('[DONE]Load Config. Symbol={0}'.format(self.sym))
 
     def set_config(self):
         self.allow_sym = eval(self.config.get('ALLOW_SYM'))
@@ -111,7 +109,7 @@ class Orderbook(API):
         for _side in ['asks','bids']:
                 raw_data['data'][_side]= raw_data['data'][_side][:depth]
         
-        responsetime_dt = to_jst_dt(raw_data['responsetime'],self.tz_offset)
+        responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
 
         if return_type is 'raw':
             return raw_data
@@ -174,7 +172,7 @@ class Ticks(API):
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data['data'][0][_item])
-            data["timestamp"] = to_jst_dt(raw_data['data'][0]["timestamp"],self.tz_offset)
+            data["timestamp"] = dl.str_utc_to_dt_offset(raw_data['data'][0]["timestamp"],self.tz_offset)
             return data
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
@@ -185,8 +183,8 @@ class Trade(API):
 
     def fetch(self, return_type='json', since_time=None, *args, **kwargs):
         tick = self.fetch_data("trade",self.sym)
-        latest_time = to_jst_dt(tick['data']['list'][0]["timestamp"],self.tz_offset)
-        since_time = to_jst_dt(tick['data']['list'][-1]["timestamp"],self.tz_offset) if since_time is None else since_time
+        latest_time = dl.str_utc_to_dt_offset(tick['data']['list'][0]["timestamp"],self.tz_offset)
+        since_time = dl.str_utc_to_dt_offset(tick['data']['list'][-1]["timestamp"],self.tz_offset) if since_time is None else since_time
         data = self.convert_shape(tick, return_type, since_time)
         logger.info("[DONE] Fetch trade.  Return_type={0}".format(return_type))
         return data, latest_time
@@ -199,7 +197,7 @@ class Trade(API):
         elif return_type in ['json','dataframe']:
             data = []
             for _trade in raw_data['data']['list']:
-                _trade["timestamp"] = to_jst_dt(_trade["timestamp"],self.tz_offset)
+                _trade["timestamp"] = dl.str_utc_to_dt_offset(_trade["timestamp"],self.tz_offset)
                 if _trade["timestamp"] > since_time:
                     _trade['price'] = float(_trade['price'])   
                     _trade['size'] = float(_trade['size'])
