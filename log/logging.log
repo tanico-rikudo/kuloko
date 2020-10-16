@@ -1,0 +1,1356 @@
+2020-10-10 21:37:47,939 outputLogging DEBUG    dd
+2020-10-10 21:40:23,426 gekota       DEBUG    dd
+2020-10-10 22:00:28,274 root  ERROR    name 'get_url' is not defined
+2020-10-10 22:00:51,694 root  ERROR    name 'url_type' is not defined
+2020-10-10 22:01:49,854 root  ERROR    'API' object has no attribute 'url_parts'
+2020-10-10 22:02:18,781 gekota INFO     [DONE]Set url parts
+2020-10-10 22:02:22,094 root  ERROR    Url_type=BTC is not allowed
+2020-10-10 22:03:16,910 gekota INFO     [DONE]Set url parts
+2020-10-10 22:03:17,108 root  ERROR    <class 'type'>
+2020-10-10 22:04:09,964 gekota INFO     [DONE]Set url parts
+2020-10-10 22:04:10,240 root  ERROR    <class 'type'>
+Traceback (most recent call last):
+  File "<ipython-input-76-f7dbfab5dea4>", line 30, in fetch_data
+    target_url = self.get_url(url_type,sym)
+  File "<ipython-input-76-f7dbfab5dea4>", line 22, in get_url
+    base_url = urllib.parse.urljoin(ENDPOINT,self.url_parts[type])
+KeyError: <class 'type'>
+2020-10-10 22:04:30,577 gekota INFO     [DONE]Set url parts
+2020-10-10 22:05:13,928 gekota INFO     [DONE]Set url parts
+2020-10-10 22:05:15,304 gekota INFO     https://api.coin.z.com/public/v1/orderbook?symbol=BTC
+2020-10-10 22:06:13,420 gekota INFO     [DONE]Set url parts
+2020-10-10 22:06:13,649 gekota INFO     https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:08:01,908 gekota INFO     [DONE]Set url parts
+2020-10-10 22:08:02,446 gekota INFO     https://api.coin.z.com/public/v1/orderbook?symbol=BTC
+2020-10-10 22:13:49,982 gekota INFO     [DONE]Set url parts
+2020-10-10 22:13:50,277 gekota INFO     https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:14:12,281 gekota INFO     [DONE]Set url parts
+2020-10-10 22:14:13,405 gekota INFO     https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:14:45,976 gekota INFO     [DONE]Set url parts
+2020-10-10 22:14:46,432 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:15:08,330 gekota INFO     [DONE]Set url parts
+2020-10-10 22:15:08,782 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:15:43,114 gekota INFO     [DONE]Set url parts
+2020-10-10 22:15:43,571 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:15:55,183 gekota INFO     [DONE]Set url parts
+2020-10-10 22:15:55,641 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:16:30,343 gekota INFO     [DONE]Set url parts
+2020-10-10 22:16:30,827 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:16:43,733 gekota INFO     [DONE]Set url parts
+2020-10-10 22:16:47,101 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:17:13,757 gekota INFO     [DONE]Set url parts
+2020-10-10 22:17:14,083 gekota INFO     [DONE] URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:17:42,945 gekota INFO     [DONE]Set url parts
+2020-10-10 22:18:57,771 gekota INFO     [DONE]Set url parts
+2020-10-10 22:18:57,962 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:19:17,417 gekota INFO     [DONE]Set url parts
+2020-10-10 22:19:18,117 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:19:18,250 gekota INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:19:48,276 gekota INFO     [DONE]Set url parts
+2020-10-10 22:19:49,226 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbook?symbol=BTC
+2020-10-10 22:20:21,539 gekota INFO     [DONE]Set url parts
+2020-10-10 22:20:22,060 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbook?symbol=BTC
+2020-10-10 22:20:35,423 gekota INFO     [DONE]Set url parts
+2020-10-10 22:20:35,584 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbook?symbol=BTC
+2020-10-10 22:20:46,662 gekota INFO     [DONE]Set url parts
+2020-10-10 22:20:47,151 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbook?symbol=BTC
+2020-10-10 22:20:47,290 gekota ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "<ipython-input-142-db3cabd5bb22>", line 38, in fetch_data
+    raise RequestError(data['messages'])
+RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-10 22:21:26,151 gekota INFO     [DONE]Set url parts
+2020-10-10 22:21:26,340 gekota INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-10 22:21:26,517 gekota INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:21:06,451 GECOTA INFO     dd
+2020-10-11 08:21:20,679 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:22:24,188 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:22:24,801 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:22:25,013 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:22:59,828 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:23:00,217 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:23:00,352 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:38:29,655 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:39:03,555 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:39:04,871 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:41:21,883 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:41:23,069 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:41:23,236 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:41:23,239 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 08:47:46,271 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:47:46,431 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:48:45,493 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:48:46,626 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:48:46,786 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:49:04,310 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:49:09,047 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:49:09,711 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:49:09,860 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:49:35,421 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:49:35,707 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:49:35,823 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:03,565 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:50:04,250 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:04,496 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:10,234 GECOTA INFO     [DONE]Set url parts
+2020-10-11 08:50:10,403 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:10,526 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:17,669 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:17,812 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 08:50:17,812 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:08:34,119 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:08:34,456 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:08:34,623 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:08:47,192 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:08:47,773 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:08:47,912 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:04,750 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:09:05,046 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:05,373 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:05,373 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:09:18,229 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:18,349 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:18,350 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:09:51,807 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:09:52,147 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:52,298 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:09:52,300 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:11:16,045 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:11:16,680 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:11:16,913 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:11:16,914 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:11:35,482 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:11:36,046 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:11:36,177 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:11:36,179 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:11:43,304 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:11:43,438 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:12:01,152 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:12:01,511 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:12:01,657 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:12:01,657 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 09:18:13,484 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:18:13,489 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:18:13,646 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:18:13,646 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 09:18:15,693 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 09:18:15,896 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 09:40:36,699 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:40:36,883 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:40:36,883 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:40:59,847 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:40:59,848 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:10,038 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:41:10,039 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:10,298 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:10,298 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 09:41:16,073 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:16,230 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:16,231 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:41:41,632 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:41:41,634 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:41,771 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:45,062 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:45,194 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:51,752 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:41:51,912 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:50:45,408 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:50:45,408 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:50:45,590 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:51:20,529 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:51:20,530 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:51:20,665 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:53:27,037 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:53:27,038 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:53:27,199 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:53:46,277 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:53:46,278 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:53:46,405 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:18,820 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:54:18,821 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:18,965 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:18,968 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:54:28,832 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:28,965 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:28,968 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:54:34,392 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:34,538 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:54:34,541 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:55:06,325 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:55:07,293 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:55:07,444 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:55:07,446 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:55:34,232 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:55:34,407 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:55:34,411 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:56:16,405 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:56:16,593 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:56:16,725 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:56:16,728 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:56:28,839 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:56:29,165 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:56:29,166 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:56:39,855 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:56:40,121 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:56:40,121 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:57:00,943 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:01,116 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:21,153 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:57:23,811 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:23,959 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:40,905 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:57:41,379 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:41,514 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:41,516 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 09:57:41,706 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:41,839 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:41,839 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 09:57:41,873 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:57:41,994 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:58:00,391 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:58:02,977 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:58:03,169 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:58:03,170 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 09:58:13,331 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:58:13,503 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:58:13,504 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 09:59:18,085 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:59:22,067 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:59:22,230 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:59:36,289 GECOTA INFO     [DONE]Set url parts
+2020-10-11 09:59:39,024 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:59:39,155 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 09:59:39,155 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:00:21,603 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:00:24,541 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:24,667 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:24,667 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:00:34,640 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:00:34,810 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:34,936 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:34,940 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:00:34,987 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:35,153 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:35,154 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:00:35,305 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:35,427 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:00:35,433 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:03:56,409 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:03:56,726 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:03:56,894 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:03:56,896 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:03:57,663 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:03:57,803 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:03:57,803 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:04:17,003 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:04:17,158 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:04:17,158 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:04:36,568 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:04:36,686 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:05:30,166 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:05:30,344 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:05:30,344 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=dataframe
+2020-10-11 10:06:11,421 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:06:11,560 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:06:11,560 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=dataframe
+2020-10-11 10:06:26,929 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:06:27,086 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:06:27,087 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=dataframe
+2020-10-11 10:18:30,178 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:18:31,594 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:18:31,754 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:18:31,757 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:18:32,315 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:18:32,454 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:18:32,455 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:18:32,524 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:18:32,660 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:18:32,660 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:19:57,121 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:19:57,298 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:19:57,535 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:19:57,540 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:19:57,611 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:19:57,817 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:19:57,817 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:19:57,835 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:19:58,078 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:19:58,079 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:20:10,815 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:11,035 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:21,344 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:20:21,515 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:21,650 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:21,652 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:20:21,712 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:21,835 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:21,836 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:20:22,186 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:22,358 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:22,358 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:20:22,659 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:22,762 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:29,177 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:29,383 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:54,963 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:20:55,129 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:55,395 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:20:55,397 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:20:58,446 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:20:58,567 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:21:28,488 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:21:28,681 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:21:41,884 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:21:42,008 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:21:42,008 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=raw
+2020-10-11 10:24:13,008 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:24:13,171 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:24:13,171 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=raw
+2020-10-11 10:24:16,305 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:24:16,463 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:24:16,463 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=json
+2020-10-11 10:29:49,078 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:29:49,248 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:29:49,249 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=json
+2020-10-11 10:31:27,465 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:31:27,788 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:27,965 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:27,967 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:31:28,085 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:28,282 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:28,283 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:31:28,889 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:29,026 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:29,026 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:31:46,593 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:46,747 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:31:46,748 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=json
+2020-10-11 10:36:26,228 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:36:38,147 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:37:57,973 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:38:21,269 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:39:18,497 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:39:42,998 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:39:44,697 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:39:44,891 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:39:45,377 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:39:45,539 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:14,599 GECOTA INFO     [DONE]Set url parts
+2020-10-11 10:40:14,640 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:15,002 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:15,008 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=dataframe
+2020-10-11 10:40:15,082 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:15,322 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:15,322 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=raw
+2020-10-11 10:40:16,327 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:16,466 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:16,466 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=seq
+2020-10-11 10:40:17,207 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:17,414 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 10:40:17,415 GECOTA INFO     [DONE] Fetch snapshot. Depth=5, Return_type=json
+2020-10-11 10:40:29,236 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:40:29,397 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 10:40:29,397 GECOTA INFO     [DONE] Fetch snapshot. Depth=None, Return_type=json
+2020-10-11 21:10:31,237 GECOTA INFO     [DONE]Set url parts
+2020-10-11 21:11:39,951 GECOTA INFO     [DONE]Set url parts
+2020-10-11 21:11:43,551 GECOTA INFO     [DONE]Set url parts
+2020-10-11 21:11:57,128 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:11:57,365 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:11:57,369 GECOTA INFO     [DONE] Fetch orderbook. Depth=5, Return_type=dataframe
+2020-10-11 21:12:00,726 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:00,872 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:00,872 GECOTA INFO     [DONE] Fetch orderbook. Depth=5, Return_type=raw
+2020-10-11 21:12:13,157 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:13,321 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:13,321 GECOTA INFO     [DONE] Fetch orderbook. Depth=5, Return_type=raw
+2020-10-11 21:12:13,846 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:14,020 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:14,021 GECOTA INFO     [DONE] Fetch orderbook. Depth=5, Return_type=seq
+2020-10-11 21:12:25,782 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:25,926 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-11 21:12:25,927 GECOTA INFO     [DONE] Fetch orderbook. Depth=5, Return_type=json
+2020-10-11 21:12:28,224 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 21:12:28,389 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 21:12:28,389 GECOTA INFO     [DONE] Fetch ticks. Depth=None, Return_type=json
+2020-10-11 21:12:57,443 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 21:12:57,584 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 21:13:35,780 GECOTA INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 21:13:35,919 GECOTA INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-11 21:13:35,919 GECOTA INFO     [DONE] Fetch ticks. Depth=None, Return_type=raw
+2020-10-11 21:25:58,477 GECOTA INFO     rw
+2020-10-11 21:26:00,842 websocket DEBUG    --- request header ---
+2020-10-11 21:26:00,852 websocket DEBUG    GET /ws/public/v1 HTTP/1.1
+Upgrade: websocket
+Host: api.coin.z.com
+Origin: http://api.coin.z.com
+Sec-WebSocket-Key: z2D361U9GKPA5LKwQHsRLA==
+Sec-WebSocket-Version: 13
+Connection: upgrade
+
+
+2020-10-11 21:26:00,867 websocket DEBUG    -----------------------
+2020-10-11 21:26:00,878 websocket DEBUG    --- response header ---
+2020-10-11 21:26:05,900 websocket DEBUG    HTTP/1.1 101 Switching Protocols
+2020-10-11 21:26:05,903 websocket DEBUG    Date: Sun, 11 Oct 2020 12:26:05 GMT
+2020-10-11 21:26:05,906 websocket DEBUG    Connection: upgrade
+2020-10-11 21:26:05,912 websocket DEBUG    Upgrade: websocket
+2020-10-11 21:26:05,914 websocket DEBUG    Sec-WebSocket-Accept: TfNaeP9YJ19PvI35Gc5KMNPI5FA=
+2020-10-11 21:26:05,924 websocket DEBUG    X-Cache: Miss from cloudfront
+2020-10-11 21:26:05,944 websocket DEBUG    Via: 1.1 1f83e59f609910f3106a87395db1ee4b.cloudfront.net (CloudFront)
+2020-10-11 21:26:05,966 websocket DEBUG    X-Amz-Cf-Pop: NRT12-C5
+2020-10-11 21:26:05,982 websocket DEBUG    X-Amz-Cf-Id: JtfQ38qiKF3siXa3V3BMJCFQ3DJ5STVc0ca7Db0JQUNitI0-eV0Bjg==
+2020-10-11 21:26:06,024 websocket DEBUG    -----------------------
+2020-10-11 21:26:06,039 websocket DEBUG    send: b'\x81\xbe\x84\x10\xe2\x15\xff2\x81z\xe9}\x83{\xe02\xd85\xa6c\x97w\xf7s\x90|\xe6u\xc09\xa42\x81}\xe5~\x8cp\xe82\xd85\xa6d\x90t\xe0u\x917\xa80\xc0f\xfd}\x80z\xe82\xd85\xa6R\xb6V\xa6m'
+2020-10-11 21:27:05,906 websocket DEBUG    send: b'\x8a\x80`\xdf\x86\xe1'
+2020-10-11 21:27:15,386 GECOTA INFO     Received:{"channel":"trades","price":"1199780","side":"BUY","size":"0.04","symbol":"BTC","timestamp":"2020-10-11T12:27:15.367Z"}
+2020-10-11 21:27:15,387 GECOTA INFO     Received:{"channel":"trades","price":"1199780","side":"SELL","size":"0.04","symbol":"BTC","timestamp":"2020-10-11T12:27:15.367Z"}
+2020-10-11 21:27:50,582 GECOTA INFO     Error:
+2020-10-11 21:27:50,582 websocket DEBUG    send: b'\x88\x82\xbco\xeb\xcd\xbf\x87'
+2020-10-11 21:27:50,628 GECOTA INFO     Close
+2020-10-11 21:29:18,385 websocket DEBUG    --- request header ---
+2020-10-11 21:29:18,387 websocket DEBUG    GET /ws/public/v1 HTTP/1.1
+Upgrade: websocket
+Host: api.coin.z.com
+Origin: http://api.coin.z.com
+Sec-WebSocket-Key: raPidR0emAxnzw2OZtaKDQ==
+Sec-WebSocket-Version: 13
+Connection: upgrade
+
+
+2020-10-11 21:29:18,389 websocket DEBUG    -----------------------
+2020-10-11 21:29:18,390 websocket DEBUG    --- response header ---
+2020-10-11 21:29:18,462 websocket DEBUG    HTTP/1.1 101 Switching Protocols
+2020-10-11 21:29:18,463 websocket DEBUG    Date: Sun, 11 Oct 2020 12:29:18 GMT
+2020-10-11 21:29:18,465 websocket DEBUG    Connection: upgrade
+2020-10-11 21:29:18,466 websocket DEBUG    Upgrade: websocket
+2020-10-11 21:29:18,467 websocket DEBUG    Sec-WebSocket-Accept: HTH9g+Qop3mfp/t8+NOmXOpFeck=
+2020-10-11 21:29:18,468 websocket DEBUG    X-Cache: Miss from cloudfront
+2020-10-11 21:29:18,470 websocket DEBUG    Via: 1.1 307a97273db3ed9a5fe03619bd9907b4.cloudfront.net (CloudFront)
+2020-10-11 21:29:18,473 websocket DEBUG    X-Amz-Cf-Pop: NRT20-C1
+2020-10-11 21:29:18,475 websocket DEBUG    X-Amz-Cf-Id: 4_crzre38P7OXguj6C1e9w4OiYviY2bs7QQUo4zRryEAAMZAgnoHQA==
+2020-10-11 21:29:18,479 websocket DEBUG    -----------------------
+2020-10-11 21:29:18,481 websocket DEBUG    send: b'\x81\xbe\x94U0l\xefwS\x03\xf98Q\x02\xf0w\nL\xb6&E\x0e\xe76B\x05\xf60\x12@\xb4wS\x04\xf5;^\t\xf8w\nL\xb6!B\r\xf00CN\xb8u\x12\x1f\xed8R\x03\xf8w\nL\xb6\x17d/\xb6('
+2020-10-11 21:30:18,465 websocket DEBUG    send: b'\x8a\x80\xfa\xa5\xac\xa2'
+2020-10-11 21:31:18,463 websocket DEBUG    send: b'\x8a\x80\x045C\xf3'
+2020-10-11 21:32:18,533 websocket DEBUG    send: b'\x8a\x805\xdc\xef\x8c'
+2020-10-11 21:33:18,467 websocket DEBUG    send: b'\x8a\x80\xaa\xb0\x11;'
+2020-10-11 21:33:57,963 websocket ERROR    error from callback <function on_message at 0x113726290>: expected bytes-like object, not str
+2020-10-11 21:33:57,980 websocket ERROR    error from callback <function on_message at 0x113726290>: expected bytes-like object, not str
+2020-10-11 21:34:03,493 websocket ERROR    error from callback <function on_message at 0x113726290>: expected bytes-like object, not str
+2020-10-11 21:34:03,496 websocket ERROR    error from callback <function on_message at 0x113726290>: expected bytes-like object, not str
+2020-10-11 21:34:18,548 websocket DEBUG    send: b'\x8a\x80\xa1\xf8\xe2\xbe'
+2020-10-11 21:35:18,461 websocket DEBUG    send: b'\x8a\x80\x08P\x98\x9a'
+2020-10-11 21:35:29,877 GECOTA INFO     Error:
+2020-10-11 21:35:29,877 websocket DEBUG    send: b'\x88\x82\xff\xf4\xdb#\xfc\x1c'
+2020-10-11 21:35:29,913 GECOTA INFO     Close Sesion
+2020-10-11 21:35:33,282 GECOTA INFO     rw
+2020-10-11 21:35:33,891 websocket DEBUG    --- request header ---
+2020-10-11 21:35:33,892 websocket DEBUG    GET /ws/public/v1 HTTP/1.1
+Upgrade: websocket
+Host: api.coin.z.com
+Origin: http://api.coin.z.com
+Sec-WebSocket-Key: r8GQni9PhzgiHB4IzgjBCg==
+Sec-WebSocket-Version: 13
+Connection: upgrade
+
+
+2020-10-11 21:35:33,893 websocket DEBUG    -----------------------
+2020-10-11 21:35:33,896 websocket DEBUG    --- response header ---
+2020-10-11 21:35:33,938 websocket DEBUG    HTTP/1.1 101 Switching Protocols
+2020-10-11 21:35:33,941 websocket DEBUG    Date: Sun, 11 Oct 2020 12:35:33 GMT
+2020-10-11 21:35:33,946 websocket DEBUG    Connection: upgrade
+2020-10-11 21:35:33,950 websocket DEBUG    Upgrade: websocket
+2020-10-11 21:35:33,951 websocket DEBUG    Sec-WebSocket-Accept: QbvWQ+zBD0Z54IYyDY/wQAmQbAM=
+2020-10-11 21:35:33,954 websocket DEBUG    X-Cache: Miss from cloudfront
+2020-10-11 21:35:33,957 websocket DEBUG    Via: 1.1 175f6538265283354cce43337b053873.cloudfront.net (CloudFront)
+2020-10-11 21:35:33,959 websocket DEBUG    X-Amz-Cf-Pop: NRT20-C1
+2020-10-11 21:35:33,962 websocket DEBUG    X-Amz-Cf-Id: jkRl7N6LHCgOzuVXshxA7efiBakIz-PmLmkUcSa-h2c5KIBhvVU1OQ==
+2020-10-11 21:35:33,965 websocket DEBUG    -----------------------
+2020-10-11 21:35:33,967 websocket DEBUG    send: b'\x81\xbe\x8a5\xc9\xdf\xf1\x17\xaa\xb0\xe7X\xa8\xb1\xee\x17\xf3\xff\xa8F\xbc\xbd\xf9V\xbb\xb6\xe8P\xeb\xf3\xaa\x17\xaa\xb7\xeb[\xa7\xba\xe6\x17\xf3\xff\xa8A\xbb\xbe\xeeP\xba\xfd\xa6\x15\xeb\xac\xf3X\xab\xb0\xe6\x17\xf3\xff\xa8w\x9d\x9c\xa8H'
+2020-10-11 21:36:33,938 websocket DEBUG    send: b'\x8a\x80\x0eF\xe3\xde'
+2020-10-11 21:37:33,937 websocket DEBUG    send: b'\x8a\x80\xb3Z\xa2\xd5'
+2020-10-11 21:38:33,941 websocket DEBUG    send: b'\x8a\x80-G\x8eW'
+2020-10-11 21:39:33,939 websocket DEBUG    send: b'\x8a\x80\x1d\xbeVy'
+2020-10-11 21:40:33,948 websocket DEBUG    send: b'\x8a\x80\xa8n\xf0T'
+2020-10-11 21:41:05,723 GECOTA INFO     Error:
+2020-10-11 21:41:05,723 websocket DEBUG    send: b'\x88\x82\xf8\xd6\x96\xfb\xfb>'
+2020-10-11 21:41:05,758 GECOTA INFO     Close Sesion
+2020-10-11 21:41:13,479 websocket ERROR    error from callback <bound method Trade.on_error of <__main__.Trade object at 0x1133cf750>>: on_error() missing 1 required positional argument: 'error'
+2020-10-11 21:41:13,489 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x1133cf750>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:41:58,206 websocket ERROR    error from callback <bound method Trade.on_error of <__main__.Trade object at 0x114034c50>>: on_error() missing 1 required positional argument: 'error'
+2020-10-11 21:41:58,214 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x114034c50>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:00,950 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:01,454 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:01,455 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:01,958 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:01,959 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:02,464 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:02,465 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:02,968 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:02,969 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:03,470 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:03,471 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:03,975 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:03,975 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:04,480 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:04,480 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:04,984 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:04,985 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:05,486 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:05,488 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:05,987 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:05,988 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:06,495 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:06,496 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:07,002 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:07,003 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:07,508 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:07,508 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:08,012 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:08,013 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:08,517 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:08,518 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:09,021 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:09,021 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:09,523 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:09,524 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:10,026 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:10,026 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:10,531 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:10,532 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:11,036 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:11,037 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:11,541 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:11,541 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:12,047 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:12,047 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:12,548 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:12,548 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:13,053 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:13,054 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:13,558 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:13,559 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:14,068 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:14,072 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:14,573 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:14,573 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:15,075 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:15,075 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:15,581 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:15,581 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:16,086 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:16,087 websocket ERROR    error from callback <bound method Trade.on_close of <__main__.Trade object at 0x113f40490>>: on_close() missing 1 required positional argument: 'ws'
+2020-10-11 21:43:48,555 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:49,057 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:49,563 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:50,069 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:50,574 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:51,080 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:51,585 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:52,090 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:52,594 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:53,098 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:53,600 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:54,104 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:54,606 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:55,109 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:55,615 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:56,118 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:56,622 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:57,124 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:57,626 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:58,131 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:58,633 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:59,137 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:43:59,640 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:00,144 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:00,649 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:01,154 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:01,659 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:02,165 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:02,670 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:03,174 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:03,675 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:04,180 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:04,682 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:05,186 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:05,690 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:06,193 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:06,697 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:07,200 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:07,702 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:08,208 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:08,712 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:09,214 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:09,716 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:10,219 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:10,736 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:11,239 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:11,743 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:12,249 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:12,755 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:13,259 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:13,760 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:14,265 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:14,770 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:15,275 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:15,777 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:16,281 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:16,789 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:17,294 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:17,796 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:18,298 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:18,800 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:19,304 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:19,810 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:20,314 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:20,818 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:21,323 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:21,828 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:22,329 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:22,830 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:23,334 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:23,838 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:24,342 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:24,846 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:25,351 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:25,856 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:26,367 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:26,872 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:27,378 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:27,880 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:28,386 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:28,890 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:29,395 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:29,896 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:30,399 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:30,901 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:31,406 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:31,907 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:32,409 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:32,910 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:33,415 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:33,917 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:34,421 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:34,922 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:35,424 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:35,930 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:36,435 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:36,938 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:37,443 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:37,945 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:38,446 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:38,951 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:39,454 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:39,959 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:40,463 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:40,969 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:41,474 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:41,975 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:42,480 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:42,985 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:43,487 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:43,990 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:44,495 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:44,996 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:45,499 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:46,001 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:46,503 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:47,009 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:47,511 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:48,017 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:48,536 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:49,042 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:49,546 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:50,051 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:50,554 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:51,056 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:51,560 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:52,066 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:52,569 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:53,072 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:53,577 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:54,080 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:54,582 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:55,087 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:55,590 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:56,094 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:56,598 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:57,100 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:57,602 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:58,106 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:58,610 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:59,116 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:44:59,619 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:00,122 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:00,626 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:01,131 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:01,636 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:02,139 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:02,644 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:03,146 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:03,651 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:04,156 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:04,659 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:05,161 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:05,667 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:06,172 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:06,678 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:07,183 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:07,687 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:08,192 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:08,693 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:09,199 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:09,702 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:10,205 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:10,707 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:11,209 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:11,714 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:12,218 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:12,722 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:13,235 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:13,738 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:14,239 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:14,744 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:15,246 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:15,750 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:16,252 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:16,758 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:17,263 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:17,767 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:18,268 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:18,773 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:19,278 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:19,783 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:20,286 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:20,790 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:21,295 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:21,797 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:22,302 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:22,805 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:23,307 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:23,812 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:24,318 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:24,824 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:25,329 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:25,834 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:26,335 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:26,838 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:27,341 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:27,846 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:28,347 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:28,852 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:29,354 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:29,859 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:30,362 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:30,868 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:31,377 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:31,880 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:32,385 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:32,890 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:33,392 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:33,897 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:34,403 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:34,904 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:35,405 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:35,909 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:36,411 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:36,913 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:37,417 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:37,922 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:38,430 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:38,934 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:39,440 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:39,944 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:40,445 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:40,947 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:41,449 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:41,953 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:42,457 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:42,967 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:43,489 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:43,883 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:43,999 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:44,387 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:44,502 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:44,891 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:45,006 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:45,395 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:45,509 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:45,902 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:46,013 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:46,402 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:46,518 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:46,907 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:47,023 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:47,407 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:47,528 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:47,912 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:48,031 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:48,417 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:48,534 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:48,922 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:49,036 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:49,426 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:49,542 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:49,930 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:50,047 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:50,434 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:50,551 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:50,936 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:51,056 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:51,437 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:51,562 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:51,941 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:52,068 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:52,445 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:52,571 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:52,950 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:53,073 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:53,455 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:53,578 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:53,956 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:54,082 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:54,458 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:54,587 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:54,963 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:55,090 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:55,468 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:55,592 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:55,970 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:56,097 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:56,481 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:56,602 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:56,985 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:57,106 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:57,491 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:57,611 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:57,991 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:58,115 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:58,495 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:58,620 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:59,001 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:59,123 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:59,512 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:45:59,625 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:00,017 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:00,130 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:00,522 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:00,633 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:01,027 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:01,136 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:01,530 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:01,641 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:02,031 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:02,144 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:02,533 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:02,649 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:03,037 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:03,150 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:03,540 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:03,651 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:04,043 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:04,152 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:04,544 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:04,657 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:05,049 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:05,159 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:05,551 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:05,664 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:06,054 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:06,168 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:06,555 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:06,672 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:07,059 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:07,177 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:07,563 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:07,682 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:08,067 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:08,183 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:08,572 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:08,687 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:09,075 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:09,190 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:09,580 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:09,695 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:10,082 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:10,196 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:10,587 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:10,701 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:11,091 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:11,205 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:11,594 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:11,709 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:12,098 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:12,214 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:12,602 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:12,718 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:13,107 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:13,223 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:13,613 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:13,725 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:14,117 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:14,230 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:14,622 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:14,736 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:15,124 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:15,241 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:15,631 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:15,745 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:16,134 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:16,246 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:16,635 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:16,750 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:17,138 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:17,256 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:17,643 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:17,759 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:18,145 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:18,264 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:18,648 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:18,768 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:19,153 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:19,273 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:19,655 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:19,777 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:20,157 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:20,280 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:20,658 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:20,786 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:21,162 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:21,289 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:21,667 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:21,790 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:22,172 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:22,294 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:22,676 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:22,801 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:23,183 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:23,302 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:23,688 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:23,804 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:24,194 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:24,306 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:24,697 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:24,807 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:25,202 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:25,312 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:25,706 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:25,818 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:26,210 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:26,319 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:26,715 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:26,823 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:27,223 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:27,324 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:27,728 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:27,831 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:28,234 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:28,335 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:28,735 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:28,840 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:29,239 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:29,341 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:29,740 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:29,842 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:30,240 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:30,347 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:30,745 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:30,850 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:31,247 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:31,355 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:31,750 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:31,860 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:32,255 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:32,364 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:32,759 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:32,868 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:33,263 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:33,373 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:33,767 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:33,877 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:34,272 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:34,383 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:34,772 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:34,886 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:35,277 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:35,390 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:35,782 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:35,892 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:36,285 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:36,400 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:36,902 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:37,408 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:37,942 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:38,462 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:38,979 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:39,491 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:40,004 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:46:40,549 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:54:04,597 GECOTA INFO     Socket Connected
+2020-10-11 21:54:05,192 GECOTA INFO     Socket Connected
+2020-10-11 21:54:45,151 GECOTA INFO     Socket Connected
+2020-10-11 21:54:49,431 GECOTA INFO     Socket Connected
+2020-10-11 21:55:14,482 GECOTA INFO     Socket Connected
+2020-10-11 21:55:15,591 GECOTA INFO     Socket Connected
+2020-10-11 21:55:48,636 GECOTA INFO     Socket Connected
+2020-10-11 21:55:49,596 GECOTA INFO     Socket Connected
+2020-10-11 21:55:59,690 GECOTA INFO     Socket Connected
+2020-10-11 21:56:00,314 GECOTA INFO     Socket Connected
+2020-10-11 21:57:33,999 GECOTA INFO     Socket Connected
+2020-10-11 21:57:34,752 GECOTA INFO     Socket Connected
+2020-10-11 21:57:57,300 GECOTA INFO     Socket Connected
+2020-10-11 21:57:57,934 GECOTA INFO     Socket Connected
+2020-10-11 21:59:02,156 GECOTA INFO     Socket Connected
+2020-10-11 21:59:02,625 GECOTA INFO     Socket Connected
+2020-10-11 21:59:03,127 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:59:03,632 GECOTA INFO     Socket Connected
+2020-10-11 21:59:07,979 GECOTA INFO     Socket Connected
+2020-10-11 21:59:08,534 GECOTA INFO     Socket Connected
+2020-10-11 21:59:08,886 GECOTA ERROR    Error. Try reconnect
+2020-10-11 21:59:09,390 GECOTA INFO     Socket Connected
+2020-10-11 21:59:38,898 GECOTA INFO     Socket Connected
+2020-10-11 21:59:39,920 GECOTA INFO     Socket Connected
+2020-10-11 21:59:40,611 GECOTA ERROR    Error. Try reconnect url is invalid
+2020-10-11 21:59:41,115 GECOTA INFO     Socket Connected
+2020-10-11 21:59:57,932 GECOTA INFO     Socket Connected
+2020-10-11 21:59:58,920 GECOTA INFO     Socket Connected
+2020-10-11 22:00:00,353 GECOTA INFO     open
+2020-10-11 22:01:22,457 GECOTA ERROR    Error. Try reconnect 
+2020-10-11 22:01:22,989 GECOTA INFO     Socket Connected
+2020-10-13 22:40:32,432 KULOKO INFO     Socket Connected
+2020-10-13 22:47:03,786 KULOKO INFO     Socket Connected
+2020-10-13 22:47:04,209 KULOKO INFO     Socket Connected
+2020-10-13 22:47:06,955 KULOKO INFO     open
+2020-10-13 22:47:18,743 KULOKO ERROR    Error. Try reconnect 
+2020-10-13 22:47:19,291 KULOKO INFO     Socket Connected
+2020-10-13 22:52:40,881 KULOKO INFO     Socket Connected
+2020-10-13 22:52:43,511 KULOKO INFO     Socket Connected
+2020-10-13 22:52:43,961 KULOKO INFO     open
+2020-10-13 22:52:58,762 KULOKO ERROR    Error. Try reconnect 
+2020-10-13 22:53:40,167 KULOKO INFO     Socket Connected
+2020-10-13 22:53:40,362 KULOKO INFO     Socket Connected
+2020-10-13 22:56:54,517 KULOKO INFO     Socket Connected
+2020-10-13 22:56:55,479 KULOKO INFO     Socket Connected
+2020-10-13 22:56:57,016 KULOKO INFO     open
+2020-10-13 22:58:56,795 KULOKO INFO     Received:{"channel":"trades","price":"1199195","side":"BUY","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T13:58:56.760Z"}
+2020-10-13 22:58:56,796 KULOKO INFO     Received:{"channel":"trades","price":"1199195","side":"SELL","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T13:58:56.760Z"}
+2020-10-13 22:59:25,353 KULOKO INFO     Received:{"channel":"trades","price":"1199940","side":"BUY","size":"0.2","symbol":"BTC","timestamp":"2020-10-13T13:59:24.962Z"}
+2020-10-13 22:59:25,354 KULOKO INFO     Received:{"channel":"trades","price":"1199940","side":"SELL","size":"0.2","symbol":"BTC","timestamp":"2020-10-13T13:59:24.962Z"}
+2020-10-13 22:59:29,963 KULOKO INFO     Received:{"channel":"trades","price":"1200000","side":"BUY","size":"0.01","symbol":"BTC","timestamp":"2020-10-13T13:59:29.871Z"}
+2020-10-13 22:59:29,965 KULOKO INFO     Received:{"channel":"trades","price":"1200000","side":"SELL","size":"0.01","symbol":"BTC","timestamp":"2020-10-13T13:59:29.871Z"}
+2020-10-13 22:59:38,561 KULOKO ERROR    Error. Try reconnect 
+2020-10-13 23:35:08,394 KULOKO INFO     Socket Connected
+2020-10-13 23:35:09,190 KULOKO INFO     Socket Connected
+2020-10-13 23:35:11,092 KULOKO INFO     open
+2020-10-13 23:35:58,134 KULOKO ERROR    Error. Try reconnect 
+2020-10-13 23:44:59,940 KULOKO INFO     Socket Connected
+2020-10-13 23:45:01,981 KULOKO INFO     Socket Connected
+2020-10-13 23:45:13,205 KULOKO INFO     Socket Connected
+2020-10-13 23:45:14,039 KULOKO INFO     Socket Connected
+2020-10-13 23:45:15,171 KULOKO INFO     Start to subscribe
+2020-10-13 23:45:20,972 KULOKO INFO     open
+2020-10-13 23:45:58,878 KULOKO INFO     Received:{"channel":"trades","price":"1201767","side":"BUY","size":"0.02","symbol":"BTC","timestamp":"2020-10-13T14:45:58.942Z"}
+2020-10-13 23:45:58,883 KULOKO INFO     Received:{"channel":"trades","price":"1201766","side":"BUY","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T14:45:58.942Z"}
+2020-10-13 23:47:56,583 KULOKO INFO     Received:{"channel":"trades","price":"1201940","side":"SELL","size":"0.0989","symbol":"BTC","timestamp":"2020-10-13T14:47:56.576Z"}
+2020-10-13 23:47:56,583 KULOKO INFO     Received:{"channel":"trades","price":"1201940","side":"BUY","size":"0.0989","symbol":"BTC","timestamp":"2020-10-13T14:47:56.576Z"}
+2020-10-13 23:48:15,271 KULOKO INFO     Received:{"channel":"trades","price":"1202505","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:48:15.171Z"}
+2020-10-13 23:48:15,273 KULOKO INFO     Received:{"channel":"trades","price":"1202505","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:48:15.171Z"}
+2020-10-13 23:49:32,447 KULOKO INFO     Received:{"channel":"trades","price":"1202600","side":"BUY","size":"0.0001","symbol":"BTC","timestamp":"2020-10-13T14:49:32.480Z"}
+2020-10-13 23:49:32,447 KULOKO INFO     Received:{"channel":"trades","price":"1202600","side":"SELL","size":"0.0001","symbol":"BTC","timestamp":"2020-10-13T14:49:32.480Z"}
+2020-10-13 23:51:56,622 KULOKO INFO     Received:{"channel":"trades","price":"1202283","side":"BUY","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T14:51:56.183Z"}
+2020-10-13 23:51:56,622 KULOKO INFO     Received:{"channel":"trades","price":"1202283","side":"SELL","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T14:51:56.183Z"}
+2020-10-13 23:53:42,082 KULOKO INFO     Received:{"channel":"trades","price":"1201766","side":"SELL","size":"0.2","symbol":"BTC","timestamp":"2020-10-13T14:53:42.091Z"}
+2020-10-13 23:53:42,083 KULOKO INFO     Received:{"channel":"trades","price":"1201766","side":"BUY","size":"0.2","symbol":"BTC","timestamp":"2020-10-13T14:53:42.091Z"}
+2020-10-13 23:54:56,219 KULOKO INFO     Received:{"channel":"trades","price":"1201540","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:54:56.184Z"}
+2020-10-13 23:54:56,220 KULOKO INFO     Received:{"channel":"trades","price":"1201540","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:54:56.184Z"}
+2020-10-13 23:56:51,383 KULOKO INFO     Received:{"channel":"trades","price":"1202490","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:56:51.454Z"}
+2020-10-13 23:56:51,384 KULOKO INFO     Received:{"channel":"trades","price":"1202490","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:56:51.454Z"}
+2020-10-13 23:57:00,480 KULOKO INFO     Received:{"channel":"trades","price":"1202443","side":"BUY","size":"0.0019","symbol":"BTC","timestamp":"2020-10-13T14:57:00.573Z"}
+2020-10-13 23:57:00,481 KULOKO INFO     Received:{"channel":"trades","price":"1202443","side":"SELL","size":"0.0019","symbol":"BTC","timestamp":"2020-10-13T14:57:00.573Z"}
+2020-10-13 23:57:05,238 KULOKO INFO     Received:{"channel":"trades","price":"1202426","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:57:05.052Z"}
+2020-10-13 23:57:05,239 KULOKO INFO     Received:{"channel":"trades","price":"1202426","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T14:57:05.052Z"}
+2020-10-13 23:58:34,118 KULOKO INFO     Socket closed
+2020-10-14 00:00:04,211 KULOKO INFO     Socket Connected
+2020-10-14 00:00:07,435 KULOKO INFO     Socket Connected
+2020-10-14 00:00:08,929 KULOKO INFO     Start to subscribe
+2020-10-14 00:00:09,285 KULOKO INFO     Socket opened
+2020-10-14 00:00:14,893 KULOKO INFO     Received:{"channel":"trades","price":"1202989","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T15:00:14.779Z"}
+2020-10-14 00:00:14,893 KULOKO INFO     Received:{"channel":"trades","price":"1202989","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T15:00:14.779Z"}
+2020-10-14 00:00:33,510 KULOKO INFO     Received:{"channel":"trades","price":"1202890","side":"BUY","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T15:00:33.297Z"}
+2020-10-14 00:00:33,510 KULOKO INFO     Received:{"channel":"trades","price":"1202890","side":"SELL","size":"0.1","symbol":"BTC","timestamp":"2020-10-13T15:00:33.297Z"}
+2020-10-14 00:00:44,160 KULOKO INFO     Received:{"channel":"trades","price":"1202839","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T15:00:44.082Z"}
+2020-10-14 00:00:44,161 KULOKO INFO     Received:{"channel":"trades","price":"1202839","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T15:00:44.082Z"}
+2020-10-14 00:00:47,538 KULOKO INFO     Received:{"channel":"trades","price":"1202820","side":"BUY","size":"0.0005","symbol":"BTC","timestamp":"2020-10-13T15:00:47.483Z"}
+2020-10-14 00:00:47,538 KULOKO INFO     Received:{"channel":"trades","price":"1202820","side":"SELL","size":"0.0005","symbol":"BTC","timestamp":"2020-10-13T15:00:47.483Z"}
+2020-10-14 00:00:53,274 KULOKO INFO     Received:{"channel":"trades","price":"1202794","side":"BUY","size":"0.0011","symbol":"BTC","timestamp":"2020-10-13T15:00:53.301Z"}
+2020-10-14 00:00:53,275 KULOKO INFO     Received:{"channel":"trades","price":"1202794","side":"SELL","size":"0.0011","symbol":"BTC","timestamp":"2020-10-13T15:00:53.301Z"}
+2020-10-14 00:01:18,700 KULOKO INFO     Websocket disconnected
+2020-10-14 00:01:18,706 KULOKO INFO     Socket closed
+2020-10-14 00:01:36,345 KULOKO INFO     Socket Connected
+2020-10-14 00:01:36,584 KULOKO INFO     Socket Connected
+2020-10-14 00:01:37,386 KULOKO INFO     Start to subscribe
+2020-10-14 00:01:37,770 KULOKO INFO     Socket opened
+2020-10-14 00:03:45,639 KULOKO INFO     Received:{"channel":"trades","price":"1201694","side":"BUY","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T15:03:45.612Z"}
+2020-10-14 00:03:45,639 KULOKO INFO     Received:{"channel":"trades","price":"1201694","side":"SELL","size":"0.001","symbol":"BTC","timestamp":"2020-10-13T15:03:45.612Z"}
+2020-10-14 00:05:12,575 KULOKO INFO     Received:{"channel":"trades","price":"1201540","side":"BUY","size":"0.049","symbol":"BTC","timestamp":"2020-10-13T15:05:12.446Z"}
+2020-10-14 19:16:33,062 KULOKO INFO     [DONE]Set url parts
+2020-10-14 19:16:33,498 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:33,716 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:33,718 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=dataframe
+2020-10-14 19:16:34,427 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:34,498 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:34,498 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=raw
+2020-10-14 19:16:34,982 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:35,074 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:35,075 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=seq
+2020-10-14 19:16:35,476 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:35,554 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:16:35,555 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=json
+2020-10-14 19:16:36,335 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-14 19:16:36,410 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-14 19:16:36,411 KULOKO INFO     [DONE] Fetch ticks. Depth=None, Return_type=json
+2020-10-14 19:16:36,881 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-14 19:16:36,930 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-14 19:16:36,931 KULOKO INFO     [DONE] Fetch ticks. Depth=None, Return_type=raw
+2020-10-14 19:18:00,219 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:18:00,300 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:18:36,224 KULOKO INFO     Socket Connected
+2020-10-14 19:18:42,705 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:18:42,840 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:18:46,746 KULOKO INFO     [DONE]Set url parts
+2020-10-14 19:18:47,433 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:18:47,577 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:18:47,580 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=dataframe
+2020-10-14 19:18:51,529 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:18:51,590 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:19:22,991 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:19:23,110 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:19:26,051 KULOKO INFO     [DONE]Set url parts
+2020-10-14 19:19:29,309 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:19:29,383 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:19:31,247 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:19:31,344 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:19:51,758 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:19:52,105 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:21:04,495 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:21:04,610 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:21:13,276 KULOKO INFO     [DONE]Set url parts
+2020-10-14 19:21:17,030 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:21:17,157 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:21:38,825 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:21:38,884 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:21:38,884 KULOKO INFO     [DONE] Fetch trade.  Return_type=raw
+2020-10-14 19:21:59,460 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trade?symbol=BTC
+2020-10-14 19:21:59,522 KULOKO ERROR    [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+Traceback (most recent call last):
+  File "/Users/macico/Dropbox/kaggle/btc/src/api_handler.py", line 62, in fetch_data
+    raise RequestError(data['messages'])
+src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'Forbidden'}]
+2020-10-14 19:21:59,523 KULOKO INFO     [DONE] Fetch trade.  Return_type=raw
+2020-10-14 19:22:02,873 KULOKO INFO     [DONE]Set url parts
+2020-10-14 19:22:03,172 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:22:03,240 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 19:22:03,242 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=dataframe
+2020-10-14 19:22:06,741 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:22:06,832 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:22:06,832 KULOKO INFO     [DONE] Fetch trade.  Return_type=raw
+2020-10-14 19:22:34,118 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:22:34,209 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:22:40,352 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:22:40,442 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:22:40,443 KULOKO INFO     [DONE] Fetch trade.  Return_type=raw
+2020-10-14 19:23:39,308 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:23:39,396 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:23:39,396 KULOKO INFO     [DONE] Fetch trade.  Return_type=raw
+2020-10-14 19:23:44,836 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:23:44,935 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:23:44,937 KULOKO INFO     [DONE] Fetch trade.  Return_type=json
+2020-10-14 19:24:58,666 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:24:58,775 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:24:58,776 KULOKO INFO     [DONE] Fetch trade.  Return_type=json
+2020-10-14 19:25:03,168 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:25:03,274 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:25:03,276 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:25:21,177 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:25:21,262 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:25:21,266 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:27:04,846 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:27:04,943 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:27:04,949 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:32:53,148 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:32:55,908 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:34:08,667 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:34:08,757 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:34:08,761 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:37:46,978 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:37:47,073 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:39:29,716 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:39:29,829 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:40:46,937 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:40:47,028 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:40:47,028 KULOKO INFO     dataframe
+2020-10-14 19:42:19,276 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:42:19,419 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:42:19,420 KULOKO INFO     None
+2020-10-14 19:42:19,420 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,420 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,420 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,420 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,421 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,421 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,421 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,421 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,422 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,423 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,423 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,423 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,423 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,423 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,423 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,424 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,425 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,426 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,426 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,426 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,426 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,426 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,427 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,428 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,429 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,430 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,431 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,431 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,431 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,431 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,431 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,431 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,432 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,435 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,435 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,436 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,437 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,438 KULOKO INFO     2020-10-14 10:35:40.387000
+2020-10-14 19:42:19,438 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:42:33,131 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:42:33,221 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:42:33,224 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:46:12,186 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:12,262 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:22,813 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:22,912 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:22,914 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:46:32,488 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:32,554 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:32,556 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:46:48,263 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:48,337 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:48,340 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:46:58,427 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:58,508 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:46:58,510 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:47:02,010 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:47:02,097 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:47:02,100 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 19:47:05,083 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:47:05,164 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-14 19:47:05,167 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-14 20:09:09,693 KULOKO INFO     [DONE]Set url parts
+2020-10-14 20:09:09,991 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 20:09:10,465 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 20:09:10,468 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=dataframe
+2020-10-14 20:09:31,082 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 20:09:31,335 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 20:09:31,336 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=seq
+2020-10-14 20:09:34,374 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 20:09:34,812 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-14 20:09:34,813 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=json
