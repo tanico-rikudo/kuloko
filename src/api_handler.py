@@ -1,16 +1,22 @@
-import requests
-import json
+# coding: utf-8
+
 import urllib.parse
 import logging
 import logging.config
+import configparser
 
 import pandas as pd
 import numpy as np
 
+import requests
+import json
+
 from datetime import datetime as dt
 
 
-ALLOW_SYM=['BTC']
+config_ini = configparser.ConfigParser()
+config_ini.read('./ini/config.ini', encoding='utf-8')
+
 logging.config.fileConfig('./ini/logconfig.ini')
 logger = logging.getLogger("KULOKO")
 
@@ -24,24 +30,29 @@ class InvalidArgumentError(Exception):
 
 class API:
 
-    def __init__(self):
+    def __init__(self,sym):
+        self.load_config(sym)
+        self.set_config()
         self.load_urls()
         pass
 
     def load_urls(self):
-        # todo: move onto config
-
-        ENDPOINT = 'https://api.coin.z.com'
-        TICK     = '/public/v1/ticker'
-        TRADE     = '/public/v1/trades'
-        ORDERBOOKS     = '/public/v1/orderbooks'
         self.url_parts = {
-            'endpoint':ENDPOINT,
-            'tick':TICK,
-            'orderbooks':ORDERBOOKS,
-            'trade':TRADE,
+            'endpoint':self.config.get('ENDPOINT_URL'),
+            'tick':self.config.get('TICK_URL'),
+            'orderbooks':self.config.get('ORDERBOOKS_URL'),
+            'trade':self.config.get('TRADE_URL'),
         }
-        logger.info('[DONE]Set url parts')
+
+        logger.info('[DONE]Set URL parts')
+
+    def load_config(self, sym):
+        self.config = config_ini[sym]
+        logger.info('[DONE]Load Config. Symbol={0}'.format(sym))
+
+    def set_config(self):
+        self.allow_sym = eval(self.config.get('ALLOW_SYM'))
+        logger.info('[DONE]Set Config from loaded config')
 
     def get_url(self, url_type, sym):
         if url_type not in self.url_parts.keys():
@@ -137,7 +148,7 @@ class Orderbook():
     def sym(self, sym):
         if sym is None:
             raise TypeError('Cannot accept None type')
-        if sym not in ALLOW_SYM:
+        if sym not in self.allow_sym:
             raise Exception("sym={0} is not allowed".format(sym))
         self.__sym = sym
 
