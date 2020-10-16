@@ -31,6 +31,7 @@ class InvalidArgumentError(Exception):
 class API:
 
     def __init__(self,sym):
+        self.sym=sym
         self.load_config(sym)
         self.set_config()
         self.load_urls()
@@ -43,7 +44,7 @@ class API:
             'orderbooks':self.config.get('ORDERBOOKS_URL'),
             'trade':self.config.get('TRADE_URL'),
         }
-
+        print(self.url_parts)
         logger.info('[DONE]Set URL parts')
 
     def load_config(self, sym):
@@ -79,16 +80,14 @@ class API:
 
         return data
 
-# todo: API is as parent 
-class Orderbook():
-    def __init__(self):
-        self.__sym = None
-        self.__rest_api = None 
+class Orderbook(API):
+    def __init__(self,sym):
+        super().__init__(sym)
         self.__depth=-1 # default: no limit
 
     def fetch(self, depth=None, return_type='dataframe', *args, **kwargs):
 
-        orderbook = self.__rest_api.fetch_data("orderbooks",self.__sym)
+        orderbook = self.fetch_data("orderbooks",self.sym)
 
         if depth is None:
             depth = self.__depth
@@ -139,19 +138,6 @@ class Orderbook():
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
 
-        
-    @property
-    def sym(self):
-        pass
-
-    @sym.setter
-    def sym(self, sym):
-        if sym is None:
-            raise TypeError('Cannot accept None type')
-        if sym not in self.allow_sym:
-            raise Exception("sym={0} is not allowed".format(sym))
-        self.__sym = sym
-
     @property
     def depth(self):
         pass
@@ -164,24 +150,13 @@ class Orderbook():
             raise TypeError('Cannot accept {0} type'.format(type(sym)))
         self.__depth = depth
 
-    @property
-    def rest_api(self):
-        pass
 
-    @rest_api.setter
-    def rest_api(self, api):
-        if api is None:
-            raise TypeError('invalid api obj')
-        self.__rest_api = api
-
-
-class Ticks():
-    def __init__(self):
-        self.__sym = None
-        self.__rest_api = None 
+class Ticks(API):
+    def __init__(self,sym):
+        super().__init__(sym)
 
     def fetch(self, depth=None, return_type='json', *args, **kwargs):
-        tick = self.__rest_api.fetch_data("tick",self.__sym)
+        tick = self.fetch_data("tick",self.sym)
         data = self.convert_shape(tick,return_type)
         logger.info("[DONE] Fetch ticks. Depth={0}, Return_type={1}".format(depth, return_type))
         return data
@@ -197,79 +172,13 @@ class Ticks():
             return data
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
-        
-    @property
-    def sym(self):
-        pass
 
-    @sym.setter
-    def sym(self, sym):
-        if sym is None:
-            raise TypeError('Cannot accept None type')
-        if sym not in ALLOW_SYM:
-            raise Exception("sym={0} is not allowed".format(sym))
-        self.__sym = sym
-
-    @property
-    def rest_api(self):
-        pass
-
-    @rest_api.setter
-    def rest_api(self, api):
-        if api is None:
-            raise TypeError('invalid api obj')
-        self.__rest_api = api
-    def __init__(self):
-        self.__sym = None
-        self.__rest_api = None 
-
-    def fetch(self, depth=None, return_type='json', *args, **kwargs):
-        tick = self.__rest_api.fetch_data("tick",self.__sym)
-        data = self.convert_shape(tick,return_type)
-        logger.info("[DONE] Fetch ticks. Depth={0}, Return_type={1}".format(depth, return_type))
-        return data
-
-    def convert_shape(self, raw_data,return_type):
-        if return_type is 'raw':
-            return raw_data
-        elif return_type is 'json':
-            data = {}
-            for _item in ['ask','bid','high','last','low','volume']:
-                data[_item] =float(raw_data['data'][0][_item])
-            data["timestamp"] = dt.strptime(raw_data['data'][0]["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ')
-            return data
-        else:
-            raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
-        
-    @property
-    def sym(self):
-        pass
-
-    @sym.setter
-    def sym(self, sym):
-        if sym is None:
-            raise TypeError('Cannot accept None type')
-        if sym not in ALLOW_SYM:
-            raise Exception("sym={0} is not allowed".format(sym))
-        self.__sym = sym
-
-    @property
-    def rest_api(self):
-        pass
-
-    @rest_api.setter
-    def rest_api(self, api):
-        if api is None:
-            raise TypeError('invalid api obj')
-        self.__rest_api = api
-
-class Trade():
-    def __init__(self):
-        self.__sym = None
-        self.__rest_api = None 
+class Trade(API):
+    def __init__(self,sym):
+        super().__init__(sym)
 
     def fetch(self, return_type='json', since_time=None, *args, **kwargs):
-        tick = self.__rest_api.fetch_data("trade",self.__sym)
+        tick = self.fetch_data("trade",self.sym)
         latest_time = dt.strptime(tick['data']['list'][0]["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ')
         since_time = dt.strptime(tick['data']['list'][-1]["timestamp"],'%Y-%m-%dT%H:%M:%S.%fZ') if since_time is None else since_time
         data = self.convert_shape(tick, return_type, since_time)
@@ -296,24 +205,3 @@ class Trade():
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
         
-    @property
-    def sym(self):
-        pass
-
-    @sym.setter
-    def sym(self, sym):
-        if sym is None:
-            raise TypeError('Cannot accept None type')
-        if sym not in ALLOW_SYM:
-            raise InvalidArgumentError("sym={0} is not allowed".format(sym))
-        self.__sym = sym
-
-    @property
-    def rest_api(self):
-        pass
-
-    @rest_api.setter
-    def rest_api(self, api):
-        if api is None:
-            raise TypeError('invalid api obj')
-        self.__rest_api = api

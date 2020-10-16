@@ -1371,3 +1371,96 @@ src.api_handler.RequestError: [{'message_code': 'ERR-5204', 'message_string': 'F
 2020-10-16 19:39:51,587 KULOKO INFO     ['BTC']
 2020-10-16 19:39:51,588 KULOKO INFO     [DONE]Set Config from loaded config
 2020-10-16 19:39:51,589 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:31:15,733 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:31:15,733 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:31:15,734 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:31:19,133 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:31:19,133 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:31:19,134 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:31:45,751 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:31:45,751 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:31:45,751 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:32:18,751 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:32:18,755 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:32:18,755 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:32:22,963 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:32:22,963 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:32:22,963 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:35:19,792 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:35:19,793 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:35:19,793 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:35:19,908 KULOKO INFO     [DONE] Get URL string=?symbol=BTC
+2020-10-16 21:35:22,634 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:35:22,634 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:35:22,634 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:35:31,442 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:35:31,442 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:35:31,442 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:35:34,749 KULOKO INFO     [DONE] Get URL string=?symbol=BTC
+2020-10-16 21:36:54,510 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:36:54,510 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:36:54,511 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:36:59,408 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:36:59,408 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:36:59,409 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:37:32,012 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:37:32,013 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:37:32,014 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:37:40,982 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:37:40,982 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:37:40,984 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:37:46,541 KULOKO INFO     [DONE] Get URL string='https:/'/public/v1/orderbooks'?symbol=BTC
+2020-10-16 21:38:26,005 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:38:26,005 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:38:26,006 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:38:26,245 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:27,029 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:27,035 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=dataframe
+2020-10-16 21:38:29,768 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:30,486 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:30,486 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=raw
+2020-10-16 21:38:30,732 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:31,016 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:31,017 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=seq
+2020-10-16 21:38:32,727 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:33,012 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/orderbooks?symbol=BTC
+2020-10-16 21:38:33,012 KULOKO INFO     [DONE] Fetch orderbook. Depth=5, Return_type=json
+2020-10-16 21:39:17,872 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:39:17,872 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:39:17,874 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:39:20,088 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-16 21:39:20,345 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-16 21:39:20,345 KULOKO INFO     [DONE] Fetch ticks. Depth=None, Return_type=json
+2020-10-16 21:39:20,859 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-16 21:39:21,055 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/ticker?symbol=BTC
+2020-10-16 21:39:21,056 KULOKO INFO     [DONE] Fetch ticks. Depth=None, Return_type=raw
+2020-10-16 21:40:30,656 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:40:30,656 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:40:30,657 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:40:41,624 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:40:41,624 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:40:41,625 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:41:19,525 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:41:19,525 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:41:19,526 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:41:20,106 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:21,041 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:21,047 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-16 21:41:22,909 KULOKO INFO     [DONE]Load Config. Symbol=BTC
+2020-10-16 21:41:22,909 KULOKO INFO     [DONE]Set Config from loaded config
+2020-10-16 21:41:22,914 KULOKO INFO     [DONE]Set URL parts
+2020-10-16 21:41:23,932 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:24,135 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:24,138 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-16 21:41:44,552 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:44,900 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:44,903 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-16 21:41:45,049 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:45,245 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:45,248 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-16 21:41:55,368 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:55,584 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:55,588 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
+2020-10-16 21:41:55,683 KULOKO INFO     [DONE] Get URL string=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:55,866 KULOKO INFO     [DONE] Fetch Data. URL=https://api.coin.z.com/public/v1/trades?symbol=BTC
+2020-10-16 21:41:55,869 KULOKO INFO     [DONE] Fetch trade.  Return_type=dataframe
