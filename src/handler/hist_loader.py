@@ -56,8 +56,8 @@ class HistDataHandler:
         logger.info("[DONE] Get URL string={0}".format(dl_url))
         return dl_url
 
-    def get_hist(self,sym, int_date, save_path=None):
-        str_date = str(int_date)
+    def get_hist(self,sym, int_date, is_save=True,save_path=None):
+        str_date = dl.intD_to_strD(int_date)
 
         # Fetch
         try:
@@ -71,27 +71,53 @@ class HistDataHandler:
             logger.error("Fail to get historical data. Sym={0}, Date={1}: {2}".format(sym, int_date, e))
             return 
 
-        # Save or Return
-        if save_path is None:
+        # save or return 
+        if is_save is False:
             return response.content
 
-        file_path = os.path.join(self.download_folderpath, "trades", sym, str_date+".csv.gz" )
+        # define save path
+        if save_path is None:
+            file_path = os.path.join(self.download_folderpath, "trades", sym, str_date+".csv.gz" )
+        else:
+            file_path = os.path.join(self.download_folderpath, "trades", sym, save_path+".csv.gz" )
+
+        # save
         try:
             if os.path.isfile(file_path):
                 logger.warn("Filepath={0} is already exist. However, download and overwirte forcefully".format(file_path))           
             with open(file_path, 'wb') as f:
-                f.write(content)
+                f.write(response.content)
             logger.info("[DONE] Save historical data. Sym={0}, Date={1}".format(sym, int_date))
+            logger.info("[DONE] -->save path={0}.".format(file_path))
+            return True
 
         except Exception as e:
             logger.error("Fail to save historical data. Sym={0}, Date={1}: {2}".format(sym, int_date, e))
             return False
 
 
-    def read_hist(self, sym, int_date):
-        str_date = str(int_date)
-        pass
+    def read_hist(self, sym, int_date, read_path=None):
+        str_date = dl.intD_to_strD(int_date)
+        # define save path
+        if read_path is None:
+            file_path = os.path.join(self.download_folderpath, "trades", sym, str_date+".csv.gz" )
+        else:
+            file_path = os.path.join(self.download_folderpath, "trades", sym, read_path+".csv.gz" )
+
+        df = pd.read_csv(file_path, compression='gzip')
+        df['timestamp'] = df['timestamp'].apply(lambda x: dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False))
+        return df
+
+    def bulk_load(self,sym, since_int_date, until_int_date, source='local'):
+        if source != 'local':
+            raise Exception("Cnnnnot support other source")
+        target_dates = dl.get_between_date(since_int_date, until_int_date)
+        dfs = []
+        for _target_date in target_dates:
+            dfs.append(self.read_hist(sym, _target_date))
         
+        return pd.concat(dfs, axis=0)
+
     def send_dynamo(self):
         pass
 

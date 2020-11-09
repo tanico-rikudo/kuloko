@@ -18,7 +18,7 @@ from datetime import  timedelta, timezone
 import hmac
 import hashlib
 
-from .util import daylib
+from ..util import daylib
 
 private_api_ini = configparser.ConfigParser()
 private_api_ini.read('./ini/private_api.ini', encoding='utf-8')
@@ -161,7 +161,7 @@ class Orderbook(API):
         #Depth
         for _side in ['asks','bids']:
                 raw_data['data'][_side]= raw_data['data'][_side][:depth]
-        
+        logger.info(raw_data['responsetime'])
         responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
 
         if return_type is 'raw':
@@ -187,6 +187,7 @@ class Orderbook(API):
             
             if return_type is 'json':
                 data = {_key :_value for _key, _value in zip(keys, values)}
+                data['time'] = dl.dt_to_intYMDHMSF(data['time'])
             elif return_type is 'seq':
                 data = values         
 
@@ -204,7 +205,7 @@ class Orderbook(API):
         if depth is None:
             raise TypeError('Cannot accept None type')
         if type(depth) is not int:
-            raise TypeError('Cannot accept {0} type'.format(type(sym)))
+            raise TypeError('Cannot accept {0} type'.format(type(depth)))
         self.__depth = depth
 
 
@@ -226,7 +227,8 @@ class Ticks(API):
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data['data'][0][_item])
-            data["timestamp"] = dl.str_utc_to_dt_offset(raw_data['data'][0]["timestamp"],self.tz_offset)
+            data["timestamp"] = dl.dt_to_intYMDHMSF(
+                dl.str_utc_to_dt_offset(raw_data['data'][0]["timestamp"],self.tz_offset))
             return data
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
@@ -259,6 +261,8 @@ class Trade(API):
                     _trade['size'] = float(_trade['size'])
                     data.append(_trade)
             if return_type in 'json':
+                for i in range(len(data)):
+                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -280,7 +284,8 @@ class Margin(API):
         return margin
 
     def convert_shape(self, raw_data, return_type):
-        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
+        responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],
+            self.tz_offset,is_Z=True,is_ms=False)
 
         if return_type is 'raw':
             return raw_data
@@ -289,6 +294,8 @@ class Margin(API):
                 raw_data['data'][_key]= float(raw_data['data'][_key])   
 
             if return_type in 'json':
+                logger.info(raw_data['data'])
+                raw_data['responsetime']= dl.dt_to_intYMDHMSF(responsetime_dt)
                 return raw_data['data']
             if return_type in 'dataframe':
                 return pd.Series(raw_data['data'])
@@ -322,6 +329,8 @@ class Assets(API):
                 _symbol_data['conversionRate']= float(_symbol_data['conversionRate'])   
                 data.append(_symbol_data)
             if return_type in 'json':
+                for i in range(len(data)):
+                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -373,6 +382,8 @@ class Orders(API):
                 _order['timestamp']= dl.str_utc_to_dt_offset(_order["timestamp"],self.tz_offset)
                 data.append(_order)
             if return_type in 'json':
+                for i in range(len(data)):
+                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -434,6 +445,8 @@ class Executions(API):
                 _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz_offset)
                 data.append(_execution)
             if return_type in 'json':
+                for i in range(len(data)):
+                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)

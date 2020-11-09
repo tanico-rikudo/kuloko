@@ -1,0 +1,27 @@
+{
+  "TableName": "Access",
+  "KeySchema": [
+    {
+      "AttributeName": "Path",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "Date",
+      "KeyType": "RANGE"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "Path",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "Date",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 2,
+    "WriteCapacityUnits": 2
+  }
+}
