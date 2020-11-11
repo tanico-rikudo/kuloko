@@ -36,65 +36,19 @@ Resources:
     # Attribute
     AttributeDefinitions: 
       - 
-        AttributeName: ask1
-        AttributeType: N
+        AttributeName: feed_datetime
+        AttributeType: S
       - 
-        AttributeName: ask1_size
-        AttributeType: N
+        AttributeName: sym
+        AttributeType: S
+
+    KeySchema:
       - 
-        AttributeName: ask2
-        AttributeType: N
-      - 
-        AttributeName: ask2_size
-        AttributeType: N
-      - 
-        AttributeName: ask3
-        AttributeType: N
-      - 
-        AttributeName: ask3_size
-        AttributeType: N 
-      - 
-        AttributeName: ask4
-        AttributeType: N
-      - 
-        AttributeName: ask4_size
-        AttributeType: N    
-      - 
-        AttributeName: ask5
-        AttributeType: N
-      - 
-        AttributeName: ask5_size
-        AttributeType: N
-      -
-        AttributeName: bid1
-        AttributeType: N
-      - 
-        AttributeName: bid1_size
-        AttributeType: N
-      - 
-        AttributeName: bid2
-        AttributeType: N
-      - 
-        AttributeName: bid2_size
-        AttributeType: N
-      - 
-        AttributeName: bid3
-        AttributeType: N
-      - 
-        AttributeName: bid3_size
-        AttributeType: N 
-      - 
-        AttributeName: bid4
-        AttributeType: N
-      - 
-        AttributeName: bid4_size
-        AttributeType: N    
-      - 
-        AttributeName: bid5
-        AttributeType: N
-      - 
-        AttributeName: bid5_size
-        AttributeType: N
+        AttributeName: sym
+        KeyType": HASH
+      -   
+        AttributeName": feed_datetime
+        KeyType: RANGE
 
     # キャパシティユニット( BillingMode が PROVISIONED の場合は必須 )
     ProvisionedThroughput:
