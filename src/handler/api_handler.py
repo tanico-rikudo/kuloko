@@ -285,7 +285,7 @@ class Margin(API):
 
     def convert_shape(self, raw_data, return_type):
         responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],
-            self.tz_offset,is_Z=True,is_ms=False)
+            self.tz_offset,is_Z=True,is_ms=True)
 
         if return_type is 'raw':
             return raw_data
@@ -342,7 +342,7 @@ class Orders(API):
         super().__init__("ORDER")
 
     def fetch_by_orderId(self, orderId, return_type='json', *args, **kwargs):
-        parameters = { "orderId": orderId }
+        parameters = { "orderId": str(orderId) }
         target_url = self.get_url("orders")
         headers= self.make_header(self.url_parts['orders'].split('/private')[1], 'GET')
         orders = self.fetch_data(target_url,headers=headers,params=parameters)

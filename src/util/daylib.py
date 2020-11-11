@@ -42,11 +42,12 @@ class daylib():
             format = format +'%H:%M:%S.%f'
         else:
             format = format +'%H:%M:%S'
-
+        # format += '.%z'
         format +=  'Z' if  is_Z else ''
-        format += '%z'
+
         logger.info(format)
-        dt_utc = dt.strptime(str_utc + "+0000", format)
+        # dt_utc = dt.strptime(str_utc + "+0000", format)
+        dt_utc = dt.strptime(str_utc, format)
         dt_offset = dt_utc.astimezone(timezone(timedelta(hours=offset)))
         return dt_offset
 
