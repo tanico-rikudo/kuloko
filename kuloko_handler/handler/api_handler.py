@@ -1,8 +1,6 @@
 # coding: utf-8
 
 import urllib.parse
-# import logging
-# import logging.config
 import configparser
 
 import pandas as pd
