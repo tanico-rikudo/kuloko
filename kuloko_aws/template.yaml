@@ -37,6 +37,16 @@ Resources:
             Path: /feed
             Method: get
 
+  FeedHandlerLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: FeedHandlerLayer
+      ContentUri: 'function/kuloko_handler.zip'
+      CompatibleRuntimes:
+        - python3.7
+    Metadata:
+      BuildMethod: python3.7
+
   tableMyAppUser: 
     Type: "AWS::DynamoDB::Table"
     Properties: 
