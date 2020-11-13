@@ -1,8 +1,6 @@
 from datetime import datetime as dt
 from datetime import  timedelta, timezone
-import logging
-logging.config.fileConfig('./ini/logconfig.ini')
-logger = logging.getLogger("KULOKO")
+import os
 
 # D: Date
 # None: datetime
@@ -45,7 +43,6 @@ class daylib():
         # format += '.%z'
         format +=  'Z' if  is_Z else ''
 
-        logger.info(format)
         # dt_utc = dt.strptime(str_utc + "+0000", format)
         dt_utc = dt.strptime(str_utc, format)
         dt_offset = dt_utc.astimezone(timezone(timedelta(hours=offset)))

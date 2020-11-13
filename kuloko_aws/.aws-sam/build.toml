@@ -5,3 +5,8 @@
 codeuri = "hello_world/"
 runtime = "python3.7"
 functions = ["HelloWorldFunction"]
+
+[build_definitions.0b9009a4-d719-4853-98ec-2ffe44b122cc]
+codeuri = "feed_handler/"
+runtime = "python3.7"
+functions = ["FeedAgentFunction"]
