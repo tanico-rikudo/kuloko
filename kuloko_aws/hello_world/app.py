@@ -6,6 +6,7 @@ import logging
 import logging.config
 
 import decimal
+import platform
 
 
 def lambda_handler(event, context):
@@ -23,7 +24,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'body': json.dumps({
-                'message': 'DONE!'
+                'message': str(sys.version)+'\n'+str(platform.platform())
             }),
         }
 

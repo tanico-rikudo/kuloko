@@ -130,3 +130,6 @@ dmypy.json
 
 #ini
 *.ini
+
+# sam psudo deploy files
+.aws-sam/

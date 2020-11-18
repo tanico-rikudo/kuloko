@@ -5,16 +5,7 @@ import sys
 import logging
 import logging.config
 import decimal
-os.environ['handler_path'] = '/Users/macico/Dropbox/kaggle/kuloko/kuloko_handler'
-sys.path.append(os.environ['handler_path'])
-handler_path=os.environ['handler_path'] 
-logging.config.fileConfig(os.path.join(handler_path,'./ini/logconfig.ini'),defaults={'logfilename': os.path.join(handler_path,'./log/logging.log')})
-logger = logging.getLogger("KULOKO")
-try:
-    import src.handler.api_handler as api
-except Exception as e:
-    logger.error(e)
-
+import kuloko_handler.handler.api_handler as api
 
 def lambda_handler(event, context):
     try:
@@ -24,6 +15,7 @@ def lambda_handler(event, context):
 
         sym = 'BTC'
         depth=5
+         
         orderbook = api.Orderbook(sym)
         orderbook.depth =depth
         json_orderbook = orderbook.fetch(return_type='json')

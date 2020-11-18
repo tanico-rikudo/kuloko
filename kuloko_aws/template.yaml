@@ -36,12 +36,14 @@ Resources:
           Properties:
             Path: /feed
             Method: get
+      Layers:
+      - !Ref FeedHandleLayer
 
-  FeedHandlerLayer:
+  FeedHandleLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      Description: FeedHandlerLayer
-      ContentUri: 'function/kuloko_handler.zip'
+      Description: FeedHandleLayer
+      ContentUri: 'layers'
       CompatibleRuntimes:
         - python3.7
     Metadata:
