@@ -16,7 +16,7 @@ Resources:
     Properties:
       CodeUri: hello_world/
       Handler: app.lambda_handler
-      Runtime: python3.7
+      Runtime: python3.6
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -29,7 +29,7 @@ Resources:
     Properties:
       CodeUri: feed_handler/
       Handler: app.lambda_handler
-      Runtime: python3.7
+      Runtime: python3.6
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -45,9 +45,9 @@ Resources:
       Description: FeedHandleLayer
       ContentUri: 'layers'
       CompatibleRuntimes:
-        - python3.7
+        - python3.6
     Metadata:
-      BuildMethod: python3.7
+      BuildMethod: python3.6
 
   tableMyAppUser: 
     Type: "AWS::DynamoDB::Table"
