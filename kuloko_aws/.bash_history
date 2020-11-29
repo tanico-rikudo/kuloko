@@ -14,3 +14,6 @@ pip install numpy
  sam build FeedHandleLayer
 sam local start-api --docker-network lambda-local
 python 
+ll
+ls
+sam build FeedHandleLayer
