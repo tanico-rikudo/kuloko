@@ -231,10 +231,66 @@ class Trade(Socket):
 class Orderbooks(Socket):
     def __init__(self,logger, general_config_ini,private_api_ini):
         super().__init__("orderbooks",logger, general_config_ini,private_api_ini)
+
+    def convert_shape(self, raw_data, depth, return_type):
+
+        #Filter Depth
+        for _side in ['asks','bids']:
+                raw_data[_side]= raw_data[_side][:depth]
+        self._logger.info(raw_data['timestamp'])
+        time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
+        symbol = raw_data['symbol']
+
+        if return_type is 'raw':
+            return raw_data
+
+        elif return_type is "dataframe":
+            data = {}
+            for _side in ['asks','bids']:
+                data[_side]= pd.DataFrame(raw_data[_side])
+                data[_side] = data[_side].astype(float)
+            return {"time":time_dt ,'data':data}
+
+        elif return_type in ['seq','json']:
+            values=[time_dt,symbol]
+            keys = ['time','symbol']
+            for _size in ["bids","asks"]:
+                depth = len(raw_data[_side])
+                for _depth in range(depth):
+                    values.append(float(raw_data[_side][_depth]['price']))
+                    values.append(float(raw_data[_side][_depth]['size']))
+                    keys.append(_size+str(_depth))
+                    keys.append(_size+str(_depth)+'_size')
+            
+            if return_type is 'json':
+                data = {_key :_value for _key, _value in zip(keys, values)}
+                data['time'] = dl.dt_to_intYMDHMSF(data['time'])
+            elif return_type is 'seq':
+                data = values         
+
+            return data
+
+        else:
+            raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
     
 
 
 class Ticker(Socket):
     def __init__(self,logger, general_config_ini,private_api_ini):
         super().__init__("ticker",logger, general_config_ini,private_api_ini)
+
+    def convert_shape(self, raw_data,return_type):
+        symbol = raw_data['symbol']
+        if return_type is 'raw':
+            return raw_data
+        elif return_type is 'json':
+            data = {}
+            for _item in ['ask','bid','high','last','low','volume']:
+                data[_item] =float(raw_data[_item])
+            data["timestamp"] = dl.dt_to_intYMDHMSF(
+                dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset))
+            data['symbol'] = symbol
+            return data
+        else:
+            raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
 
