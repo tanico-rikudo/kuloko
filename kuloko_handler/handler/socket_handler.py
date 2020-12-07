@@ -209,18 +209,16 @@ class Trade(Socket):
         super().__init__("trades",logger, general_config_ini,private_api_ini)
 
     def convert_shape(self, raw_data, return_type):
+        data = raw_data
         if return_type is 'raw':
             return raw_data
         elif return_type in ['json','dataframe']:
-            data = []
-            for _trade in raw_data:
-                _trade["timestamp"] = dl.str_utc_to_dt_offset(_trade["timestamp"],self.tz_offset)
-                _trade['price'] = float(_trade['price'])   
-                _trade['size'] = float(_trade['size'])
-                data.append(_trade)
+            data["time"] = dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset)
+            del data["timestamp"]
+            data['price'] = float(raw_data['price'])   
+            data['size'] = float(raw_data['size'])
             if return_type in 'json':
-                for i in range(len(data)):
-                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
+                data["time"] = dl.dt_to_intYMDHMSF(data["time"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -254,13 +252,13 @@ class Orderbooks(Socket):
         elif return_type in ['seq','json']:
             values=[time_dt,symbol]
             keys = ['time','symbol']
-            for _size in ["bids","asks"]:
+            for _side in ["bids","asks"]:
                 depth = len(raw_data[_side])
                 for _depth in range(depth):
                     values.append(float(raw_data[_side][_depth]['price']))
                     values.append(float(raw_data[_side][_depth]['size']))
-                    keys.append(_size+str(_depth))
-                    keys.append(_size+str(_depth)+'_size')
+                    keys.append(_side+str(_depth))
+                    keys.append(_side+str(_depth)+'_size')
             
             if return_type is 'json':
                 data = {_key :_value for _key, _value in zip(keys, values)}
@@ -287,7 +285,7 @@ class Ticker(Socket):
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data[_item])
-            data["timestamp"] = dl.dt_to_intYMDHMSF(
+            data["time"] = dl.dt_to_intYMDHMSF(
                 dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset))
             data['symbol'] = symbol
             return data

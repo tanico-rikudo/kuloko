@@ -180,13 +180,13 @@ class Orderbook(API):
         elif return_type in ['seq','json']:
             values=[responsetime_dt]
             keys = ['time']
-            for _size in ["bids","asks"]:
+            for _side in ["bids","asks"]:
                 depth = len(raw_data['data'][_side])
                 for _depth in range(depth):
                     values.append(float(raw_data['data'][_side][_depth]['price']))
                     values.append(float(raw_data['data'][_side][_depth]['size']))
-                    keys.append(_size+str(_depth))
-                    keys.append(_size+str(_depth)+'_size')
+                    keys.append(_side+str(_depth))
+                    keys.append(_side+str(_depth)+'_size')
             
             if return_type is 'json':
                 data = {_key :_value for _key, _value in zip(keys, values)}

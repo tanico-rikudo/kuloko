@@ -19,3 +19,7 @@ class MongoHandler:
     def delete_all(self):
         self.db[self.db_name].delete_many({})
         return 
+
+    def find(self):
+        return self.db[self.db_name].find({})
+         
