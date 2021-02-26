@@ -331,9 +331,10 @@ class Assets(API):
                 _symbol_data['conversionRate']= float(_symbol_data['conversionRate'])   
                 data.append(_symbol_data)
             if return_type in 'json':
-                for i in range(len(data)):
-                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
-                return data
+                # for i in range(len(data)):
+                #     data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
+                json_obj = { _data['symbol']: _data for _data in data}
+                return json_obj
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
         else:

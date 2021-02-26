@@ -63,16 +63,14 @@ class Socket(object):
     def load_urls(self):
         self.url_parts = {
             'endpoint':self.general_config.get('ENDPOINT_URL'),
-            'socket_endpoint':self.general_config.get('SOCKET_ENDPOINT_URL'),
-            'public':self.general_config.get('SOCKET_PUBLIC_URL'),
+            'socket_public_endpoint':self.general_config.get('SOCKET_PUBLIC_ENDPOINT'),
             'private':self.general_config.get('SOCKET_PRIVATE_URL'),
             'socket_access_token':self.general_config.get('SOCKET_ACCESS_TOKEN'),
         }
         self._logger.info('[DONE]Set URL parts')
 
-    def get_url(self):
-        path = os.path.join(self.url_parts['socket_endpoint'],self.url_parts['public'])
-        return path
+    def get_public_socket_url(self):
+        return self.url_parts['socket_public_endpoint']
 
 
     def connect(self,url,sym,maxlen=100):
@@ -164,7 +162,7 @@ class Socket(object):
 
     def get_access_token(self):
         reqBody = {}
-        path = self.url_parts["socket_access_token"]
+        path = self.url_parts["private"]
         endPoint = self.url_parts["endpoint"]
         headers= self.make_header(path.split('/private')[1],'POST',json.dumps(reqBody))
         target_url=endPoint+path
@@ -186,7 +184,7 @@ class Socket(object):
 
     def extend_access_token(self):
         reqBody = {'token':self.token}
-        path = self.url_parts["socket_access_token"]
+        path = self.url_parts["private"]
         endPoint = self.url_parts["endpoint"]
         headers= self.make_header(path.split('/private')[1],'PUT')
         target_url=endPoint+path
