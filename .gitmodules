@@ -1,4 +1,0 @@
-[submodule "geco_commons"]
-	path = geco_commons
-	url = https://github.com/tanico-rikudo/geco_commons.git
-	branch = main
