@@ -1,5 +1,0 @@
-awscli
-aws-sam-cli
-requests
-boto3
-numpy
