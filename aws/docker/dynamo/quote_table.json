@@ -1,0 +1,18 @@
+{
+  "TableName": "Quote",
+  "AttributeDefinitions":[
+    {"AttributeName": "feed_datetime",
+      "AttributeType": "S"},
+    {"AttributeName": "sym",
+        "AttributeType": "S"}
+  ],
+  "KeySchema":[
+    {"AttributeName": "sym" ,
+      "KeyType": "HASH" },   
+    {"AttributeName": "feed_datetime" ,
+        "KeyType": "RANGE" }],
+  "ProvisionedThroughput":{
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}

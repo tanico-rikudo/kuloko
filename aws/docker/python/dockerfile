@@ -1,0 +1,20 @@
+FROM python:3.6
+LABEL key="awspy36"
+# MV work dirs
+WORKDIR /root
+
+RUN apt-get update
+RUN apt-get install -y vim
+
+# locale
+ENV LANGUAGE ja_JP:ja
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+# pip install from requirement.txt
+ADD requirements.txt /root
+RUN pip install --upgrade setuptools 
+RUN pip install -r requirements.txt
+
+# docker build -t awspy36:init .
+CMD ["/bin/sh"]
