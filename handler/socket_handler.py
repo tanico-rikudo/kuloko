@@ -8,6 +8,7 @@ import numpy as np
 import requests
 import json
 import os
+import sys
 
 import time
 from datetime import datetime as dt
@@ -16,13 +17,15 @@ from datetime import  timedelta, timezone
 import hmac
 import hashlib
 
-from ..util import daylib
-dl = daylib.daylib()
 
 import websocket
 from collections import deque
 import threading
 websocket.enableTrace(True) #trace ON
+
+sys.path.append(os.environ['COMMON_DIR'] )
+from util import daylib
+dl = daylib.daylib()
 
 
 class RequestError(Exception):
