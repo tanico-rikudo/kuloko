@@ -16,6 +16,7 @@ from mongodb.src.mongo_handler import MongoHandler
 # Handlers
 sys.path.append(os.path.join(os.environ['KULOKO_DIR'],"handler" ))
 import  socket_handler as skt_api 
+import  api_handler as web_api 
 
 class Item:
     def __init__(self,name,item_type,currency):
@@ -30,6 +31,7 @@ class Item:
         
         # Handlers
         self.skt_api = skt_api
+        self.web_api = web_api
 
         # Init Logger 
         logging.config.fileConfig(os.path.join(KULOKO_DIR,'ini/logconfig.ini'),defaults={'logfilename': os.path.join(LOGDIR,'logging.log')})
@@ -49,6 +51,3 @@ class Item:
     def init_mongodb(self):
         self.mongo_db = MongoHandler(self.mongo_ini['LOCAL'],self.item_type)
         self.logger.info("[DONE] Init mongo DB")
-        
-    
-    
