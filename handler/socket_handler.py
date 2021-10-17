@@ -53,8 +53,6 @@ class Socket(object):
         self.load_urls()
         self.ws = None
         
-        
-
     def load_config(self,general_config_ini,private_api_ini,general_config_mode,private_api_mode):
         self.private_api_config = private_api_ini[private_api_mode]
         self.general_config = general_config_ini[general_config_mode]
@@ -287,7 +285,6 @@ class Orderbooks(Socket):
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
     
-
 
 class Ticker(Socket):
     def __init__(self,logger, general_config_ini,private_api_ini):
