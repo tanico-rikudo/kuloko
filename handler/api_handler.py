@@ -443,15 +443,16 @@ class Executions(API):
             return raw_data
         elif return_type in ['json','dataframe']:
             data = []
-            for _execution in raw_data['data']['list']:
-                _execution['executionId']= int(_execution['executionId'])
-                _execution['orderId']= int(_execution['orderId'])
-                _execution['price']= float(_execution['price'])   
-                _execution['size']= float(_execution['size'])   
-                _execution['lossGain']= float(_execution['lossGain'])   
-                _execution['fee']= float(_execution['fee'])   
-                _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz_offset)
-                data.append(_execution)
+            if not len(raw_data['data']) == 0:
+                for _execution in raw_data['data']['list']:
+                    _execution['executionId']= int(_execution['executionId'])
+                    _execution['orderId']= int(_execution['orderId'])
+                    _execution['price']= float(_execution['price'])   
+                    _execution['size']= float(_execution['size'])   
+                    _execution['lossGain']= float(_execution['lossGain'])   
+                    _execution['fee']= float(_execution['fee'])   
+                    _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz_offset)
+                    data.append(_execution)
             if return_type in 'json':
                 for i in range(len(data)):
                     data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])

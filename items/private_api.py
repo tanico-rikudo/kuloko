@@ -44,6 +44,23 @@ class Orders(Item):
         v = self.orders_web_api.fetch_by_orderId(id,return_type)
         return v
 
-    
+class Executions(Item):
+    def __init__(self):
+        super(Executions, self).__init__(name="orders",item_type="orders",currency="BTC")
+        self.executions_web_api = self.web_api.Executions(self.currency, self.logger, self.general_config_ini, self.private_api_ini)
+        self.init_mongodb()
+      
+    def fetch_latest(self, sym=None, return_type="json"): 
+        if sym is None:
+            sym = self.currency
+        v = self.executions_web_api.fetch_latestExecutions(sym,count=100, return_type=return_type)
+        return v
+    # TODO by order
+    # def fetch(self, sym=None, return_type="json"): 
+    #     if sym is None:
+    #         sym = self.currency
+    #     v = self.executions_web_api.fetch_latestExecutions(sym,count=100, return_type=return_type)
+    #     return v
+
         
         
