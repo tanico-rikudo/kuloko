@@ -51,6 +51,9 @@ class Socket(object):
 
         self.channel = channel
         self.load_urls()
+        self.ws = None
+        
+        
 
     def load_config(self,general_config_ini,private_api_ini,general_config_mode,private_api_mode):
         self.private_api_config = private_api_ini[private_api_mode]
@@ -74,6 +77,9 @@ class Socket(object):
 
     def get_public_socket_url(self):
         return self.url_parts['socket_public_endpoint']
+    
+    def get_private_socket_url(self):
+        return self.url_parts['private']
 
 
     def connect(self,url,sym,maxlen=100):
@@ -95,8 +101,11 @@ class Socket(object):
         self._logger.info("Start to subscribe")
 
     def is_connected(self):
-        flag =  self.ws.sock and self.ws.sock.connected
-        self._logger.info("Is connected:{0}".format(flag))
+        flag = False
+        if self.ws is not  None:
+            flag =  self.ws.sock and self.ws.sock.connected
+        self._logger.info("Connection :{0}".format("Connected" if flag  else "Disconnected"))
+        return flag
 
     def disconnect(self):
         self.ws.keep_running = False
@@ -104,6 +113,11 @@ class Socket(object):
         self._logger.info("Socket closed")
 
     def get(self):
+        """ DeQue data possesing at present 
+
+        Returns:
+            obj list : data list
+        """
         queue_len = len(self.queue)
         return [ self.queue.popleft() for _ in range(queue_len)]
 
@@ -115,7 +129,8 @@ class Socket(object):
         return return_data
 
     def on_message(self, message):
-        self._logger.info('Received:{0}'.format(message))
+        # self._logger.info('Received:{0}'.format(message))
+        self._logger.info('Received: Channel={0}'.format(self.channel))
         self.queue.append(json.loads(message))
         if len(self.queue) > self.maxlen:
             self._logger.warn("Message queue is full. Old item are discarded")

@@ -164,7 +164,7 @@ class Orderbook(API):
         #Depth
         for _side in ['asks','bids']:
                 raw_data['data'][_side]= raw_data['data'][_side][:depth]
-        self._logger.info(raw_data['responsetime'])
+        # self._logger.info(raw_data['responsetime'])
         responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
 
         if return_type is 'raw':
