@@ -544,6 +544,8 @@ class Order(API):
         if reqBody["size"] < 0.0:
             raise Exception("size must be >0. you set = {0}".format(reqBody["size"]))
         reqBody["size"] = str(reqBody["size"])
+        
+        # TODO; cancel before optiom ....
 
         # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
