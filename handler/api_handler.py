@@ -651,7 +651,8 @@ class Order(API):
                 "timeInForce": order_kwargs["timeInForce"],
                 "price": order_kwargs["price"],
                 "losscutPrice": order_kwargs["losscutPrice"],
-                "size": order_kwargs["size"]
+                "size": order_kwargs["size"],
+                "cancelBefore": order_kwargs["cancelBefore"]
             }
             reqBody = self.validate_order_params(reqBody)
             target_url = self.get_url("order")
@@ -664,7 +665,7 @@ class Order(API):
                 self._logger.error("Reject to post order. reqBody={0}".format(json.dumps(reqBody)))
             return order
 
-        except Exception as e:
+        except RequestError as e:
             self._logger.error("Fail to post order: {0}".format(e),exc_info=True)
         
 
@@ -686,7 +687,7 @@ class Order(API):
                 self._logger.error("Rejject to Change order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
             return order
 
-        except Exception as e:
+        except RequestError as e:
             self._logger.error("Fail to change order: {0}".format(e),exc_info=True)
 
     def do_cancel(self,return_type='json', *args, **order_kwargs):
@@ -705,6 +706,6 @@ class Order(API):
                 self._logger.error("Reject to cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
             return order
 
-        except Exception as e:
+        except RequestError as e:
             self._logger.error("Fail to cancel order: {0}".format(e),exc_info=True)
 
