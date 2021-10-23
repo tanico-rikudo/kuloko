@@ -605,11 +605,15 @@ class Order(API):
     def validate_change_params(self, reqBody):
         if reqBody["price"] is None:
             raise OrderParamException("Price must be set.")
+        if not (utils.is_type(reqBody["price"], float) or utils.is_type(reqBody["price"], int) ) :
+            raise OrderParamException("Price must be int/float. you set type={0}".format(type(reqBody["price"])))
         if reqBody["price"] < 0.0:
             raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
         reqBody["price"] = str(reqBody["price"])
 
         if reqBody["losscutPrice"] is not None:
+            if not (utils.is_type(reqBody["losscutPrice"], float) or utils.is_type(reqBody["losscutPrice"], int) ) :
+                raise OrderParamException("losscutPrice must be int/float. you set type={0}".format(type(reqBody["losscutPrice"])))
             if reqBody["losscutPrice"] < 0.0:
                 raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
             reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
@@ -619,7 +623,9 @@ class Order(API):
 
         if reqBody["orderId"] is None:
             raise OrderParamException("orderId must be set.")
-
+        if not utils.is_type(reqBody["orderId"], str):
+            raise OrderParamException("orderId must be str. you set type={0}".format(type(reqBody["orderId"])))
+            
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
         self._logger.info("[DONE] Change order parameter validation: OK")
@@ -628,6 +634,8 @@ class Order(API):
     def validate_cancel_params(self, reqBody):
         if reqBody["orderId"] is None:
             raise OrderParamException("orderId must be set.")
+        if not utils.is_type(reqBody["orderId"], str):
+            raise OrderParamException("orderId must be str. you set type={0}".format(type(reqBody["orderId"])))
 
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
