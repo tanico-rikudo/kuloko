@@ -130,5 +130,81 @@ class Order(Item):
             reqBody["eventType"] = eventType
             self.mongo_db.insert_one(reqBody)    
             return orderId 
+
+    def amend(self,reqBody):
+        """ Order amend
+
+        Args:
+            reqBody ([type]): [description]
+
+        Returns:
+            [string]: [Order Id or None]
+        """
         
+        # Build order and check
+
+        try:
+            self.order_web_api.validate_change_params(reqBody)
+            orderId = reqBody['orderId']
+        except OrderParamException as e:
+            self.logger.warning("Invalid order params: OrderId={0}, Reason={1}".format(orderId, e))
+            return orderId
+        except CapacityException():
+            self.logger.warning("Over capacity: OrderId={0}, Reason={1}".format(orderId, e))
+            return orderId
+    
+            
+        # Post attempt
+        self.logger.info("Attempt Amend Order: {0}".format(reqBody))
+        try:
+            res, success = self.order_web_api.do_change(**reqBody)
+            if success:
+                eventType = "orderAmend"
+                self.logger.warning("[DONE]Order Entry. OrderId={0}".format(orderId))
+            else:
+                eventType = "orderAmend-Reject"
+                self.logger.warning("Reject to order amend: OrderId={0}, Reason={1}".format(orderId, res['messages']))
+        except Exception as e:
+            eventType = "orderAmend-Error"
+            self.logger.warning("Fail to order amend: OrderId={0}, Reason={1}".format(orderId, e))
+        finally:
+            reqBody["eventType"] = eventType
+            self.mongo_db.insert_one(reqBody)    
+            return  orderId
+        
+    def cancel(self,reqBody):
+        """ cancel order
+
+        Args:
+            reqBody ([type]): [description]
+
+        Returns:
+            [string]: [Order Id or None]
+        """
+        
+        # Build order and check
+        try:
+            orderId = reqBody['orderId']
+            self.order_web_api.validate_cancel_params(reqBody)
+        except OrderParamException as e:
+            self.logger.warning("Invalid order params: OrderId={0}, Reason={1}".format(orderId, e))
+            return orderId
+            
+        # Post attempt
+        self.logger.info("Attempt Cancel: {0}".format(reqBody))
+        try:
+            res, success = self.order_web_api.do_cancel(**reqBody)
+            if success:
+                eventType = "orderCancel"
+                self.logger.warning("[DONE]Order Cancel: OrderId={0}".format(orderId))
+            else:
+                eventType = "orderCancel-Reject"
+                self.logger.warning("Reject to order cancel: OrderId={0}, Reason={1}".format(orderId,res['messages']))
+        except Exception as e:
+            eventType = "orderCancel-Error"
+            self.logger.warning("Fail to order cancel: OrderId={0}, Reason={1}".format(orderId, e))
+        finally:
+            reqBody["eventType"] = eventType
+            self.mongo_db.insert_one(reqBody)    
+            return  orderId
     
