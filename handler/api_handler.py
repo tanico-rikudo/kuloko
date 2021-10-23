@@ -18,12 +18,40 @@ import hmac
 import hashlib
 
 from util import daylib
+from util import utils
 dl = daylib.daylib()
 
+
 class RequestError(Exception):
+    """ Reject Request Error from venue
+
+    Args:
+        Exception ([type]): [description]
+    """
     pass
 
 class InvalidArgumentError(Exception):
+    """ Private  function argument error
+
+    Args:
+        Exception ([type]): [description]
+    """
+    pass
+
+class OrderParamException(Exception):
+    """  Invalid Order param error
+
+    Args:
+        Exception ([type]): [description]
+    """
+    pass
+
+class  CapacityException(Exception):
+    """ Capacity check by myself error
+
+    Args:
+        Exception ([type]): [description]
+    """
     pass
 
 class API:
@@ -211,7 +239,6 @@ class Orderbook(API):
             raise TypeError('Cannot accept {0} type'.format(type(depth)))
         self.__depth = depth
 
-
 class Ticks(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
@@ -271,7 +298,6 @@ class Trade(API):
                 return pd.DataFrame(data)
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
-
 
 class Margin(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
@@ -398,7 +424,6 @@ class Orders(API):
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
         
-
 class Executions(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
@@ -462,35 +487,37 @@ class Executions(API):
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
       
-
 class Order(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
 
     def validate_order_params(self, reqBody):
         # Sym
-        if type(reqBody["symbol"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["symbol"]) is not str:
+        if not utils.is_type(reqBody["symbol"], str):
+            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
         if reqBody["symbol"] is None:
-            raise Exception("symbol must be set")
+            raise OrderParamException("symbol must be set")
         if reqBody["symbol"] not in eval(self.general_config.get("ALLOW_SYM")):
-            raise Exception("Order validation error. Invalid Sym={0}".format(reqBody["symbol"]))
+            raise OrderParamException("Order validation error. Invalid Sym={0}".format(reqBody["symbol"]))
 
         # side
-        if type(reqBody["side"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["side"]) is not str:
+        if not utils.is_type(reqBody["side"], str):
+            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
         if reqBody["side"] is None:
-            raise Exception("side must be set")
+            raise OrderParamException("side must be set")
         if reqBody["side"] not in eval(self.general_config.get("EXEC_SIDE")):
-            raise Exception("Order validation error. Invalid Side={0}".format(reqBody["side"]))
+            raise OrderParamException("Order validation error. Invalid Side={0}".format(reqBody["side"]))
 
         # executionType
-        if type(reqBody["executionType"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["executionType"]) is not str:
+        if not utils.is_type(reqBody["executionType"], str):
+            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
         if reqBody["executionType"] is None:
-            raise Exception("executionType must be set")
+            raise OrderParamException("executionType must be set")
         if reqBody["executionType"] not in eval(self.general_config.get("EXEC_TYPE")):
-            raise Exception("Order validation error. Invalid executionType={0}".format(reqBody["executionType"]))
+            raise OrderParamException("Order validation error. Invalid executionType={0}".format(reqBody["executionType"]))
         
         # timeInForce
         if reqBody["timeInForce"] is None:
@@ -500,27 +527,30 @@ class Order(API):
             if reqBody["executionType"] in ['LIMIT']:
                 reqBody["timeInForce"] = 'FAS'
                 self._logger.info("timeInForce is set automatically=FAS") 
-        if type(reqBody["timeInForce"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["timeInForce"]) is not str:
+        if not utils.is_type(reqBody["timeInForce"], str):
+            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
         if reqBody["timeInForce"] not in eval(self.general_config.get("TIME_IN_FORCE")):
-            raise Exception("Order validation error. Invalid timeInForce={0}".format(reqBody["timeInForce"]))
+            raise OrderParamException("Order validation error. Invalid timeInForce={0}".format(reqBody["timeInForce"]))
         if reqBody["timeInForce"] == 'FAK':
             if reqBody["executionType"] not in ["MARKET","STOP"]:
-                raise Exception("Order validation error. executionType must be in MARKET or STOP when TimeInForce=FAK, but you set executionType={0}".format(reqBody["executionType"]))
+                raise OrderParamException("Order validation error. executionType must be in MARKET or STOP when TimeInForce=FAK, but you set executionType={0}".format(reqBody["executionType"]))
         if reqBody["timeInForce"] in ["FOK",'FAS','SOK']:
             if reqBody["executionType"] not in ["LIMIT"]:
-                raise Exception("Order validation error. executionType must be in LIMIT when TimeInForce={0}, but you set executionType={1}".format(reqBody["timeInForce"], reqBody["executionType"]))
+                raise OrderParamException("Order validation error. executionType must be in LIMIT when TimeInForce={0}, but you set executionType={1}".format(reqBody["timeInForce"], reqBody["executionType"]))
             if reqBody["timeInForce"] == "SOK":
                 if reqBody["symbol"] not in eval(self.general_config.get("LISTED_SYM")):
                     if reqBody["symbol"] != "BTC_JPY":
-                        raise Exception("Order validation error. timeInForce can be set SOK when symbol is in spot symbols or BTC_JPY, you set={0}".format(reqBody["symbol"]))
+                        raise OrderParamException("Order validation error. timeInForce can be set SOK when symbol is in spot symbols or BTC_JPY, you set={0}".format(reqBody["symbol"]))
         
         # price
         if reqBody["executionType"] in ["LIMIT",'STOP']:
             if reqBody["price"] is None:
-                raise Exception("Price must be set.")
+                raise OrderParamException("Price must be set.")
+            if not (utils.is_type(reqBody["price"], float) or utils.is_type(reqBody["price"], int) ) :
+                raise OrderParamException("Price must be int/float. you set type={0}".format(type(reqBody["price"])))
             if reqBody["price"] < 0.0:
-                raise Exception("Price must be >0. you set = {0}".format(reqBody["price"]))
+                raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
             reqBody["price"] = str(reqBody["price"])
         else:
             reqBody["price"] = None
@@ -528,11 +558,13 @@ class Order(API):
         # losscutPrice
         if reqBody["losscutPrice"] is not None:
             if reqBody["symbol"] not in eval(self.general_config.get("LISTED_REV_SYM")):
-                raise Exception("losscutPrice must be set when symbol is in LISTED_REV_SYM")
+                raise OrderParamException("losscutPrice can be set when symbol is in ONLY Leverage symbols={0}".format(self.general_config.get("LISTED_REV_SYM")))
             if reqBody["executionType"] not in ["LIMIT",'STOP']:
-                raise Exception("losscutPrice must be set when executionType is in LIMIT or STOP")
-            if reqBody["executionType"] < 0.0:
-                raise Exception("executionType must be >0. you set = {0}".format(reqBody["executionType"]))
+                raise OrderParamException("losscutPrice can be set when executionType is in LIMIT or STOP")
+            if not (utils.is_type(reqBody["losscutPrice"], float) or utils.is_type(reqBody["losscutPrice"], int) ) :
+                raise OrderParamException("losscutPrice must be int/float. you set type={0}".format(type(reqBody["losscutPrice"])))
+            if reqBody["losscutPrice"] <= 0.0:
+                raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
             
             reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
         else:
@@ -540,35 +572,53 @@ class Order(API):
 
         # size
         if reqBody["size"] is None:
-            raise Exception("size must be set")
-        if reqBody["size"] < 0.0:
-            raise Exception("size must be >0. you set = {0}".format(reqBody["size"]))
+            raise OrderParamException("size must be set")
+        if not (utils.is_type(reqBody["size"], float) or utils.is_type(reqBody["size"], int) ) :
+            raise OrderParamException("size must be int/float. you set type={0}".format(type(reqBody["size"])))
+        if reqBody["size"] <= 0.0:
+            raise OrderParamException("size must be >0. you set = {0}".format(reqBody["size"]))
         reqBody["size"] = str(reqBody["size"])
+    
+        # Cancel before
+        if reqBody["cancelBefore"] is not None:
+            if not reqBody["executionType"] is "MARKET":
+                raise OrderParamException("executionType must be MARKET. You set={0}".format(reqBody["executionType"]))
+            if not reqBody["timeInforce"] is "FAK":
+                raise OrderParamException("timeInforce must be FAK. You set={0}".format(reqBody["timeInforce"]))
+            if not reqBody["side"] is "SELL":
+                raise OrderParamException("side must be SELL. You set={0}".format(reqBody["side"]))
+            if not utils.is_type(reqBody["cancelBefore"], bool):
+                raise OrderParamException("cancelBefore must be bool. you set type={0}".format(type(reqBody["cancelBefore"])))
+            if reqBody["cancelBefore"] is True:
+                if reqBody["symbol"] in eval(self.general_config.get("LISTED_REV_SYM")):
+                    raise OrderParamException("losscutPrice CANNOT be set TRUE when symbol is in Leverage symbols={0}".format(self.general_config.get("LISTED_REV_SYM")))
+            reqBody["cancelBefore"] = str(reqBody["cancelBefore"])
+        else:
+            reqBody["cancelBefore"] = None
         
-        # TODO; cancel before optiom ....
 
-        # excl none
+        # exclude none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
         self._logger.info("[DONE] Order parameter validation: OK")
         return reqBody
 
     def validate_change_params(self, reqBody):
         if reqBody["price"] is None:
-            raise Exception("Price must be set.")
+            raise OrderParamException("Price must be set.")
         if reqBody["price"] < 0.0:
-            raise Exception("Price must be >0. you set = {0}".format(reqBody["price"]))
+            raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
         reqBody["price"] = str(reqBody["price"])
 
         if reqBody["losscutPrice"] is not None:
             if reqBody["losscutPrice"] < 0.0:
-                raise Exception("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
+                raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
             reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
         else:
             reqBody["losscutPrice"] = None
 
 
         if reqBody["orderId"] is None:
-            raise Exception("orderId must be set.")
+            raise OrderParamException("orderId must be set.")
 
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
@@ -577,7 +627,7 @@ class Order(API):
 
     def validate_cancel_params(self, reqBody):
         if reqBody["orderId"] is None:
-            raise Exception("orderId must be set.")
+            raise OrderParamException("orderId must be set.")
 
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
