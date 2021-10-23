@@ -572,14 +572,12 @@ class Order(API):
             raise OrderParamException("Price must be int/float. you set type={0}".format(type(reqBody["price"])))
         if reqBody["price"] < 0.0:
             raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
-        reqBody["price"] = str(reqBody["price"])
 
         if reqBody["losscutPrice"] is not None:
             if not (utils.is_type(reqBody["losscutPrice"], float) or utils.is_type(reqBody["losscutPrice"], int) ) :
                 raise OrderParamException("losscutPrice must be int/float. you set type={0}".format(type(reqBody["losscutPrice"])))
             if reqBody["losscutPrice"] < 0.0:
                 raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
-            reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
         else:
             reqBody["losscutPrice"] = None
 
@@ -643,42 +641,40 @@ class Order(API):
         
 
     def do_change(self,return_type='json', *args, **order_kwargs):
-        try:
-            reqBody = {
-                "orderId": order_kwargs["orderId"],
-                "price": order_kwargs["price"],
-                "losscutPrice": order_kwargs["losscutPrice"],
-            }
-            reqBody = self.validate_change_params(reqBody)
-            target_url = self.get_url("changeOrder")
-            dumped_req_body = json.dumps(reqBody)
-            headers= self.make_header(self.url_parts['changeOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
-            order = self.post_data(target_url,headers=headers,data=dumped_req_body)
-            if order['status'] == 0 :
-                self._logger.info("[DONE] Change order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            else :
-                self._logger.error("Rejject to Change order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            return order
+        reqBody = {
+            "orderId": order_kwargs["orderId"],
+            "price": order_kwargs["price"],
+            "losscutPrice": order_kwargs["losscutPrice"],
+        }
+        orderId = order_kwargs["orderId"]
+        reqBody = self.validate_change_params(reqBody)
+        target_url = self.get_url("changeOrder")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['changeOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            self._logger.info("[DONE] Change order. OrderId={0}, reqBody={1}".format(orderId, json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to Change order. OrderId={0}, Return={1}, reqBody={2}".format(orderId, res, json.dumps(reqBody)))
+            success = False
+        return res, success
 
-        except RequestError as e:
-            self._logger.error("Fail to change order: {0}".format(e),exc_info=True)
 
     def do_cancel(self,return_type='json', *args, **order_kwargs):
-        try:
-            reqBody = {
-                "orderId": order_kwargs["orderId"],
-            }
-            reqBody = self.validate_cancel_params(reqBody)
-            target_url = self.get_url("cancelOrder")
-            dumped_req_body = json.dumps(reqBody)
-            headers= self.make_header(self.url_parts['cancelOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
-            order = self.post_data(target_url,headers=headers,data=dumped_req_body)
-            if order['status'] == 0 :
-                self._logger.info("[DONE] Cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            else :
-                self._logger.error("Reject to cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            return order
-
-        except RequestError as e:
-            self._logger.error("Fail to cancel order: {0}".format(e),exc_info=True)
+        reqBody = {
+            "orderId": order_kwargs["orderId"],
+        }
+        reqBody = self.validate_cancel_params(reqBody)
+        target_url = self.get_url("cancelOrder")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['cancelOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            self._logger.info("[DONE] Cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to cancel order. OrderId={0}, Return={1}, reqBody={2}".format(order_kwargs["orderId"], res, json.dumps(reqBody)))
+            success = False
+        return res, success
 
