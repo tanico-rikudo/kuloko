@@ -17,42 +17,10 @@ from datetime import  timedelta, timezone
 import hmac
 import hashlib
 
+from util.exceptions import *
 from util import daylib
 from util import utils
 dl = daylib.daylib()
-
-
-class RequestError(Exception):
-    """ Reject Request Error from venue
-
-    Args:
-        Exception ([type]): [description]
-    """
-    pass
-
-class InvalidArgumentError(Exception):
-    """ Private  function argument error
-
-    Args:
-        Exception ([type]): [description]
-    """
-    pass
-
-class OrderParamException(Exception):
-    """  Invalid Order param error
-
-    Args:
-        Exception ([type]): [description]
-    """
-    pass
-
-class  CapacityException(Exception):
-    """ Capacity check by myself error
-
-    Args:
-        Exception ([type]): [description]
-    """
-    pass
 
 class API:
 
@@ -551,7 +519,6 @@ class Order(API):
                 raise OrderParamException("Price must be int/float. you set type={0}".format(type(reqBody["price"])))
             if reqBody["price"] < 0.0:
                 raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
-            reqBody["price"] = str(reqBody["price"])
         else:
             reqBody["price"] = None
 
@@ -564,9 +531,7 @@ class Order(API):
             if not (utils.is_type(reqBody["losscutPrice"], float) or utils.is_type(reqBody["losscutPrice"], int) ) :
                 raise OrderParamException("losscutPrice must be int/float. you set type={0}".format(type(reqBody["losscutPrice"])))
             if reqBody["losscutPrice"] <= 0.0:
-                raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
-            
-            reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
+                raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))            
         else:
             reqBody["losscutPrice"] = None
 
@@ -577,22 +542,22 @@ class Order(API):
             raise OrderParamException("size must be int/float. you set type={0}".format(type(reqBody["size"])))
         if reqBody["size"] <= 0.0:
             raise OrderParamException("size must be >0. you set = {0}".format(reqBody["size"]))
-        reqBody["size"] = str(reqBody["size"])
     
         # Cancel before
         if reqBody["cancelBefore"] is not None:
-            if not reqBody["executionType"] is "MARKET":
-                raise OrderParamException("executionType must be MARKET. You set={0}".format(reqBody["executionType"]))
-            if not reqBody["timeInforce"] is "FAK":
-                raise OrderParamException("timeInforce must be FAK. You set={0}".format(reqBody["timeInforce"]))
-            if not reqBody["side"] is "SELL":
-                raise OrderParamException("side must be SELL. You set={0}".format(reqBody["side"]))
             if not utils.is_type(reqBody["cancelBefore"], bool):
-                raise OrderParamException("cancelBefore must be bool. you set type={0}".format(type(reqBody["cancelBefore"])))
+                    raise OrderParamException("cancelBefore must be bool. you set type={0}".format(type(reqBody["cancelBefore"])))
             if reqBody["cancelBefore"] is True:
+                if not reqBody["executionType"] is "MARKET":
+                    raise OrderParamException("executionType must be MARKET. You set={0}".format(reqBody["executionType"]))
+                if not reqBody["timeInforce"] is "FAK":
+                    raise OrderParamException("timeInforce must be FAK. You set={0}".format(reqBody["timeInforce"]))
+                if not reqBody["side"] is "SELL":
+                    raise OrderParamException("side must be SELL. You set={0}".format(reqBody["side"]))
                 if reqBody["symbol"] in eval(self.general_config.get("LISTED_REV_SYM")):
                     raise OrderParamException("losscutPrice CANNOT be set TRUE when symbol is in Leverage symbols={0}".format(self.general_config.get("LISTED_REV_SYM")))
-            reqBody["cancelBefore"] = str(reqBody["cancelBefore"])
+            else:
+                pass    
         else:
             reqBody["cancelBefore"] = None
         
@@ -640,7 +605,18 @@ class Order(API):
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
         self._logger.info("[DONE] Cancel order parameter validation: OK")
-        return reqBody       
+        return reqBody
+    
+    def finalize_order_params(self, reqBody):
+        keys = reqBody.keys()
+        if "price" in keys:
+            reqBody = str(reqBody["price"])
+        if "losscutPrice" in keys:
+            reqBody = str(reqBody["losscutPrice"])
+        if "size" in keys:
+            reqBody = str(reqBody["size"])
+        self._logger.info("[DONE] Finalize Order params")
+         
 
     def do_order(self,return_type='json', *args, **order_kwargs):
         try:
