@@ -124,17 +124,15 @@ class API:
 
     def post_data(self, target_url, headers=None, data=None):
         try:
-            response = requests.post(target_url,headers=headers, data=data)
-            data = response.json()
-            if data['status'] !=0:
-                raise RequestError(data['messages'])
+            res = requests.post(target_url,headers=headers, data=data).json()
             self._logger.info("[DONE] Post Data. URL={0}".format(target_url))
-        except RequestError as e:
-            self._logger.error(e,exc_info=True)    
+            return res
         except Exception as e:
-            raise Exception(e)
-
-        return data
+            self._logger.error("Fail to post data:{0}".format(e),exc_info=True)        
+            if res['status'] !=0:
+                raise RequestError(res['messages'])
+            else:
+                raise Exception(e)
 
 class Orderbook(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
@@ -619,30 +617,29 @@ class Order(API):
          
 
     def do_order(self,return_type='json', *args, **order_kwargs):
-        try:
-            reqBody = {
-                "symbol": order_kwargs["symbol"],
-                "side": order_kwargs["side"],
-                "executionType": order_kwargs["executionType"],
-                "timeInForce": order_kwargs["timeInForce"],
-                "price": order_kwargs["price"],
-                "losscutPrice": order_kwargs["losscutPrice"],
-                "size": order_kwargs["size"],
-                "cancelBefore": order_kwargs["cancelBefore"]
-            }
-            reqBody = self.validate_order_params(reqBody)
-            target_url = self.get_url("order")
-            dumped_req_body = json.dumps(reqBody)
-            headers= self.make_header(self.url_parts['order'].split('/private')[1], 'POST', request_body=dumped_req_body)
-            order = self.post_data(target_url,headers=headers,data=dumped_req_body)
-            if order['status'] == 0 :
-                self._logger.info("[DONE] Post order. OrderId={0}, reqBody={1}".format(order['data'], json.dumps(reqBody)))
-            else :
-                self._logger.error("Reject to post order. reqBody={0}".format(json.dumps(reqBody)))
-            return order
-
-        except RequestError as e:
-            self._logger.error("Fail to post order: {0}".format(e),exc_info=True)
+        reqBody = {
+            "symbol": order_kwargs["symbol"],
+            "side": order_kwargs["side"],
+            "executionType": order_kwargs["executionType"],
+            "timeInForce": order_kwargs["timeInForce"],
+            "price": order_kwargs["price"],
+            "losscutPrice": order_kwargs["losscutPrice"],
+            "size": order_kwargs["size"],
+            "cancelBefore": order_kwargs["cancelBefore"]
+        }
+        reqBody = self.validate_order_params(reqBody)
+        target_url = self.get_url("order")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['order'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            self._logger.info("[DONE] Post order. OrderId={0}, reqBody={1}".format(res['data'], json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to post order. Return={0}, reqBody={1}".format(res, json.dumps(reqBody)))
+            success = False
+        return res,success
         
 
     def do_change(self,return_type='json', *args, **order_kwargs):

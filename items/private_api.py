@@ -91,26 +91,44 @@ class Order(Item):
     
 
     def entry(self,reqBody):
+        """ Order  Entty
+
+        Args:
+            reqBody ([type]): [description]
+
+        Returns:
+            [string]: [Order Id or None]
+        """
+        
+        # Build order and check
+        orderId = None
         try:
             self.order_web_api.validate_order_params(reqBody)
         except OrderParamException as e:
-            self.logger.warning("")
-        except CapacityException():
-            self.logger.warning("")
-            
-        orderId = ""
-        eventType = "orderEntry"
-        try:
-            res = self.order_web_api.do_order(**reqBody)
-            orderId = res['data']
+            self.logger.warning("Invalid order params:{0}".format(e))
             return orderId
+        except CapacityException():
+            self.logger.warning("Over capacity:{0}".format(e))
+            return orderId
+            
+        # Post attempt
+        self.logger.info("Attempt Entry: {0}".format(reqBody))
+        try:
+            res, success = self.order_web_api.do_order(**reqBody)
+            if success:
+                orderId = res['data']
+                eventType = "orderEntry"
+                self.logger.warning("[DONE]Order Entry")
+            else:
+                eventType = "orderEntry-Reject"
+                self.logger.warning("Reject to order entry:{0}".format(res['messages']))
         except Exception as e:
             eventType = "orderEntry-Error"
+            self.logger.warning("Fail to order entry:{0}".format(e))
         finally:
             reqBody["orderId"] = orderId
             reqBody["eventType"] = eventType
-            self.logger.info("Attempt Entry: {0}".format(**reqBody))
-            self.mongo_db.insert_one(reqBody)     
-            
-                  
-      
+            self.mongo_db.insert_one(reqBody)    
+            return orderId 
+        
+    
