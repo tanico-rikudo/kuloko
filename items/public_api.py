@@ -1,6 +1,28 @@
 import time
 from item import Item
 
+from util import daylib
+from util import utils
+dl = daylib.daylib()
+
+class venueStatus(Item):
+    def __init__(self):
+        super(venueStatus, self).__init__(name="venueStatus",item_type="venueStatus",currency="BTC")
+        self.vStatus_web_api = self.web_api.venueStatus(self.logger, self.general_config_ini, self.private_api_ini)
+        
+        # Init mongo
+        self.init_mongodb()
+              
+    def get(self):
+        try:
+            res = self.vStatus_web_api.fetch(return_type='json')
+        except Exception as e:
+            res = {"res_time":dl.currentTime(self.vStatus_web_api.tz_offset), "status":"INQUIRY_ERROR"}
+        finally:
+            self.mongo_db.insert_many(res)
+            self.logger.info("[DONE] API venue status inquiry: {0}".format(res['status']))
+            return res
+        
 class Orderbook(Item):
     def __init__(self):
         super(Orderbook, self).__init__(name="orderbook",item_type="orderbook",currency="BTC")

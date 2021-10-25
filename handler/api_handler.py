@@ -50,6 +50,7 @@ class API:
             'endpoint':self.general_config.get('ENDPOINT_URL'),
             'tick':self.general_config.get('TICK_URL'),
             'orderbooks':self.general_config.get('ORDERBOOKS_URL'),
+            'venueStatus':self.general_config.get('VENUNESTATUS_URL'),
             'trade':self.general_config.get('TRADE_URL'),
             'margin':self.general_config.get('MARGIN_URL'),
             'assets':self.general_config.get('ASSERTS_URL'),
@@ -133,6 +134,29 @@ class API:
                 raise RequestError(res['messages'])
             else:
                 raise Exception(e)
+
+class venueStatus(API):
+    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+
+    def fetch(self, return_type='json', *args, **kwargs):
+        target_url = self.get_url("venueStatus")
+        res = self.fetch_data(target_url)
+        data = self.convert_shape(res,return_type)
+        self._logger.info("[DONE] Fetch venue status. Return_type={1}".format(return_type))
+        return data
+
+    def convert_shape(self, raw_data, return_type):
+        if return_type is 'raw':
+            return raw_data
+        elif return_type is 'json':
+            data = {}
+            data['status']  = raw_data['data']['status']
+            data['res_time']  = dl.dt_to_intYMDHMSF(
+                dl.str_utc_to_dt_offset(raw_data["responsetime"],self.tz_offset))
+            return data
+        else:
+            raise InvalidArgumentError('Cannot accept in venueStatus. Return_type={0}'.format(return_type))
 
 class Orderbook(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
