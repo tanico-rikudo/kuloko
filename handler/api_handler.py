@@ -17,7 +17,7 @@ from datetime import  timedelta, timezone
 import hmac
 import hashlib
 
-from ..util import daylib
+from util import daylib
 dl = daylib.daylib()
 
 class RequestError(Exception):
@@ -164,7 +164,7 @@ class Orderbook(API):
         #Depth
         for _side in ['asks','bids']:
                 raw_data['data'][_side]= raw_data['data'][_side][:depth]
-        self._logger.info(raw_data['responsetime'])
+        # self._logger.info(raw_data['responsetime'])
         responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
 
         if return_type is 'raw':
@@ -294,7 +294,11 @@ class Margin(API):
             return raw_data
         elif return_type in ['json','dataframe']:
             for _key in raw_data['data'].keys():
-                raw_data['data'][_key]= float(raw_data['data'][_key])   
+                v = raw_data['data'][_key]
+                if _key == 'marginCallStatus':
+                    raw_data['data'][_key]=  v
+                else:
+                    raw_data['data'][_key]= float(v) 
 
             if return_type in 'json':
                 self._logger.info(raw_data['data'])
@@ -343,6 +347,7 @@ class Assets(API):
 class Orders(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+        
     def fetch_by_orderId(self, orderId, return_type='json', *args, **kwargs):
         parameters = { "orderId": str(orderId) }
         target_url = self.get_url("orders")
@@ -374,15 +379,16 @@ class Orders(API):
             return raw_data
         elif return_type in ['json','dataframe']:
             data = []
-            for _order in raw_data['data']['list']:
-                _order['executedSize']= float(_order['executedSize'])   
-                _order['losscutPrice']= float(_order['losscutPrice'])   
-                _order['orderId']= int(_order['orderId'])
-                _order['price']= float(_order['price'])   
-                _order['rootOrderId']= int(_order['rootOrderId'])
-                _order['size']= float(_order['size'])   
-                _order['timestamp']= dl.str_utc_to_dt_offset(_order["timestamp"],self.tz_offset)
-                data.append(_order)
+            if len(raw_data['data']) > 0:
+                for _order in raw_data['data']['list']:
+                    _order['executedSize']= float(_order['executedSize'])   
+                    _order['losscutPrice']= float(_order['losscutPrice'])   
+                    _order['orderId']= int(_order['orderId'])
+                    _order['price']= float(_order['price'])   
+                    _order['rootOrderId']= int(_order['rootOrderId'])
+                    _order['size']= float(_order['size'])   
+                    _order['timestamp']= dl.str_utc_to_dt_offset(_order["timestamp"],self.tz_offset)
+                    data.append(_order)
             if return_type in 'json':
                 for i in range(len(data)):
                     data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
@@ -437,15 +443,16 @@ class Executions(API):
             return raw_data
         elif return_type in ['json','dataframe']:
             data = []
-            for _execution in raw_data['data']['list']:
-                _execution['executionId']= int(_execution['executionId'])
-                _execution['orderId']= int(_execution['orderId'])
-                _execution['price']= float(_execution['price'])   
-                _execution['size']= float(_execution['size'])   
-                _execution['lossGain']= float(_execution['lossGain'])   
-                _execution['fee']= float(_execution['fee'])   
-                _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz_offset)
-                data.append(_execution)
+            if not len(raw_data['data']) == 0:
+                for _execution in raw_data['data']['list']:
+                    _execution['executionId']= int(_execution['executionId'])
+                    _execution['orderId']= int(_execution['orderId'])
+                    _execution['price']= float(_execution['price'])   
+                    _execution['size']= float(_execution['size'])   
+                    _execution['lossGain']= float(_execution['lossGain'])   
+                    _execution['fee']= float(_execution['fee'])   
+                    _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz_offset)
+                    data.append(_execution)
             if return_type in 'json':
                 for i in range(len(data)):
                     data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
@@ -537,6 +544,8 @@ class Order(API):
         if reqBody["size"] < 0.0:
             raise Exception("size must be >0. you set = {0}".format(reqBody["size"]))
         reqBody["size"] = str(reqBody["size"])
+        
+        # TODO; cancel before optiom ....
 
         # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
