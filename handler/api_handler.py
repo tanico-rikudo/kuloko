@@ -60,7 +60,7 @@ class API:
             'order':self.general_config.get('ORDER_URL'),
             'changeOrder':self.general_config.get('CHANGEORDER_URL'),
             'cancelOrder':self.general_config.get('CANCELORDER_URL'),
-            
+            'cancelBulkOrder':self.general_config.get('CANCELBULKORDER_URL'),     
         }
         self._logger.info('[DONE]Set URL parts')
 
@@ -470,7 +470,7 @@ class Order(API):
         # side
         # if type(reqBody["side"]) is not str:
         if not utils.is_type(reqBody["side"], str):
-            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+            raise OrderParamException("side must be string. you set type={0}".format(type(reqBody["side"])))
         if reqBody["side"] is None:
             raise OrderParamException("side must be set")
         if reqBody["side"] not in eval(self.general_config.get("EXEC_SIDE")):
@@ -479,7 +479,7 @@ class Order(API):
         # executionType
         # if type(reqBody["executionType"]) is not str:
         if not utils.is_type(reqBody["executionType"], str):
-            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+            raise OrderParamException("executionType must be string. you set type={0}".format(type(reqBody["executionType"])))
         if reqBody["executionType"] is None:
             raise OrderParamException("executionType must be set")
         if reqBody["executionType"] not in eval(self.general_config.get("EXEC_TYPE")):
@@ -495,7 +495,7 @@ class Order(API):
                 self._logger.info("timeInForce is set automatically=FAS") 
         # if type(reqBody["timeInForce"]) is not str:
         if not utils.is_type(reqBody["timeInForce"], str):
-            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+            raise OrderParamException("timeInForce must be string. you set type={0}".format(type(reqBody["timeInForce"])))
         if reqBody["timeInForce"] not in eval(self.general_config.get("TIME_IN_FORCE")):
             raise OrderParamException("Order validation error. Invalid timeInForce={0}".format(reqBody["timeInForce"]))
         if reqBody["timeInForce"] == 'FAK':
@@ -603,6 +603,35 @@ class Order(API):
         self._logger.info("[DONE] Cancel order parameter validation: OK")
         return reqBody
     
+    def validate_cancel_bulk_params(self, reqBody):
+        # symbols
+        if reqBody["symbols"] is None:
+            raise OrderParamException("symbols must be set.")
+        if not utils.is_type(reqBody["symbols"], list):
+            raise OrderParamException("symbols must be list. you set type={0}".format(type(reqBody["symbols"])))
+        not_allowed_syms = list(set(reqBody["symbols"]) - set(eval(self.general_config.get("ALLOW_SYM"))))
+        if len(not_allowed_syms) > 0:
+            raise OrderParamException("Following symbols are not allowed: {0}".format(not_allowed_syms))
+        
+        # side
+        if not utils.is_type(reqBody["side"], str):
+            raise OrderParamException("side must be string. you set type={0}".format(type(reqBody["side"])))
+        if reqBody["side"] is None:
+            raise OrderParamException("side must be set")
+        if reqBody["side"] not in eval(self.general_config.get("EXEC_SIDE")):
+            raise OrderParamException("Order validation error. Invalid Side={0}".format(reqBody["side"]))
+        
+        # desc
+        if not utils.is_type(reqBody["desc"], bool):
+            raise OrderParamException("desc must be string. you set type={0}".format(type(reqBody["desc"])))
+
+         # excl none
+        reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
+        self._logger.info("[DONE] Cancel bulk  order parameter validation: OK")
+        return reqBody
+    
+        
+    
     def finalize_order_params(self, reqBody):
         keys = reqBody.keys()
         if "price" in keys:
@@ -675,6 +704,27 @@ class Order(API):
             success = True
         else :
             self._logger.error("Reject to cancel order. OrderId={0}, Return={1}, reqBody={2}".format(order_kwargs["orderId"], res, json.dumps(reqBody)))
+            success = False
+        return res, success
+    
+    def do_bulk_cancel(self,return_type='json', *args, **order_kwargs):
+        # NOTE: settle type is not support my wallet
+        reqBody = {
+            "symbols": order_kwargs["symbols"],
+            "side": order_kwargs["side"],
+            "desc": order_kwargs["desc"],
+        }
+        reqBody = self.validate_cancel_bulk_params(reqBody)
+        target_url = self.get_url("cancelBulkOrder")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['cancelBulkOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            orderIds = res['data']
+            self._logger.info("[DONE] Cancel bulk order. OrderIds={0}, reqBody={1}".format(orderIds, json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to cancel bulk order.Return={0}, reqBody={1}".format( res, json.dumps(reqBody)))
             success = False
         return res, success
 
