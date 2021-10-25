@@ -39,29 +39,26 @@ class Orderbook(Item):
         self.orderbook_skt_api.subscribe()
         
     def dequeue(self):
-        retry_cnt=0
-        max_retry_cnt=60
+        no_update_second=60*60  #TODO: define outside
         if not self.orderbook_skt_api.is_connected():
             self.logger.error("Cannot find socket connection.")            
             return 
         self.logger.info("[START] Dequeue")
-        
+        update_time = dt.now()
         while True:
-            if retry_cnt > max_retry_cnt:
-                self.logger.warning("[END]Retry cnt is over maximum") 
+            time.sleep(1)
+            if (update_time - dt.now()).seconds > no_update_second:
+                self.logger.warning("[END]Update time is too past. Last update time:{0}".format(update_time)) 
                 break 
             try:
-                time.sleep(10)
                 data = self.orderbook_skt_api.get()
-                self.logger.info("Dequeued Data:{0}, Retry_cnt={1}".format(len(data),retry_cnt))
+                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 if len(data)==0:
-                    retry_cnt += 1
                     continue
                 insert_json =[ self.orderbook_skt_api.convert_shape(_data,5,"json") for _data in data ]
                 self.mongo_db.insert_many(insert_json)
-                retry_cnt = 0
+                update_time = dt.now()
             except Exception as e:
-                retry_cnt += 1
                 self.logger.warning("Fail to deque data:{0}".format(e))
             
                     
@@ -84,29 +81,26 @@ class Ticker(Item):
         self.ticker_skt_api.subscribe()
         
     def dequeue(self):
-        retry_cnt=0
-        max_retry_cnt=60
+        no_update_second=60*60  #TODO: define outside
         if not self.ticker_skt_api.is_connected():
             self.logger.error("Cannot find socket connection.")            
             return 
         self.logger.info("[START] Dequeue")
         
         while True:
-            if retry_cnt > max_retry_cnt:
-                self.logger.warning("[END]Retry cnt is over maximum") 
+            if (update_time - dt.now()).seconds > no_update_second:
+                self.logger.warning("[END]Update time is too past. Last update time:{0}".format(update_time)) 
                 break 
             try:
-                time.sleep(10)
+                time.sleep(1)
                 data = self.ticker_skt_api.get()
-                self.logger.info("Dequeued Data:{0}, Retry_cnt={1}".format(len(data),retry_cnt))
+                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 if len(data)==0:
-                    retry_cnt += 1
                     continue
                 insert_json =[ self.ticker_skt_api.convert_shape(_data,"json") for _data in data ]
                 self.mongo_db.insert_many(insert_json)
-                retry_cnt = 0
+                update_time = dt.now()
             except Exception as e:
-                retry_cnt += 1
                 self.logger.warning("Fail to deque data:{0}".format(e))
             
     def disconnect(self):
@@ -128,29 +122,26 @@ class Trade(Item):
         self.trade_skt_api.subscribe()
         
     def dequeue(self):
-        retry_cnt=0
-        max_retry_cnt=60
+        no_update_second=60*60  #TODO: define outside
         if not self.trade_skt_api.is_connected():
             self.logger.error("Cannot find socket connection.")            
             return 
         self.logger.info("[START] Dequeue")
         
         while True:
-            if retry_cnt > max_retry_cnt:
-                self.logger.warning("[END]Retry cnt is over maximum") 
+            if (update_time - dt.now()).seconds > no_update_second:
+                self.logger.warning("[END]Update time is too past. Last update time:{0}".format(update_time)) 
                 break 
             try:
-                time.sleep(10)
+                time.sleep(1)
                 data = self.trade_skt_api.get()
-                self.logger.info("Dequeued Data:{0}, Retry_cnt={1}".format(len(data),retry_cnt))
+                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 if len(data)==0:
-                    retry_cnt += 1
                     continue
                 insert_json =[ self.trade_skt_api.convert_shape(_data,"json") for _data in data ]
                 self.mongo_db.insert_many(insert_json)
-                retry_cnt = 0
+                update_time = dt.now()
             except Exception as e:
-                retry_cnt += 1
                 self.logger.warning("Fail to deque data:{0}".format(e))
             
     def disconnect(self):
