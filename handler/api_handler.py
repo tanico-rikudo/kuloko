@@ -17,14 +17,10 @@ from datetime import  timedelta, timezone
 import hmac
 import hashlib
 
+from util.exceptions import *
 from util import daylib
+from util import utils
 dl = daylib.daylib()
-
-class RequestError(Exception):
-    pass
-
-class InvalidArgumentError(Exception):
-    pass
 
 class API:
 
@@ -64,7 +60,7 @@ class API:
             'order':self.general_config.get('ORDER_URL'),
             'changeOrder':self.general_config.get('CHANGEORDER_URL'),
             'cancelOrder':self.general_config.get('CANCELORDER_URL'),
-            
+            'cancelBulkOrder':self.general_config.get('CANCELBULKORDER_URL'),     
         }
         self._logger.info('[DONE]Set URL parts')
 
@@ -128,17 +124,15 @@ class API:
 
     def post_data(self, target_url, headers=None, data=None):
         try:
-            response = requests.post(target_url,headers=headers, data=data)
-            data = response.json()
-            if data['status'] !=0:
-                raise RequestError(data['messages'])
+            res = requests.post(target_url,headers=headers, data=data).json()
             self._logger.info("[DONE] Post Data. URL={0}".format(target_url))
-        except RequestError as e:
-            self._logger.error(e,exc_info=True)    
+            return res
         except Exception as e:
-            raise Exception(e)
-
-        return data
+            self._logger.error("Fail to post data:{0}".format(e),exc_info=True)        
+            if res['status'] !=0:
+                raise RequestError(res['messages'])
+            else:
+                raise Exception(e)
 
 class Orderbook(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
@@ -211,7 +205,6 @@ class Orderbook(API):
             raise TypeError('Cannot accept {0} type'.format(type(depth)))
         self.__depth = depth
 
-
 class Ticks(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
@@ -271,7 +264,6 @@ class Trade(API):
                 return pd.DataFrame(data)
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
-
 
 class Margin(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
@@ -398,7 +390,6 @@ class Orders(API):
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
         
-
 class Executions(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
@@ -462,35 +453,37 @@ class Executions(API):
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
       
-
 class Order(API):
     def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
 
     def validate_order_params(self, reqBody):
         # Sym
-        if type(reqBody["symbol"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["symbol"]) is not str:
+        if not utils.is_type(reqBody["symbol"], str):
+            raise OrderParamException("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
         if reqBody["symbol"] is None:
-            raise Exception("symbol must be set")
+            raise OrderParamException("symbol must be set")
         if reqBody["symbol"] not in eval(self.general_config.get("ALLOW_SYM")):
-            raise Exception("Order validation error. Invalid Sym={0}".format(reqBody["symbol"]))
+            raise OrderParamException("Order validation error. Invalid Sym={0}".format(reqBody["symbol"]))
 
         # side
-        if type(reqBody["side"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["side"]) is not str:
+        if not utils.is_type(reqBody["side"], str):
+            raise OrderParamException("side must be string. you set type={0}".format(type(reqBody["side"])))
         if reqBody["side"] is None:
-            raise Exception("side must be set")
+            raise OrderParamException("side must be set")
         if reqBody["side"] not in eval(self.general_config.get("EXEC_SIDE")):
-            raise Exception("Order validation error. Invalid Side={0}".format(reqBody["side"]))
+            raise OrderParamException("Order validation error. Invalid Side={0}".format(reqBody["side"]))
 
         # executionType
-        if type(reqBody["executionType"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["executionType"]) is not str:
+        if not utils.is_type(reqBody["executionType"], str):
+            raise OrderParamException("executionType must be string. you set type={0}".format(type(reqBody["executionType"])))
         if reqBody["executionType"] is None:
-            raise Exception("executionType must be set")
+            raise OrderParamException("executionType must be set")
         if reqBody["executionType"] not in eval(self.general_config.get("EXEC_TYPE")):
-            raise Exception("Order validation error. Invalid executionType={0}".format(reqBody["executionType"]))
+            raise OrderParamException("Order validation error. Invalid executionType={0}".format(reqBody["executionType"]))
         
         # timeInForce
         if reqBody["timeInForce"] is None:
@@ -500,76 +493,100 @@ class Order(API):
             if reqBody["executionType"] in ['LIMIT']:
                 reqBody["timeInForce"] = 'FAS'
                 self._logger.info("timeInForce is set automatically=FAS") 
-        if type(reqBody["timeInForce"]) is not str:
-            raise Exception("symbol must be string. you set type={0}".format(type(reqBody["symbol"])))
+        # if type(reqBody["timeInForce"]) is not str:
+        if not utils.is_type(reqBody["timeInForce"], str):
+            raise OrderParamException("timeInForce must be string. you set type={0}".format(type(reqBody["timeInForce"])))
         if reqBody["timeInForce"] not in eval(self.general_config.get("TIME_IN_FORCE")):
-            raise Exception("Order validation error. Invalid timeInForce={0}".format(reqBody["timeInForce"]))
+            raise OrderParamException("Order validation error. Invalid timeInForce={0}".format(reqBody["timeInForce"]))
         if reqBody["timeInForce"] == 'FAK':
             if reqBody["executionType"] not in ["MARKET","STOP"]:
-                raise Exception("Order validation error. executionType must be in MARKET or STOP when TimeInForce=FAK, but you set executionType={0}".format(reqBody["executionType"]))
+                raise OrderParamException("Order validation error. executionType must be in MARKET or STOP when TimeInForce=FAK, but you set executionType={0}".format(reqBody["executionType"]))
         if reqBody["timeInForce"] in ["FOK",'FAS','SOK']:
             if reqBody["executionType"] not in ["LIMIT"]:
-                raise Exception("Order validation error. executionType must be in LIMIT when TimeInForce={0}, but you set executionType={1}".format(reqBody["timeInForce"], reqBody["executionType"]))
+                raise OrderParamException("Order validation error. executionType must be in LIMIT when TimeInForce={0}, but you set executionType={1}".format(reqBody["timeInForce"], reqBody["executionType"]))
             if reqBody["timeInForce"] == "SOK":
                 if reqBody["symbol"] not in eval(self.general_config.get("LISTED_SYM")):
                     if reqBody["symbol"] != "BTC_JPY":
-                        raise Exception("Order validation error. timeInForce can be set SOK when symbol is in spot symbols or BTC_JPY, you set={0}".format(reqBody["symbol"]))
+                        raise OrderParamException("Order validation error. timeInForce can be set SOK when symbol is in spot symbols or BTC_JPY, you set={0}".format(reqBody["symbol"]))
         
         # price
         if reqBody["executionType"] in ["LIMIT",'STOP']:
             if reqBody["price"] is None:
-                raise Exception("Price must be set.")
+                raise OrderParamException("Price must be set.")
+            if not (utils.is_type(reqBody["price"], float) or utils.is_type(reqBody["price"], int) ) :
+                raise OrderParamException("Price must be int/float. you set type={0}".format(type(reqBody["price"])))
             if reqBody["price"] < 0.0:
-                raise Exception("Price must be >0. you set = {0}".format(reqBody["price"]))
-            reqBody["price"] = str(reqBody["price"])
+                raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
         else:
             reqBody["price"] = None
 
         # losscutPrice
         if reqBody["losscutPrice"] is not None:
             if reqBody["symbol"] not in eval(self.general_config.get("LISTED_REV_SYM")):
-                raise Exception("losscutPrice must be set when symbol is in LISTED_REV_SYM")
+                raise OrderParamException("losscutPrice can be set when symbol is in ONLY Leverage symbols={0}".format(self.general_config.get("LISTED_REV_SYM")))
             if reqBody["executionType"] not in ["LIMIT",'STOP']:
-                raise Exception("losscutPrice must be set when executionType is in LIMIT or STOP")
-            if reqBody["executionType"] < 0.0:
-                raise Exception("executionType must be >0. you set = {0}".format(reqBody["executionType"]))
-            
-            reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
+                raise OrderParamException("losscutPrice can be set when executionType is in LIMIT or STOP")
+            if not (utils.is_type(reqBody["losscutPrice"], float) or utils.is_type(reqBody["losscutPrice"], int) ) :
+                raise OrderParamException("losscutPrice must be int/float. you set type={0}".format(type(reqBody["losscutPrice"])))
+            if reqBody["losscutPrice"] <= 0.0:
+                raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))            
         else:
             reqBody["losscutPrice"] = None
 
         # size
         if reqBody["size"] is None:
-            raise Exception("size must be set")
-        if reqBody["size"] < 0.0:
-            raise Exception("size must be >0. you set = {0}".format(reqBody["size"]))
-        reqBody["size"] = str(reqBody["size"])
+            raise OrderParamException("size must be set")
+        if not (utils.is_type(reqBody["size"], float) or utils.is_type(reqBody["size"], int) ) :
+            raise OrderParamException("size must be int/float. you set type={0}".format(type(reqBody["size"])))
+        if reqBody["size"] <= 0.0:
+            raise OrderParamException("size must be >0. you set = {0}".format(reqBody["size"]))
+    
+        # Cancel before
+        if reqBody["cancelBefore"] is not None:
+            if not utils.is_type(reqBody["cancelBefore"], bool):
+                    raise OrderParamException("cancelBefore must be bool. you set type={0}".format(type(reqBody["cancelBefore"])))
+            if reqBody["cancelBefore"] is True:
+                if not reqBody["executionType"] is "MARKET":
+                    raise OrderParamException("executionType must be MARKET. You set={0}".format(reqBody["executionType"]))
+                if not reqBody["timeInforce"] is "FAK":
+                    raise OrderParamException("timeInforce must be FAK. You set={0}".format(reqBody["timeInforce"]))
+                if not reqBody["side"] is "SELL":
+                    raise OrderParamException("side must be SELL. You set={0}".format(reqBody["side"]))
+                if reqBody["symbol"] in eval(self.general_config.get("LISTED_REV_SYM")):
+                    raise OrderParamException("losscutPrice CANNOT be set TRUE when symbol is in Leverage symbols={0}".format(self.general_config.get("LISTED_REV_SYM")))
+            else:
+                pass    
+        else:
+            reqBody["cancelBefore"] = None
         
-        # TODO; cancel before optiom ....
 
-        # excl none
+        # exclude none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
         self._logger.info("[DONE] Order parameter validation: OK")
         return reqBody
 
     def validate_change_params(self, reqBody):
         if reqBody["price"] is None:
-            raise Exception("Price must be set.")
+            raise OrderParamException("Price must be set.")
+        if not (utils.is_type(reqBody["price"], float) or utils.is_type(reqBody["price"], int) ) :
+            raise OrderParamException("Price must be int/float. you set type={0}".format(type(reqBody["price"])))
         if reqBody["price"] < 0.0:
-            raise Exception("Price must be >0. you set = {0}".format(reqBody["price"]))
-        reqBody["price"] = str(reqBody["price"])
+            raise OrderParamException("Price must be >0. you set = {0}".format(reqBody["price"]))
 
         if reqBody["losscutPrice"] is not None:
+            if not (utils.is_type(reqBody["losscutPrice"], float) or utils.is_type(reqBody["losscutPrice"], int) ) :
+                raise OrderParamException("losscutPrice must be int/float. you set type={0}".format(type(reqBody["losscutPrice"])))
             if reqBody["losscutPrice"] < 0.0:
-                raise Exception("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
-            reqBody["losscutPrice"] = str(reqBody["losscutPrice"])
+                raise OrderParamException("losscutPrice must be >0. you set = {0}".format(reqBody["losscutPrice"]))
         else:
             reqBody["losscutPrice"] = None
 
 
         if reqBody["orderId"] is None:
-            raise Exception("orderId must be set.")
-
+            raise OrderParamException("orderId must be set.")
+        if not utils.is_type(reqBody["orderId"], str):
+            raise OrderParamException("orderId must be str. you set type={0}".format(type(reqBody["orderId"])))
+            
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
         self._logger.info("[DONE] Change order parameter validation: OK")
@@ -577,76 +594,137 @@ class Order(API):
 
     def validate_cancel_params(self, reqBody):
         if reqBody["orderId"] is None:
-            raise Exception("orderId must be set.")
+            raise OrderParamException("orderId must be set.")
+        if not utils.is_type(reqBody["orderId"], str):
+            raise OrderParamException("orderId must be str. you set type={0}".format(type(reqBody["orderId"])))
 
          # excl none
         reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
         self._logger.info("[DONE] Cancel order parameter validation: OK")
-        return reqBody       
+        return reqBody
+    
+    def validate_cancel_bulk_params(self, reqBody):
+        # symbols
+        if reqBody["symbols"] is None:
+            raise OrderParamException("symbols must be set.")
+        if not utils.is_type(reqBody["symbols"], list):
+            raise OrderParamException("symbols must be list. you set type={0}".format(type(reqBody["symbols"])))
+        not_allowed_syms = list(set(reqBody["symbols"]) - set(eval(self.general_config.get("ALLOW_SYM"))))
+        if len(not_allowed_syms) > 0:
+            raise OrderParamException("Following symbols are not allowed: {0}".format(not_allowed_syms))
+        
+        # side
+        if not utils.is_type(reqBody["side"], str):
+            raise OrderParamException("side must be string. you set type={0}".format(type(reqBody["side"])))
+        if reqBody["side"] is None:
+            raise OrderParamException("side must be set")
+        if reqBody["side"] not in eval(self.general_config.get("EXEC_SIDE")):
+            raise OrderParamException("Order validation error. Invalid Side={0}".format(reqBody["side"]))
+        
+        # desc
+        if not utils.is_type(reqBody["desc"], bool):
+            raise OrderParamException("desc must be string. you set type={0}".format(type(reqBody["desc"])))
+
+         # excl none
+        reqBody = {_key :_val for _key, _val in reqBody.items() if _val is not None}
+        self._logger.info("[DONE] Cancel bulk  order parameter validation: OK")
+        return reqBody
+    
+        
+    
+    def finalize_order_params(self, reqBody):
+        keys = reqBody.keys()
+        if "price" in keys:
+            reqBody = str(reqBody["price"])
+        if "losscutPrice" in keys:
+            reqBody = str(reqBody["losscutPrice"])
+        if "size" in keys:
+            reqBody = str(reqBody["size"])
+        self._logger.info("[DONE] Finalize Order params")
+         
 
     def do_order(self,return_type='json', *args, **order_kwargs):
-        try:
-            reqBody = {
-                "symbol": order_kwargs["symbol"],
-                "side": order_kwargs["side"],
-                "executionType": order_kwargs["executionType"],
-                "timeInForce": order_kwargs["timeInForce"],
-                "price": order_kwargs["price"],
-                "losscutPrice": order_kwargs["losscutPrice"],
-                "size": order_kwargs["size"]
-            }
-            reqBody = self.validate_order_params(reqBody)
-            target_url = self.get_url("order")
-            dumped_req_body = json.dumps(reqBody)
-            headers= self.make_header(self.url_parts['order'].split('/private')[1], 'POST', request_body=dumped_req_body)
-            order = self.post_data(target_url,headers=headers,data=dumped_req_body)
-            if order['status'] == 0 :
-                self._logger.info("[DONE] Post order. OrderId={0}, reqBody={1}".format(order['data'], json.dumps(reqBody)))
-            else :
-                self._logger.error("Reject to post order. reqBody={0}".format(json.dumps(reqBody)))
-            return order
-
-        except Exception as e:
-            self._logger.error("Fail to post order: {0}".format(e),exc_info=True)
+        reqBody = {
+            "symbol": order_kwargs["symbol"],
+            "side": order_kwargs["side"],
+            "executionType": order_kwargs["executionType"],
+            "timeInForce": order_kwargs["timeInForce"],
+            "price": order_kwargs["price"],
+            "losscutPrice": order_kwargs["losscutPrice"],
+            "size": order_kwargs["size"],
+            "cancelBefore": order_kwargs["cancelBefore"]
+        }
+        reqBody = self.validate_order_params(reqBody)
+        target_url = self.get_url("order")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['order'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            self._logger.info("[DONE] Post order. OrderId={0}, reqBody={1}".format(res['data'], json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to post order. Return={0}, reqBody={1}".format(res, json.dumps(reqBody)))
+            success = False
+        return res,success
         
 
     def do_change(self,return_type='json', *args, **order_kwargs):
-        try:
-            reqBody = {
-                "orderId": order_kwargs["orderId"],
-                "price": order_kwargs["price"],
-                "losscutPrice": order_kwargs["losscutPrice"],
-            }
-            reqBody = self.validate_change_params(reqBody)
-            target_url = self.get_url("changeOrder")
-            dumped_req_body = json.dumps(reqBody)
-            headers= self.make_header(self.url_parts['changeOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
-            order = self.post_data(target_url,headers=headers,data=dumped_req_body)
-            if order['status'] == 0 :
-                self._logger.info("[DONE] Change order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            else :
-                self._logger.error("Rejject to Change order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            return order
+        reqBody = {
+            "orderId": order_kwargs["orderId"],
+            "price": order_kwargs["price"],
+            "losscutPrice": order_kwargs["losscutPrice"],
+        }
+        orderId = order_kwargs["orderId"]
+        reqBody = self.validate_change_params(reqBody)
+        target_url = self.get_url("changeOrder")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['changeOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            self._logger.info("[DONE] Change order. OrderId={0}, reqBody={1}".format(orderId, json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to Change order. OrderId={0}, Return={1}, reqBody={2}".format(orderId, res, json.dumps(reqBody)))
+            success = False
+        return res, success
 
-        except Exception as e:
-            self._logger.error("Fail to change order: {0}".format(e),exc_info=True)
 
     def do_cancel(self,return_type='json', *args, **order_kwargs):
-        try:
-            reqBody = {
-                "orderId": order_kwargs["orderId"],
-            }
-            reqBody = self.validate_cancel_params(reqBody)
-            target_url = self.get_url("cancelOrder")
-            dumped_req_body = json.dumps(reqBody)
-            headers= self.make_header(self.url_parts['cancelOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
-            order = self.post_data(target_url,headers=headers,data=dumped_req_body)
-            if order['status'] == 0 :
-                self._logger.info("[DONE] Cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            else :
-                self._logger.error("Reject to cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
-            return order
-
-        except Exception as e:
-            self._logger.error("Fail to cancel order: {0}".format(e),exc_info=True)
+        reqBody = {
+            "orderId": order_kwargs["orderId"],
+        }
+        reqBody = self.validate_cancel_params(reqBody)
+        target_url = self.get_url("cancelOrder")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['cancelOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            self._logger.info("[DONE] Cancel order. OrderId={0}, reqBody={1}".format(order_kwargs["orderId"], json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to cancel order. OrderId={0}, Return={1}, reqBody={2}".format(order_kwargs["orderId"], res, json.dumps(reqBody)))
+            success = False
+        return res, success
+    
+    def do_bulk_cancel(self,return_type='json', *args, **order_kwargs):
+        # NOTE: settle type is not support my wallet
+        reqBody = {
+            "symbols": order_kwargs["symbols"],
+            "side": order_kwargs["side"],
+            "desc": order_kwargs["desc"],
+        }
+        reqBody = self.validate_cancel_bulk_params(reqBody)
+        target_url = self.get_url("cancelBulkOrder")
+        dumped_req_body = json.dumps(reqBody)
+        headers= self.make_header(self.url_parts['cancelBulkOrder'].split('/private')[1], 'POST', request_body=dumped_req_body)
+        res = self.post_data(target_url,headers=headers,data=dumped_req_body)
+        if res['status'] == 0 :
+            orderIds = res['data']
+            self._logger.info("[DONE] Cancel bulk order. OrderIds={0}, reqBody={1}".format(orderIds, json.dumps(reqBody)))
+            success = True
+        else :
+            self._logger.error("Reject to cancel bulk order.Return={0}, reqBody={1}".format( res, json.dumps(reqBody)))
+            success = False
+        return res, success
 
