@@ -3,6 +3,8 @@ import sys
 import logging
 import logging.config
 
+from datetime import datetime as dt
+
 # Path
 KULOKO_DIR=os.environ['KULOKO_DIR'] 
 MONGO_DIR=os.environ['MONGO_DIR'] 
@@ -17,6 +19,7 @@ from mongodb.src.mongo_handler import MongoHandler
 sys.path.append(os.path.join(os.environ['KULOKO_DIR'],"handler" ))
 import  socket_handler as skt_api 
 import  api_handler as web_api 
+import hist_loader as hist
 
 class Item:
     def __init__(self,name,item_type,currency):
@@ -32,6 +35,7 @@ class Item:
         # Handlers
         self.skt_api = skt_api
         self.web_api = web_api
+        self.hist = hist
 
         # Init Logger 
         logging.config.fileConfig(os.path.join(KULOKO_DIR,'ini/logconfig.ini'),defaults={'logfilename': os.path.join(LOGDIR,'logging.log')})

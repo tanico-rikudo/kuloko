@@ -1,4 +1,5 @@
 import time
+from datetime import datetime as dt
 from item import Item
 
 from util import daylib
@@ -47,8 +48,9 @@ class Orderbook(Item):
         update_time = dt.now()
         while True:
             time.sleep(1)
-            if (update_time - dt.now()).seconds > no_update_second:
-                self.logger.warning("[END]Update time is too past. Last update time:{0}".format(update_time)) 
+            lapse_seconds = (dt.now() - update_time).seconds
+            if lapse_seconds > no_update_second:
+                self.logger.warning("[END]Update time is too past. Last update time:{0}. Lapse={1} sec".format(update_time, lapse_seconds)) 
                 break 
             try:
                 data = self.orderbook_skt_api.get()
@@ -86,10 +88,11 @@ class Ticker(Item):
             self.logger.error("Cannot find socket connection.")            
             return 
         self.logger.info("[START] Dequeue")
-        
+        update_time = dt.now()
         while True:
-            if (update_time - dt.now()).seconds > no_update_second:
-                self.logger.warning("[END]Update time is too past. Last update time:{0}".format(update_time)) 
+            lapse_seconds = (dt.now() - update_time).seconds
+            if lapse_seconds > no_update_second:
+                self.logger.warning("[END]Update time is too past. Last update time:{0}. Lapse:{1}".format(update_time, lapse_seconds)) 
                 break 
             try:
                 time.sleep(1)
@@ -127,10 +130,12 @@ class Trade(Item):
             self.logger.error("Cannot find socket connection.")            
             return 
         self.logger.info("[START] Dequeue")
-        
+        update_time = dt.now()
         while True:
-            if (update_time - dt.now()).seconds > no_update_second:
-                self.logger.warning("[END]Update time is too past. Last update time:{0}".format(update_time)) 
+            now = dt.now()
+            lapse_seconds = (now - update_time ).seconds
+            if lapse_seconds> no_update_second:
+                self.logger.warning("[END]Update time is too past. Last update time:{0}. Lapse:{1}. {2}".format(update_time,lapse_seconds, dt.now())) 
                 break 
             try:
                 time.sleep(1)
