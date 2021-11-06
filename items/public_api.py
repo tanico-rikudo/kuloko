@@ -54,9 +54,9 @@ class Orderbook(Item):
                 break 
             try:
                 data = self.orderbook_skt_api.get()
-                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 if len(data)==0:
                     continue
+                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 insert_json =[ self.orderbook_skt_api.convert_shape(_data,5,"json") for _data in data ]
                 self.mongo_db.insert_many(insert_json)
                 update_time = dt.now()
@@ -97,9 +97,9 @@ class Ticker(Item):
             try:
                 time.sleep(1)
                 data = self.ticker_skt_api.get()
-                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 if len(data)==0:
                     continue
+                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 insert_json =[ self.ticker_skt_api.convert_shape(_data,"json") for _data in data ]
                 self.mongo_db.insert_many(insert_json)
                 update_time = dt.now()
@@ -140,9 +140,9 @@ class Trade(Item):
             try:
                 time.sleep(1)
                 data = self.trade_skt_api.get()
-                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 if len(data)==0:
                     continue
+                self.logger.info("Dequeued Data:{0}".format(len(data)))
                 insert_json =[ self.trade_skt_api.convert_shape(_data,"json") for _data in data ]
                 self.mongo_db.insert_many(insert_json)
                 update_time = dt.now()

@@ -59,7 +59,7 @@ class HistDataHandler:
                                   str_date[:4],
                                   str_date[4:6],
                                   str_date+ "_"+ sym+ ".csv.gz")
-        logger.info("[DONE]Get remote  taget url:{0}".format(target_url))
+        # logger.info("[DONE]Get remote  taget url:{0}".format(target_url))
         return target_url
     
     def get_local_target_url(self,sym, kind, int_date=None):
@@ -72,7 +72,7 @@ class HistDataHandler:
                                   str_date[:4],
                                   str_date[4:6],
                                   str_date+ "_"+ sym+ ".csv.gz")
-        logger.info("[DONE]Get remote  taget url:{0}".format(target_url))
+        # logger.info("[DONE]Get local  taget url:{0}".format(target_url))
         return target_url
 
     def get_hist(self,sym, kind, int_date, is_save=False, mode="auto"):
@@ -87,7 +87,7 @@ class HistDataHandler:
             logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
             
         if mode == 'remote':
-            df = self.download_remote_hist( save_path=save_path)
+            df = self.download_remote_hist( remote_path, save_path=save_path)
             logger.info("[DONE] Get remote hist data. Path={0}".format(remote_path))
         if mode == 'auto':
             if not os.path.isfile(local_path):
@@ -97,6 +97,9 @@ class HistDataHandler:
             else:
                 df = self.read_local_hist(local_path)
                 logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
+        
+        # time stamp format        
+        df['timestamp'] = df['timestamp'].apply(lambda x: dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False))
                 
         return df
 
@@ -132,7 +135,7 @@ class HistDataHandler:
     def save_hist(self, data, save_path):
         if os.path.isfile(save_path):
             logger.warn("Filepath={0} is already exist. "
-                        "However, download and overwirte forcefully".format(file_path))
+                        "However, download and overwirte forcefully".format(save_path))
         save_dir = os.path.dirname(save_path)
         if not os.path.isdir(save_dir):
             os.makedirs(save_dir)    
@@ -144,7 +147,6 @@ class HistDataHandler:
     def read_local_hist(self, read_local_path):
         
         df = pd.read_csv(read_local_path, compression='gzip')
-        df['timestamp'] = df['timestamp'].apply(lambda x: dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False))
         logger.info("[DONE] Readed data. Path={0}".format(read_local_path))
         return df
     
@@ -164,7 +166,7 @@ class HistDataHandler:
 
     def bulk_load(self,sym, kind, since_int_date, until_int_date, is_save=True, mode='auto'):
         target_dates = dl.get_between_date(since_int_date, until_int_date)
-        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_hist)(sym, _target_date,kind,  is_save, mode) for _target_date in target_dates)
+        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_hist)(sym, kind, _target_date,  is_save, mode) for _target_date in target_dates)
         return pd.concat(dfs, axis=0)
 
     def send_dynamo(self):
