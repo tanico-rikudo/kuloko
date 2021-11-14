@@ -20,6 +20,9 @@ sys.path.append(os.environ['COMMON_DIR'] )
 from util.exceptions import *
 from util import daylib
 from util import utils
+from util.config import ConfigManager
+
+cm = ConfigManager(os.environ['KULOKO_INI'])
 dl = daylib.daylib()
 
 logging.config.fileConfig(os.path.join(os.environ['KULOKO_DIR'],'ini/logconfig.ini'),defaults={'logfilename': os.path.join(os.environ['LOGDIR'],'logging.log')})
@@ -30,11 +33,10 @@ class HistDataHandler:
     def __init__(self,logger, general_config_ini=None,general_config_mode="DEFAULT"):
         self._logger = logger
         if general_config_ini is None:
-            general_config_ini = configparser.ConfigParser()
-            general_config_ini.read('../ini/config.ini', encoding='utf-8')
+            general_config_ini = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
             self._logger.info('[DONE]Load General Config.')
 
-        self.load_config( general_config_ini, general_config_mode)
+        self.load_config(general_config_ini, general_config_mode)
         self.set_config()
         self._logger.info('[DONE]API Initialized')
         

@@ -25,6 +25,9 @@ websocket.enableTrace(True) #trace ON
 
 sys.path.append(os.environ['COMMON_DIR'] )
 from util import daylib
+from util.config import ConfigManager
+
+cm = ConfigManager(os.environ['KULOKO_INI'])
 dl = daylib.daylib()
 
 
@@ -38,12 +41,10 @@ class Socket(object):
     def __init__(self,channel,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
         self._logger = logger
         if general_config_ini is None:
-            general_config_ini = configparser.ConfigParser()
-            general_config_ini.read('../ini/config.ini', encoding='utf-8')
+            general_config_ini = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
             self._logger.info('[DONE]Load General Config.')
         if private_api_ini is None:            
-            private_api_ini = configparser.ConfigParser()
-            private_api_ini.read('../private_api.ini', encoding='utf-8')
+            private_api_ini = cm.load_ini_config(path=None,config_name="private_api", mode=general_config_mode)
             self._logger.info('[DONE]Load Private API Config.')
 
         self.load_config( general_config_ini,private_api_ini,general_config_mode,private_api_mode)

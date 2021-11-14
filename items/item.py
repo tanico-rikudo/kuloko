@@ -21,6 +21,11 @@ import  socket_handler as skt_api
 import  api_handler as web_api 
 import hist_loader as hist
 
+#util
+from util.config import ConfigManager
+
+cm = ConfigManager(os.environ['KULOKO_INI'])
+
 class Item:
     def __init__(self,name,item_type,currency):
         import configparser
@@ -46,11 +51,15 @@ class Item:
         self.mongo_ini.read(os.path.join(MONGO_DIR,'ini/mongo_config.ini'), encoding='utf-8')
 
         # Init API
-        self.private_api_ini = configparser.ConfigParser()
-        self.private_api_ini.read(os.path.join(KULOKO_DIR,'ini/private_api.ini'), encoding='utf-8')
-
-        self.general_config_ini = configparser.ConfigParser()
-        self.general_config_ini.read(os.path.join(KULOKO_DIR,'ini/config.ini'), encoding='utf-8')
+        general_config_mode = "DEFAULT"
+        if general_config_ini is None:
+            general_config_ini=cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+            self._logger.info('[DONE]Load General Config.')
+        
+        private_api_mode = "DEFAULT"
+        if private_api_ini is None:            
+            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
+            self._logger.info('[DONE]Load Private API Config.')
         
     def init_mongodb(self):
         self.mongo_db = MongoHandler(self.mongo_ini['LOCAL'],self.item_type)
