@@ -25,9 +25,6 @@ from util.config import ConfigManager
 cm = ConfigManager(os.environ['KULOKO_INI'])
 dl = daylib.daylib()
 
-logging.config.fileConfig(os.path.join(os.environ['KULOKO_DIR'],'ini/logconfig.ini'),defaults={'logfilename': os.path.join(os.environ['LOGDIR'],'logging.log')})
-logger = logging.getLogger("KULOKO")
-
 class HistDataHandler:
 
     def __init__(self,logger, general_config_ini=None,general_config_mode="DEFAULT"):
@@ -49,8 +46,8 @@ class HistDataHandler:
         self.remote_end_point = os.path.join(self.general_config.get('ENDPOINT_URL'),self.general_config.get('HISTDATA_URL'))
         self.local_end_point= self.general_config.get('LOCAL_HISTDATA_PATH')
         self.n_usable_core= self.general_config.getint('N_USABLE_CORE')
-        logger.info("[DONE] Get end points={0}".format(self.remote_end_point))
-        logger.info('[DONE]Set Config from loaded config')
+        self._logger.info("[DONE] Get end points={0}".format(self.remote_end_point))
+        self._logger.info('[DONE]Set Config from loaded config')
         
     def get_remote_target_url(self,sym, kind, int_date=None):
         int_date = dl.dt_to_intD(dl.currentTime(0)) if int_date is None  else int_date
@@ -61,7 +58,7 @@ class HistDataHandler:
                                   str_date[:4],
                                   str_date[4:6],
                                   str_date+ "_"+ sym+ ".csv.gz")
-        # logger.info("[DONE]Get remote  taget url:{0}".format(target_url))
+        # self._logger.info("[DONE]Get remote  taget url:{0}".format(target_url))
         return target_url
     
     def get_local_target_url(self,sym, kind, int_date=None):
@@ -74,7 +71,7 @@ class HistDataHandler:
                                   str_date[:4],
                                   str_date[4:6],
                                   str_date+ "_"+ sym+ ".csv.gz")
-        # logger.info("[DONE]Get local  taget url:{0}".format(target_url))
+        # self._logger.info("[DONE]Get local  taget url:{0}".format(target_url))
         return target_url
 
     def get_hist(self,sym, kind, int_date, is_save=False, mode="auto"):
@@ -84,21 +81,21 @@ class HistDataHandler:
         save_path = local_path if is_save else None
         if mode == 'local':
             if not os.path.isfile(local_path):
-                logger.error("Fail to get hist data. path{0}:{1}".format(local_path, e))
+                self._logger.error("Fail to get hist data. path{0}:{1}".format(local_path, e))
             df = self.read_local_hist(local_path)
-            logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
+            self._logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
             
         if mode == 'remote':
             df = self.download_remote_hist( remote_path, save_path=save_path)
-            logger.info("[DONE] Get remote hist data. Path={0}".format(remote_path))
+            self._logger.info("[DONE] Get remote hist data. Path={0}".format(remote_path))
         if mode == 'auto':
             if not os.path.isfile(local_path):
-                logger.info("No local hist data. Try: remote.  path{0}".format(local_path))
+                self._logger.info("No local hist data. Try: remote.  path{0}".format(local_path))
                 df = self.download_remote_hist(remote_path, save_path=save_path)
-                logger.info("[DONE] Get remote hist data. Path={0}".format(remote_path))
+                self._logger.info("[DONE] Get remote hist data. Path={0}".format(remote_path))
             else:
                 df = self.read_local_hist(local_path)
-                logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
+                self._logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
         
         # time stamp format        
         df['timestamp'] = df['timestamp'].apply(lambda x: dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False))
@@ -112,10 +109,10 @@ class HistDataHandler:
             response = requests.get(url)
             if response.headers['Content-Type'] != 'text/csv':
                 raise Exception("Response content type is invalid. Type={0}".format(response.headers['Content-Type']))
-            logger.info("[DONE] Get historical data. url={0}".format(url))
+            self._logger.info("[DONE] Get historical data. url={0}".format(url))
 
         except Exception as e:
-            logger.error("Fail to get historical data. url={0}:{1}".format(url, e))
+            self._logger.error("Fail to get historical data. url={0}:{1}".format(url, e))
             return None
         
         binary_data = response.content
@@ -130,26 +127,26 @@ class HistDataHandler:
             try:
                 self.save_hist(binary_data, save_path)
             except Exception as e:
-                logger.error("Fail to save historical data. Url={0}:{1}".format(save_path, e))
+                self._logger.error("Fail to save historical data. Url={0}:{1}".format(save_path, e))
             finally:
                 return data
             
     def save_hist(self, data, save_path):
         if os.path.isfile(save_path):
-            logger.warn("Filepath={0} is already exist. "
+            self._logger.warn("Filepath={0} is already exist. "
                         "However, download and overwirte forcefully".format(save_path))
         save_dir = os.path.dirname(save_path)
         if not os.path.isdir(save_dir):
             os.makedirs(save_dir)    
-            logger.info("[DONE] Make dir:{0}".format(save_dir))   
+            self._logger.info("[DONE] Make dir:{0}".format(save_dir))   
         with open(save_path, 'wb') as f:
             f.write(data)
-        logger.info("[DONE] Save historical data. path:{0}".format(save_path))
+        self._logger.info("[DONE] Save historical data. path:{0}".format(save_path))
         
     def read_local_hist(self, read_local_path):
         
         df = pd.read_csv(read_local_path, compression='gzip')
-        logger.info("[DONE] Readed data. Path={0}".format(read_local_path))
+        self._logger.info("[DONE] Readed data. Path={0}".format(read_local_path))
         return df
     
     def convert_gzip_binary_to_plain(self,  data):

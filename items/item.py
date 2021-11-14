@@ -43,23 +43,17 @@ class Item:
         self.hist = hist
 
         # Init Logger 
-        logging.config.fileConfig(os.path.join(KULOKO_DIR,'ini/logconfig.ini'),defaults={'logfilename': os.path.join(LOGDIR,'logging.log')})
-        self.logger = logging.getLogger("KULOKO")
+        self.logger = cm.load_log_config(os.path.join(LOGDIR,'logging.log'),log_name="KULOKO")
 
         # Init mongo
-        self.mongo_ini = configparser.ConfigParser()
-        self.mongo_ini.read(os.path.join(MONGO_DIR,'ini/mongo_config.ini'), encoding='utf-8')
+        self.mongo_ini=cm.load_ini_config(path=None,config_name="mongo", mode=None)
 
         # Init API
-        general_config_mode = "DEFAULT"
-        if general_config_ini is None:
-            general_config_ini=cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
-        
-        private_api_mode = "DEFAULT"
-        if private_api_ini is None:            
-            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
-            self._logger.info('[DONE]Load Private API Config.')
+        general_config_mode = None
+        self.general_config_ini=cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+
+        private_api_mode = None
+        self.private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
         
     def init_mongodb(self):
         self.mongo_db = MongoHandler(self.mongo_ini['LOCAL'],self.item_type)
