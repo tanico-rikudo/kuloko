@@ -54,6 +54,10 @@ class Socket(object):
         self.load_urls()
         self.ws = None
         
+    def __del__(self):
+        self.disconnect()
+        self._logger.info('[DONE] Socket Instance deleted.')
+        
     def load_config(self,general_config_ini,private_api_ini,general_config_mode,private_api_mode):
         self.private_api_config = private_api_ini[private_api_mode]
         self.general_config = general_config_ini[general_config_mode]
@@ -142,7 +146,7 @@ class Socket(object):
 
     def on_close(self):
         message = {
-            "command": "unsubscribe",
+            "command": "disconnected",
             "channel": self.channel,
             "symbol": self.sym 
         }
@@ -250,7 +254,6 @@ class Orderbooks(Socket):
         #Filter Depth
         for _side in ['asks','bids']:
                 raw_data[_side]= raw_data[_side][:depth]
-        self._logger.info(raw_data['timestamp'])
         time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
         symbol = raw_data['symbol']
 
