@@ -39,7 +39,17 @@ class Orderbook(Item):
     def subscribe(self):
         self.orderbook_skt_api.subscribe()
         
-    def dequeue(self):
+    def dequeue(self, autosave_mongo=True):
+        data = self.orderbook_skt_api.get()
+        if len(data)==0:
+            return None
+        self.logger.info("Dequeued Data:{0}".format(len(data)))
+        ret_json =[ self.orderbook_skt_api.convert_shape(_data,5,"json") for _data in data ]
+        if autosave_mongo:  
+            self.mongo_db.insert_many(ret_json)
+        return ret_json
+          
+    def dequeue_forever(self):
         no_update_second=60*60  #TODO: define outside
         if not self.orderbook_skt_api.is_connected():
             self.logger.error("Cannot find socket connection.")            
@@ -52,13 +62,9 @@ class Orderbook(Item):
             if lapse_seconds > no_update_second:
                 self.logger.warning("[END]Update time is too past. Last update time:{0}. Lapse={1} sec".format(update_time, lapse_seconds)) 
                 break 
+            self.dequeue()
             try:
-                data = self.orderbook_skt_api.get()
-                if len(data)==0:
-                    continue
-                self.logger.info("Dequeued Data:{0}".format(len(data)))
-                insert_json =[ self.orderbook_skt_api.convert_shape(_data,5,"json") for _data in data ]
-                self.mongo_db.insert_many(insert_json)
+                insert_json =  self.dequeue()
                 update_time = dt.now()
             except Exception as e:
                 self.logger.warning("Fail to deque data:{0}".format(e))
@@ -82,7 +88,17 @@ class Ticker(Item):
     def subscribe(self):
         self.ticker_skt_api.subscribe()
         
-    def dequeue(self):
+    def dequeue(self, autosave_mongo=True):
+        data = self.ticker_skt_api.get()
+        if len(data)==0:
+            return
+        self.logger.info("Dequeued Data:{0}".format(len(data)))
+        ret_json =[ self.ticker_skt_api.convert_shape(_data,"json") for _data in data ]
+        if  autosave_mongo:
+            self.mongo_db.insert_many(ret_json)
+        return ret_json
+                
+    def dequeue_forever(self):
         no_update_second=60*60  #TODO: define outside
         if not self.ticker_skt_api.is_connected():
             self.logger.error("Cannot find socket connection.")            
@@ -95,13 +111,7 @@ class Ticker(Item):
                 self.logger.warning("[END]Update time is too past. Last update time:{0}. Lapse:{1}".format(update_time, lapse_seconds)) 
                 break 
             try:
-                time.sleep(1)
-                data = self.ticker_skt_api.get()
-                if len(data)==0:
-                    continue
-                self.logger.info("Dequeued Data:{0}".format(len(data)))
-                insert_json =[ self.ticker_skt_api.convert_shape(_data,"json") for _data in data ]
-                self.mongo_db.insert_many(insert_json)
+                self.dequeue()
                 update_time = dt.now()
             except Exception as e:
                 self.logger.warning("Fail to deque data:{0}".format(e))
@@ -124,7 +134,17 @@ class Trade(Item):
     def subscribe(self):
         self.trade_skt_api.subscribe()
         
-    def dequeue(self):
+    def dequeue(self, autosave_mongo=True):
+        data = self.trade_skt_api.get()
+        if len(data)==0:
+            return None
+        self.logger.info("Dequeued Data:{0}".format(len(data)))
+        ret_json =[ self.trade_skt_api.convert_shape(_data,"json") for _data in data ]
+        if autosave_mongo:
+            self.mongo_db.insert_many(ret_json)
+        return ret_json
+      
+    def dequeue_forever(self):
         no_update_second=60*60  #TODO: define outside
         if not self.trade_skt_api.is_connected():
             self.logger.error("Cannot find socket connection.")            
@@ -138,13 +158,7 @@ class Trade(Item):
                 self.logger.warning("[END]Update time is too past. Last update time:{0}. Lapse:{1}. {2}".format(update_time,lapse_seconds, dt.now())) 
                 break 
             try:
-                time.sleep(1)
-                data = self.trade_skt_api.get()
-                if len(data)==0:
-                    continue
-                self.logger.info("Dequeued Data:{0}".format(len(data)))
-                insert_json =[ self.trade_skt_api.convert_shape(_data,"json") for _data in data ]
-                self.mongo_db.insert_many(insert_json)
+                self.dequeue()
                 update_time = dt.now()
             except Exception as e:
                 self.logger.warning("Fail to deque data:{0}".format(e))
