@@ -94,14 +94,14 @@ class Socket(object):
             url,
             on_message = self.on_message,on_open=self.on_open,
             on_error = self.on_error, on_close = self.on_close)
-        self._logger.info("Socket Connected")
+        self._logger.info(f"Socket Connected. Channel={self.channel}")
     
     def subscribe(self):
         self.ws.keep_running = True 
         self.thread = threading.Thread(target=lambda: self.ws.run_forever())
         self.thread.daemon = True
         self.thread.start()
-        self._logger.info("Start to subscribe")
+        self._logger.info(f"Start to subscribe. Channel={self.channel}")
 
     def is_connected(self):
         flag = False
@@ -113,7 +113,7 @@ class Socket(object):
     def disconnect(self):
         self.ws.keep_running = False
         self.ws.close()
-        self._logger.info("Socket closed")
+        self._logger.info(f"Socket closed. Channel={self.channel}")
 
     def get(self):
         """ DeQue data possesing at present 
@@ -131,36 +131,36 @@ class Socket(object):
             return_data[_i]['size'] =return_data[_i]['size']
         return return_data
 
-    def on_message(self, message):
+    def on_message(self, ws,message):
         # self._logger.info('Received:{0}'.format(message))
-        self._logger.info('Received: Channel={0}'.format(self.channel))
+        # self._logger.info('Received: Channel={0}'.format(self.channel))
         self.queue.append(json.loads(message))
         if len(self.queue) > self.maxlen:
-            self._logger.warn("Message queue is full. Old item are discarded")
+            self._logger.warn(f"Message queue is full. Old item are discarded. Channel={self.channel}")
 
-    def on_error(self, error):
+    def on_error(self, ws, error):
         self._logger.error('Try reconnect {0}'.format(error),exc_info=True)
         self.disconnect()
         time.sleep(0.5)
         self.connect(self.url , self.sym)
 
-    def on_close(self):
+    def on_close(self,ws, close_status_code, close_msg):
         message = {
             "command": "disconnected",
             "channel": self.channel,
             "symbol": self.sym 
         }
         self.ws.send(json.dumps(message))
-        self._logger.info('Websocket disconnected')
+        self._logger.info(f'Websocket disconnected. Channel={self.channel}')
 
-    def on_open(self):
+    def on_open(self,ws):
         message = {
             "command": "subscribe",
             "channel": self.channel,
             "symbol": self.sym 
         }
         self.ws.send(json.dumps(message))
-        self._logger.info('Socket opened')
+        self._logger.info(f'Socket opened. Channel={self.channel}')
 
 
     def make_header(self,access_path, access_method,request_body=""):
@@ -229,6 +229,7 @@ class Trade(Socket):
 
     def convert_shape(self, raw_data, return_type):
         data = raw_data
+        del data["_id"]
         if return_type is 'raw':
             return raw_data
         elif return_type in ['json','dataframe']:
@@ -256,6 +257,7 @@ class Orderbooks(Socket):
                 raw_data[_side]= raw_data[_side][:depth]
         time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
         symbol = raw_data['symbol']
+        del raw_data["_id"]
 
         if return_type is 'raw':
             return raw_data
@@ -296,6 +298,8 @@ class Ticker(Socket):
 
     def convert_shape(self, raw_data,return_type):
         symbol = raw_data['symbol']
+        del raw_data["_id"]
+        
         if return_type is 'raw':
             return raw_data
         elif return_type is 'json':
