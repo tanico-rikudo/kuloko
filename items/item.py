@@ -23,6 +23,7 @@ import hist_loader as hist
 
 #util
 from util.config import ConfigManager
+from util.daylib import daylib
 
 cm = ConfigManager(os.environ['KULOKO_INI'])
 
@@ -54,6 +55,9 @@ class Item:
 
         private_api_mode = None
         self.private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
+        
+        #util 
+        self.dl = daylib()
         
     def init_mongodb(self):
         self.mongo_db = MongoHandler(self.mongo_ini['LOCAL'],self.item_type)

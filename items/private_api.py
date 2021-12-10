@@ -2,6 +2,7 @@ import time
 from item import Item
 import json
 from util.exceptions import *
+import copy
 class Margin(Item):
     def __init__(self):
         super(Margin, self).__init__(name="margin",item_type="margin",currency="BTC")
@@ -10,8 +11,9 @@ class Margin(Item):
       
     def fetch(self, return_type="json"): 
         v = self.margin_web_api.fetch(return_type)
+        insert_json = copy.deepcopy(v)
         if return_type=="json":
-            self.mongo_db.insert_one(v)
+            self.mongo_db.insert_one(insert_json)
         return v
     
 
@@ -23,11 +25,10 @@ class Assets(Item):
       
     def fetch(self, return_type="json"): 
         v = self.assets_web_api.fetch(return_type)
+        insert_json = copy.deepcopy(v)
+        if return_type=="json":
+            self.mongo_db.insert_one(insert_json)
         return v
-        #todo 
-        # if return_type=="json":
-        #     self.mongo_db.insert
-        # return v
         
 class Orders(Item):
     def __init__(self):

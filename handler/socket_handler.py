@@ -229,7 +229,6 @@ class Trade(Socket):
 
     def convert_shape(self, raw_data, return_type):
         data = raw_data
-        del data["_id"]
         if return_type is 'raw':
             return raw_data
         elif return_type in ['json','dataframe']:
@@ -257,7 +256,6 @@ class Orderbooks(Socket):
                 raw_data[_side]= raw_data[_side][:depth]
         time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
         symbol = raw_data['symbol']
-        del raw_data["_id"]
 
         if return_type is 'raw':
             return raw_data
@@ -298,7 +296,6 @@ class Ticker(Socket):
 
     def convert_shape(self, raw_data,return_type):
         symbol = raw_data['symbol']
-        del raw_data["_id"]
         
         if return_type is 'raw':
             return raw_data

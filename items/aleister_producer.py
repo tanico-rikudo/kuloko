@@ -8,6 +8,7 @@ from mongodb.src.mongo_handler import *
 import json 
 
 #  stand alone from ITEM
+
 class AleisterFeedAgent(Item):
     def  __init__(self):
         super(AleisterFeedAgent, self).__init__(name="AleisterFeedAgent",item_type="AleisterFeedAgent",currency="BTC")
@@ -20,14 +21,14 @@ class AleisterFeedAgent(Item):
         #MQ
         self.mqserver_host = "localhost"
         self.mqname = "aleister"
-        self.routing_key = "realtime_data"
+        self.routing_key = "aleister"
         self.interval_sec = 10
         self.max_feed_instance =4
         
         #db
         self.mongo_util = None
         
-    def init_mongodb(self):
+    def init_db(self):
         # target set
         self.tables = ['orderbook','trade','ticker']
         # Init mongo
@@ -44,7 +45,7 @@ class AleisterFeedAgent(Item):
         self.logger.info(f"[DONE] Connect MQ server. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
         
     def send_data_via_mq(self, data):  
-        # self.logger.info(data)
+        self.logger.info(data)
         self.channel.basic_publish(exchange='',
                                     routing_key=self.routing_key,
                                     body=json.dumps(data))
@@ -149,7 +150,7 @@ class AleisterFeedAgent(Item):
             tables  = self.tables
             
         datas = {}
-        date_list  = get_between_date(start_date, end_date)
+        date_list  = self.dl.get_between_date(start_date, end_date)
         for _date in  date_list:
             datas[_date] = {}
             for table_name in tables:
@@ -157,16 +158,16 @@ class AleisterFeedAgent(Item):
         
         return datas
 
-    def do_in_realtime():
+    def sart_realtime_fetch(self):
         """
         Provide master for  realtime to predict realtime
         """
         self.setup_realtime_data()
         self.subscribe_realtime_data()
         
+    def stop_realtime_fetch(self):
+        self.stop_subscribe_realtime_data()
+        
 
-    def do_in_past():
-        """
-        Provide master for afterward to  learning
-        """
-        pass
+
+

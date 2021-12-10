@@ -6,6 +6,8 @@ from util import daylib
 from util import utils
 dl = daylib.daylib()
 
+import  copy
+
 class venueStatus(Item):
     def __init__(self):
         super(venueStatus, self).__init__(name="venueStatus",item_type="venueStatus",currency="BTC")
@@ -43,10 +45,11 @@ class Orderbook(Item):
         data = self.orderbook_skt_api.get()
         if len(data)==0:
             return None
-        self.logger.info("Dequeued Data:{0}".format(len(data)))
+        # self.logger.info("Dequeued Data:{0}".format(len(data)))
         ret_json =[ self.orderbook_skt_api.convert_shape(_data,5,"json") for _data in data ]
+        insert_json =  copy.deepcopy(ret_json)
         if autosave_mongo:  
-            self.mongo_db.insert_many(ret_json)
+            self.mongo_db.insert_many(insert_json)
         return ret_json
           
     def dequeue_forever(self):
@@ -92,10 +95,11 @@ class Ticker(Item):
         data = self.ticker_skt_api.get()
         if len(data)==0:
             return
-        self.logger.info("Dequeued Data:{0}".format(len(data)))
+        # self.logger.info("Dequeued Data:{0}".format(len(data)))
         ret_json =[ self.ticker_skt_api.convert_shape(_data,"json") for _data in data ]
+        insert_json =  copy.deepcopy(ret_json)
         if  autosave_mongo:
-            self.mongo_db.insert_many(ret_json)
+            self.mongo_db.insert_many(insert_json)
         return ret_json
                 
     def dequeue_forever(self):
@@ -138,10 +142,12 @@ class Trade(Item):
         data = self.trade_skt_api.get()
         if len(data)==0:
             return None
-        self.logger.info("Dequeued Data:{0}".format(len(data)))
+        # self.logger.info("Dequeued Data:{0}".format(len(data)))
         ret_json =[ self.trade_skt_api.convert_shape(_data,"json") for _data in data ]
+        insert_json =  copy.deepcopy(ret_json)
+
         if autosave_mongo:
-            self.mongo_db.insert_many(ret_json)
+            self.mongo_db.insert_many(insert_json)
         return ret_json
       
     def dequeue_forever(self):
