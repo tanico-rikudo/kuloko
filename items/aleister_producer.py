@@ -19,9 +19,9 @@ class AleisterFeedAgent(Item):
         self.db_accesser = None
         
         #MQ
-        self.mqserver_host = "localhost"
-        self.mqname = "aleister"
-        self.routing_key = "aleister"
+        self.mqserver_host = self.general_config_ini.get("MQ_HOST")
+        self.mqname = self.general_config_ini.get("MQ_NAME")
+        self.routing_key = self.general_config_ini.get("MQ_ROUTING")
         self.interval_sec = 10
         self.max_feed_instance =4
         
@@ -45,25 +45,19 @@ class AleisterFeedAgent(Item):
     def connect_mq(self):
 
         self.connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost'))
+        pika.ConnectionParameters(host=self.mqserver_host))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.mqname)
-        # self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-        # self.channel = self.connection.channel()
-        # self.channel.queue_declare(queue=self.mqname)
-        # self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.mqserver_host))
-        # self.channel = self.connection.channel()
-        # self.channel.queue_declare(queue=self.mqname)
         self.logger.info(f"[DONE] Connect MQ server. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
         
-    # def publish_mq(self, data, exchange='', routing_key=None,properties=None ):  
-    #     exchange = '' if exchange is None else exchange
-    #     routing_key = self.routing_key if routing_key is None else routing_key
-    #     self.channel.basic_publish(exchange=exchange,
-    #                                 routing_key=routing_key,
-    #                                 properties= properties,
-    #                                 body=data)
-    #     self.logger.info(f"[DONE] Send data via MQ. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
+    def publish_mq(self, data, exchange='', routing_key=None,properties=None ):  
+        exchange = '' if exchange is None else exchange
+        routing_key = self.routing_key if routing_key is None else routing_key
+        self.channel.basic_publish(exchange=exchange,
+                                    routing_key=routing_key,
+                                    properties= properties,
+                                    body=data)
+        self.logger.info(f"[DONE] Send data via MQ. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
         
     def close_mq(self):
         self.channel.basic_cancel() # declare no more send

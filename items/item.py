@@ -27,7 +27,7 @@ from util.daylib import daylib
 
 cm = ConfigManager(os.environ['KULOKO_INI'])
 
-class Item:
+class Item(object):
     def __init__(self,name,item_type,currency):
         import configparser
         import logging
