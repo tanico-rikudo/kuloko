@@ -5,5 +5,4 @@ pandas==1.3.4
 pymongo==4.0
 pytest==6.2.5
 requests==2.26.0
-util==0.0.1
 websocket_client==1.2.1
