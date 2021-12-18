@@ -74,7 +74,7 @@ class HistDataHandler:
         # self._logger.info("[DONE]Get local  taget url:{0}".format(target_url))
         return target_url
 
-    def get_hist(self,sym, kind, int_date, is_save=False, mode="auto"):
+    def get_file_hist(self,sym, kind, int_date, is_save=False, mode="auto"):
         str_date = dl.intD_to_strD(int_date)
         local_path = self.get_local_target_url(sym, kind, int_date)
         remote_path = self.get_remote_target_url(sym, kind, int_date)
@@ -170,7 +170,7 @@ class HistDataHandler:
 
     def bulk_load(self,sym, kind, since_int_date, until_int_date, is_save=True, mode='auto'):
         target_dates = dl.get_between_date(since_int_date, until_int_date)
-        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_hist)(sym, kind, _target_date,  is_save, mode) for _target_date in target_dates)
+        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_file_hist)(sym, kind, _target_date,  is_save, mode) for _target_date in target_dates)
         dfs = [ df for  df in dfs if df is not None]
         if len(dfs) ==  0:
             self._logger.warning("ALL object is failure.")
