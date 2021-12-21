@@ -19,7 +19,8 @@ from mongodb.src.mongo_handler import MongoHandler
 sys.path.append(os.path.join(os.environ['KULOKO_DIR'],"handler" ))
 import  socket_handler as skt_api 
 import  api_handler as web_api 
-import hist_loader as hist
+import hist_loader as file_hist
+import db_loader as db_hist
 
 #util
 from util.config import ConfigManager
@@ -41,7 +42,8 @@ class Item(object):
         # Handlers
         self.skt_api = skt_api
         self.web_api = web_api
-        self.hist = hist
+        self.file_hist = file_hist
+        self.db_hist = db_hist
 
         # Init Logger 
         self.logger = cm.load_log_config(os.path.join(LOGDIR,'logging.log'),log_name="KULOKO")

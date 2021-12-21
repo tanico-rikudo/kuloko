@@ -39,7 +39,7 @@ class HistDataHandler:
         
     def load_config(self,general_config_ini,general_config_mode):
         self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. Private API:[{0}] General:[{1}]'
+        self._logger.info('[DONE]Load Config. Hist File loader:[{0}] General:[{1}]'
             .format(general_config_ini,general_config_mode))
 
     def set_config(self):
@@ -100,7 +100,7 @@ class HistDataHandler:
         
         if  df is not None:
             # time stamp format     
-            df['timestamp'] = df['timestamp'].apply(lambda x: dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False))
+            df['timestamp'] = df['timestamp'].apply(lambda x: dl.dt_to_intYMDHMSF(dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False)))
         
         return df
 

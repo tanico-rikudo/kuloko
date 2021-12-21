@@ -8,7 +8,6 @@ from mongodb.src.mongo_handler import *
 import json 
 
 #  stand alone from ITEM
-
 class AleisterFeedAgent(Item):
     def  __init__(self):
         super(AleisterFeedAgent, self).__init__(name="AleisterFeedAgent",item_type="AleisterFeedAgent",currency="BTC")
@@ -33,8 +32,6 @@ class AleisterFeedAgent(Item):
         self.db_accesser.dao.close()
         
     def init_db(self):
-        # target set
-        self.tables = ['orderbook','trade','ticker']
         # Init mongo
         self.init_mongodb()
         
@@ -181,22 +178,6 @@ class AleisterFeedAgent(Item):
             self.logger.info(f"[RETURN] Returrn RPC request. ID={corr_id}")
         except Exception as e:
             self.logger.warning(f"[Failure] Fail to replay. ID={corr_id}")
-                
-    def fetch_hist_realtime_data(self, start_date, end_date, tables):
-        """
-        Get realtime feed data from DB
-        """
-        if  tables is None:
-            tables  = self.tables
-            
-        datas = {}
-        date_list  = self.dl.get_between_date(start_date, end_date)
-        for _date in  date_list:
-            datas[_date] = {}
-            for table_name in tables:
-                datas[_date][table_name] = self.db_accesser.find_at_date(table_name, str(_date))
-        
-        return datas
 
     def start_realtime_fetch(self):
         """

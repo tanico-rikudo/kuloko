@@ -78,7 +78,7 @@ class Orderbook(Item):
         
 class Ticker(Item):
     def __init__(self):
-        super(Ticker, self).__init__(name="trade",item_type="trade",currency="BTC")
+        super(Ticker, self).__init__(name="ticker",item_type="ticker",currency="BTC")
         self.ticker_skt_api = self.skt_api.Ticker(self.logger, self.general_config_ini, self.private_api_ini)
         
         # Init mongo

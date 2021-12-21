@@ -9,10 +9,12 @@ import numpy as np
 import requests
 import json
 import os
+import copy
 
 import time
 from datetime import datetime as dt
 from datetime import  timedelta, timezone
+from joblib import Parallel, delayed
 
 import hmac
 import hashlib
@@ -31,21 +33,27 @@ class DbLoadHandler:
 
     def __init__(self,logger, general_config_ini=None,general_config_mode="DEFAULT",mongo_db=None):
         self._logger = logger
-
         if general_config_ini is None:
             general_config_ini=cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
             self._logger.info('[DONE]Load General Config.')
-        if private_api_ini is None:            
-            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
-            self._logger.info('[DONE]Load Private API Config.')
 
-        self.load_config( general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+        self.load_config( general_config_ini,general_config_mode)
         self.set_config()
         self.mongo_db = mongo_db
+        self.load_db_accessor()
         self._logger.info('[DONE]DB loader Initialized')
         
-    def load_db_accessor(self, mongo_db):
-        self.db_accesser =  MongoUtil(self.mongo_db, self.logger)
+    def load_config(self,general_config_ini,general_config_mode):
+        self.general_config = general_config_ini[general_config_mode]
+        self._logger.info('[DONE]Load Config. DB config:[{0}] General:[{1}]'
+            .format(general_config_ini,general_config_mode))
+        
+    def set_config(self):
+        self.n_usable_core= self.general_config.getint('N_USABLE_CORE')
+        self._logger.info('[DONE]Set Config from loaded config')
+        
+    def load_db_accessor(self):
+        self.db_accesser =  MongoUtil(self.mongo_db, self._logger)
         
     def bulk_load(self, sym, kind, since_int_date, until_int_date):
         target_dates = dl.get_between_date(since_int_date, until_int_date)
@@ -57,18 +65,20 @@ class DbLoadHandler:
             return None
         return pd.concat(dfs, axis=0)
         
-    def get_db_hist(self, sym, table_name, start_date, end_date, tables):
+    def get_db_hist(self, sym, table_name, start_date, end_date):
         """
         Get realtime feed data from DB
         """
-        if  tables is None:
-            tables  = self.tables
-        datas = {}
-        date_list  = self.dl.get_between_date(start_date, end_date)
+        datas = []
+        date_list  = dl.get_between_date(start_date, end_date)
         for _date in  date_list:
-            datas[_date] = {}
-            for table_name in tables:
-                datas[_date][table_name] = self.db_accesser.find_at_date(table_name, str(_date))
+            raw_data = pd.DataFrame(self.db_accesser.find_at_date(table_name, str(_date)))
+            del  raw_data["_id"]
+            del  raw_data["channel"]
+            # raw_data["date"] = _date
+            datas.append(raw_data)
+            
+        datas = pd.concat(datas)
         
         return datas
 
