@@ -5,7 +5,9 @@ from item import Item
 import public_api
 import private_api
 from mongodb.src.mongo_handler import *
-import json 
+import json
+from mq.mq_handler import MqProvider
+
 
 #  stand alone from ITEM
 class AleisterFeedAgent(Item):
@@ -18,11 +20,11 @@ class AleisterFeedAgent(Item):
         self.db_accesser = None
         
         #MQ
-        self.mqserver_host = self.general_config_ini.get("MQ_HOST")
-        self.mqname = self.general_config_ini.get("MQ_NAME")
-        self.routing_key = self.general_config_ini.get("MQ_ROUTING")
-        self.interval_sec = 10
-        self.max_feed_instance =4
+        mqserver_host = self.general_config_ini.get("MQ_HOST")
+        mqname = self.general_config_ini.get("MQ_NAME")
+        routing_key = self.general_config_ini.get("MQ_ROUTING")
+        self.interval_sec = 10  #todo: outside
+        self.max_feed_instance =4 #todo: outside
         
         #db
         self.mongo_util = None
@@ -38,28 +40,6 @@ class AleisterFeedAgent(Item):
         # wrap util
         self.db_accesser =  MongoUtil(self.mongo_db, self.logger)
         self.logger.info("[DONE] Init mongo DB wrpper")
-        
-    def connect_mq(self):
-
-        self.connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host=self.mqserver_host))
-        self.channel = self.connection.channel()
-        self.channel.queue_declare(queue=self.mqname)
-        self.logger.info(f"[DONE] Connect MQ server. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
-        
-    def publish_mq(self, data, exchange='', routing_key=None,properties=None ):  
-        exchange = '' if exchange is None else exchange
-        routing_key = self.routing_key if routing_key is None else routing_key
-        self.channel.basic_publish(exchange=exchange,
-                                    routing_key=routing_key,
-                                    properties= properties,
-                                    body=data)
-        self.logger.info(f"[DONE] Send data via MQ. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
-        
-    def close_mq(self):
-        self.channel.basic_cancel() # declare no more send
-        self.connection.close()
-        self.logger.info(f"[DONE] Close MQ connecton. Host={self.mqserver_host}, Name={self.mqname}, Routing={self.routing_key}")
         
     def init_skt(self):
         self.socket_handler = {
@@ -110,7 +90,8 @@ class AleisterFeedAgent(Item):
         self.init_rest()
         
         #mq
-        self.connect_mq()
+        self.mq_privider = MqProvider( mqserver_host, mqname, routing_key, logger)
+        self.mq_privider.connect_mq()
         self.logger.info(f"[DONE] Init data fetch setup")
         
     def subscribe_realtime_data(self):
@@ -156,7 +137,7 @@ class AleisterFeedAgent(Item):
     
     def publish_realtime_data(self):
         data = self.fetch_realtime_data()
-        self.publish_mq(data)
+        self.mq_privider.publish_mq(data)
         
     def replay_realtime_data(self, ch, method, properties, body):
         self.logger.info(f"[DONE] Get request MQ.")
@@ -184,7 +165,7 @@ class AleisterFeedAgent(Item):
         Provide master for  realtime to predict realtime
         """
         self.setup_realtime_data()
-        # self.subscribe_realtime_data()
+        self.subscribe_realtime_data()
         self.start_realtime_rpc_receiver()
         
     def stop_realtime_fetch(self):
