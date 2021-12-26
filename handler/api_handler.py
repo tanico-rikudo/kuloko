@@ -153,7 +153,7 @@ class venueStatus(API):
         elif return_type is 'json':
             data = {}
             data['status']  = raw_data['data']['status']
-            data['res_time']  = dl.dt_to_intYMDHMSF(
+            data['res_time']  = dl.dt_to_strYMDHMSF(
                 dl.str_utc_to_dt_offset(raw_data["responsetime"],self.tz_offset))
             return data
         else:
@@ -209,7 +209,7 @@ class Orderbook(API):
             
             if return_type is 'json':
                 data = {_key :_value for _key, _value in zip(keys, values)}
-                data['time'] = dl.dt_to_intYMDHMSF(data['time'])
+                data['time'] = dl.dt_to_strYMDHMSF(data['time'])
             elif return_type is 'seq':
                 data = values         
 
@@ -248,7 +248,7 @@ class Ticks(API):
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data['data'][0][_item])
-            data["timestamp"] = dl.dt_to_intYMDHMSF(
+            data["timestamp"] = dl.dt_to_strYMDHMSF(
                 dl.str_utc_to_dt_offset(raw_data['data'][0]["timestamp"],self.tz_offset))
             return data
         else:
@@ -283,7 +283,7 @@ class Trade(API):
                     data.append(_trade)
             if return_type in 'json':
                 for i in range(len(data)):
-                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
+                    data[i]["timestamp"] = dl.dt_to_strYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -319,7 +319,7 @@ class Margin(API):
 
             if return_type in 'json':
                 self._logger.info(raw_data['data'])
-                raw_data['responsetime']= dl.dt_to_intYMDHMSF(responsetime_dt)
+                raw_data['responsetime']= dl.dt_to_strYMDHMSF(responsetime_dt)
                 return raw_data['data']
             if return_type in 'dataframe':
                 return pd.Series(raw_data['data'])
@@ -353,7 +353,7 @@ class Assets(API):
                 data.append(_symbol_data)
             if return_type in 'json':
                 # for i in range(len(data)):
-                #     data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
+                #     data[i]["timestamp"] = dl.dt_to_strYMDHMSF(data[i]["timestamp"])
                 json_obj = { _data['symbol']: _data for _data in data}
                 return json_obj
             if return_type in 'dataframe':
@@ -408,7 +408,7 @@ class Orders(API):
                     data.append(_order)
             if return_type in 'json':
                 for i in range(len(data)):
-                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
+                    data[i]["timestamp"] = dl.dt_to_strYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -471,7 +471,7 @@ class Executions(API):
                     data.append(_execution)
             if return_type in 'json':
                 for i in range(len(data)):
-                    data[i]["timestamp"] = dl.dt_to_intYMDHMSF(data[i]["timestamp"])
+                    data[i]["timestamp"] = dl.dt_to_strYMDHMSF(data[i]["timestamp"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
