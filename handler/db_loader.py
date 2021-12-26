@@ -58,8 +58,14 @@ class DbLoadHandler:
     def bulk_load(self, sym, kind, since_int_date, until_int_date):
         target_dates = dl.get_between_date(since_int_date, until_int_date)
         table_name =  kind
-        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_db_hist)(sym, table_name, _target_date) for _target_date in target_dates)
-        dfs = [ df for  df in dfs if df is not None]
+        # Note:  Thread object inhibit multiproicesss...
+        # dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_db_hist)(sym, table_name, _target_date) for _target_date in target_dates)
+        dfs =[]
+        for _target_date in target_dates:
+            df = self.get_db_hist(sym, table_name, _target_date,_target_date)
+            if df is not None:
+                dfs.append(df)
+        # dfs = [ df for  df in dfs if df is not None]
         if len(dfs) ==  0:
             self._logger.warning("ALL object is failure.")
             return None
@@ -73,8 +79,9 @@ class DbLoadHandler:
         date_list  = dl.get_between_date(start_date, end_date)
         for _date in  date_list:
             raw_data = pd.DataFrame(self.db_accesser.find_at_date(table_name, str(_date)))
-            del  raw_data["_id"]
-            del  raw_data["channel"]
+            for _key in ["_id", "channel"]:
+                if _key in raw_data.keys():
+                    del  raw_data[_key]
             # raw_data["date"] = _date
             datas.append(raw_data)
             
