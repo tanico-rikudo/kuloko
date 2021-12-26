@@ -237,7 +237,7 @@ class Trade(Socket):
             data['price'] = float(raw_data['price'])   
             data['size'] = float(raw_data['size'])
             if return_type in 'json':
-                data["time"] = dl.dt_to_intYMDHMSF(data["time"])
+                data["time"] = dl.dt_to_strYMDHMSF(data["time"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -280,7 +280,7 @@ class Orderbooks(Socket):
             
             if return_type is 'json':
                 data = {_key :_value for _key, _value in zip(keys, values)}
-                data['time'] = dl.dt_to_intYMDHMSF(data['time'])
+                data['time'] = dl.dt_to_strYMDHMSF(data['time'])
             elif return_type is 'seq':
                 data = values         
 
@@ -303,7 +303,7 @@ class Ticker(Socket):
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data[_item])
-            data["time"] = dl.dt_to_intYMDHMSF(
+            data["time"] = dl.dt_to_strYMDHMSF(
                 dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset))
             data['symbol'] = symbol
             return data

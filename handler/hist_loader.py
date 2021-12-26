@@ -100,7 +100,7 @@ class HistDataHandler:
         
         if  df is not None:
             # time stamp format     
-            df['timestamp'] = df['timestamp'].apply(lambda x: dl.dt_to_intYMDHMSF(dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False)))
+            df['timestamp'] = df['timestamp'].apply(lambda x: dl.dt_to_strYMDHMSF(dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False)))
         
         return df
 
