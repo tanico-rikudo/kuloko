@@ -171,7 +171,7 @@ class Orderbook(API):
         if depth is None:
             depth = self.__depth
         if depth is -1:
-            self._logger.warn("Try to fetch FUll Depth orderbook")
+            self._logger.warning("Try to fetch FUll Depth orderbook")
 
         data = self.convert_shape(orderbook, depth, return_type)
         self._logger.info("[DONE] Fetch orderbook. Depth={0}, Return_type={1}".format(depth, return_type))

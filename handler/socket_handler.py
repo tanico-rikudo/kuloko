@@ -136,7 +136,7 @@ class Socket(object):
         # self._logger.info('Received: Channel={0}'.format(self.channel))
         self.queue.append(json.loads(message))
         if len(self.queue) > self.maxlen:
-            self._logger.warn(f"Message queue is full. Old item are discarded. Channel={self.channel}")
+            self._logger.warning(f"Message queue is full. Old item are discarded. Channel={self.channel}")
 
     def on_error(self, ws, error):
         self._logger.error('Try reconnect {0}'.format(error),exc_info=True)

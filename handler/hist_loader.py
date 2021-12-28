@@ -135,7 +135,7 @@ class HistDataHandler:
             
     def save_hist(self, data, save_path):
         if os.path.isfile(save_path):
-            self._logger.warn("Filepath={0} is already exist. "
+            self._logger.warning("Filepath={0} is already exist. "
                         "However, download and overwirte forcefully".format(save_path))
         save_dir = os.path.dirname(save_path)
         if not os.path.isdir(save_dir):
