@@ -1,43 +1,53 @@
 import threading
-from item import AleisterFeedAgent
-import hist_data
 import argparse
+import os, sys
+sys.path.append(os.path.join(os.environ['KULOKO_DIR'],"items" ))
+sys.path.append(os.path.join(os.path.dirname('__file__'),'..'))
+sys.path.append(os.environ['COMMON_DIR'] )
+
+from items.aleister_producer import AleisterFeedAgent
+import hist_data
+from mq.mq_handler import  *
+
 
 class realtimeFeedAgent:
     
-    def __init__(self):
-        self.afa = AleisterFeedAgent()
-        self.general_config_ini  =  self.afa.general_config_ini
-        self.mqserver_host = self.general_config_ini .get("MQ_HOST")
-        self.mqname = self.general_config_ini .get("MQ_NAME")
-        self.routing_key = self.general_config_ini .get("MQ_ROUTING")
-        self.logger = self.afa._logger
+    def __init__(self, general_config_mode):
+        self.afa = AleisterFeedAgent(general_config_mode)
+        self.general_config  =  self.afa.general_config
+        self.mqserver_host = self.general_config.get("MQ_HOST")
+        self.mqname = self.general_config.get("MQ_NAME")
+        self.routing_key = self.general_config.get("MQ_ROUTING")
+        self.logger = self.afa.logger
         
     def init_mqclient(self):
         self.mq_rpc_client = RpcClient(self.mqserver_host,self.mqname, self.logger)
+        self.logger.info("[DONE] New mq client")
         
     def build_provider(self):
         """
         Start subbscribe market data
         """
         self.init_mqclient()
-        
         try:
             #  Backgroud process=>no
-            afa_provider_process = threading.Thread(target=start_fetch_feed)
-            # afa_provider_process.setDaemon(True)
-            self.logger.info("[START] AleisterFeedAgent Realtime Privide Deamon.")
-            afa_provider_process.start()
+            self.logger.info("[START] AleisterFeedAgent Realtime Provide.")
+            # afa_provider_process = threading.Thread(target=self.start_fetch_feed)
+            # # afa_provider_process.setDaemon(True)
+            # afa_provider_process.start()
+            
+            self.start_fetch_feed()
             
         except  Exception as e:
+            self.logger.info(f"[STOP] AleisterFeedAgent Realtime Privide.e={e}")
             self.stop_fetch_feed()        
-            self.logger.info("[STOP] AleisterFeedAgent Realtime Privide Deamon.")
             
     def start_fetch_feed(self):
         """
         Luunch fethcing market data and send it to MQ
         """
         self.afa.start_realtime_fetch()
+        self.logger.info("[START] Realtime feed start.")
         
     def stop_fetch_feed(self):
         """
@@ -45,6 +55,7 @@ class realtimeFeedAgent:
         """
         self.mq_rpc_client.end_call()
         del self.afa
+        self.logger.info("[STOP] Realtime feed STOP")
         
 
 class histFeedAgent:
@@ -70,15 +81,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--process",
                         type=str, choices=['receiver', 'provider', 'killer'],
+                        required=True,
                         help="Select process")
     opt = parser.parse_args()
-    rfa  = realtimeFeedAgent()
+    general_config_mode = "DEFAULT"
+    #TODO: outside
+    rfa  = realtimeFeedAgent(general_config_mode)
     if opt.process == "receiver":
         rfa.build_provider()
     elif opt.process == "provider":
         rfa.start_fetch_feed()
     elif opt.process == "killer":
         rfa.stop_fetch_feed()
+    else:
+        raise Exception(f"Cannont recogninze option : {opt.process}")
 
         
         

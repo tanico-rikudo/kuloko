@@ -318,7 +318,6 @@ class Margin(API):
                     raw_data['data'][_key]= float(v) 
 
             if return_type in 'json':
-                self._logger.info(raw_data['data'])
                 raw_data['responsetime']= dl.dt_to_strYMDHMSF(responsetime_dt)
                 return raw_data['data']
             if return_type in 'dataframe':

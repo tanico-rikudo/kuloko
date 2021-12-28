@@ -202,6 +202,12 @@ class Socket(object):
             raise Exception(e)
 
         return 
+    
+    def error_handle(self,raw_data):
+        if "error" in raw_data.keys():
+            return None
+        else:
+            return raw_data
 
     def extend_access_token(self):
         reqBody = {'token':self.token}
@@ -228,10 +234,15 @@ class Trade(Socket):
         super().__init__("trades",logger, general_config_ini,private_api_ini)
 
     def convert_shape(self, raw_data, return_type):
+        raw_data = self.error_handle(raw_data)
+        if raw_data is None:
+            return {}
+        
         data = raw_data
         if return_type is 'raw':
             return raw_data
         elif return_type in ['json','dataframe']:
+            # print(raw_data)
             data["time"] = dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset)
             del data["timestamp"]
             data['price'] = float(raw_data['price'])   
@@ -250,10 +261,12 @@ class Orderbooks(Socket):
         super().__init__("orderbooks",logger, general_config_ini,private_api_ini)
 
     def convert_shape(self, raw_data, depth, return_type):
-
+        raw_data = self.error_handle(raw_data)
+        if raw_data is None:
+            return {}
         #Filter Depth
         for _side in ['asks','bids']:
-                raw_data[_side]= raw_data[_side][:depth]
+            raw_data[_side]= raw_data[_side][:depth]
         time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
         symbol = raw_data['symbol']
 
@@ -295,6 +308,9 @@ class Ticker(Socket):
         super().__init__("ticker",logger, general_config_ini,private_api_ini)
 
     def convert_shape(self, raw_data,return_type):
+        raw_data = self.error_handle(raw_data)
+        if raw_data is None:
+            return {}
         symbol = raw_data['symbol']
         
         if return_type is 'raw':

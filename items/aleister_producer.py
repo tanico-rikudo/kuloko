@@ -11,8 +11,9 @@ from mq.mq_handler import MqProvider
 
 #  stand alone from ITEM
 class AleisterFeedAgent(Item):
-    def  __init__(self):
+    def  __init__(self, config_mode):
         super(AleisterFeedAgent, self).__init__(name="AleisterFeedAgent",item_type="AleisterFeedAgent",currency="BTC")
+        self.general_config = self.general_config_ini[config_mode]
         
         # Init handler 
         self.socket_handler = {}
@@ -20,18 +21,18 @@ class AleisterFeedAgent(Item):
         self.db_accesser = None
         
         #MQ
-        mqserver_host = self.general_config_ini.get("MQ_HOST")
-        mqname = self.general_config_ini.get("MQ_NAME")
-        routing_key = self.general_config_ini.get("MQ_ROUTING")
+        self.mqserver_host = self.general_config.get("MQ_HOST")
+        self.mqname = self.general_config.get("MQ_NAME")
+        self.routing_key = self.general_config.get("MQ_ROUTING")
         self.interval_sec = 10  #todo: outside
         self.max_feed_instance =4 #todo: outside
         
         #db
         self.mongo_util = None
         
-    def __del__(self):
-        self.close_socket()
-        self.db_accesser.dao.close()
+    # def __del__(self):
+    #     self.close_socket()
+    #     self.db_accesser.dao.close()
         
     def init_db(self):
         # Init mongo
@@ -65,18 +66,19 @@ class AleisterFeedAgent(Item):
         self.logger.info(f"[DONE] Connect sockets.")
         
     def close_socket(self):
-        # stop subscribeb
+        # stop subscribe
+        
         for obj_name in self.socket_handler.keys():
             self.socket_handler[obj_name].disconnect()
     
-        self.logger.info(f"[STOP] Subbscrieb sockets.")
+        self.logger.info(f"[STOP] Subscribe sockets.")
         
     def start_subscribe_socket(self):
         # start subscribeb
         for obj_name in self.socket_handler.keys():
             self.socket_handler[obj_name].subscribe()
     
-        self.logger.info(f"[START] Subbscrieb sockets.")
+        self.logger.info(f"[START] Subscribe sockets.")
 
     def setup_realtime_data(self):
         """
@@ -90,7 +92,7 @@ class AleisterFeedAgent(Item):
         self.init_rest()
         
         #mq
-        self.mq_privider = MqProvider( mqserver_host, mqname, routing_key, logger)
+        self.mq_privider = MqProvider( self.mqserver_host, self.mqname, self.routing_key, self.logger)
         self.mq_privider.connect_mq()
         self.logger.info(f"[DONE] Init data fetch setup")
         
@@ -110,11 +112,11 @@ class AleisterFeedAgent(Item):
         self.logger.info("[END] Realtime data Subscription scheduleder stopped.")
         
     def start_realtime_rpc_receiver(self):
-        self.channel.basic_qos(prefetch_count=1)
-        self.channel.basic_consume(on_message_callback= lambda ch, method, properties, body: self.replay_realtime_data(ch, method, properties, body), queue=self.mqname)
+        self.mq_privider.channel.basic_qos(prefetch_count=1)
+        self.mq_privider.channel.basic_consume(on_message_callback= lambda ch, method, properties, body: self.replay_realtime_data(ch, method, properties, body), queue=self.mqname)
 
         self.logger.info(f"[START] RPC receiver")
-        self.channel.start_consuming()
+        self.mq_privider.channel.start_consuming()
 
                 
     def fetch_realtime_data(self):
@@ -133,10 +135,11 @@ class AleisterFeedAgent(Item):
             cnt += len(result[obj_name])
         self.logger.info(f"[DONE] Fetch data from api. Count={cnt}")
         json_result = json.dumps(result)
+        # print(json_result)
         return json_result
     
     def publish_realtime_data(self):
-        data = self.fetch_realtime_data()
+        data = self.fetch_realtime_data()            
         self.mq_privider.publish_mq(data)
         
     def replay_realtime_data(self, ch, method, properties, body):
@@ -147,25 +150,28 @@ class AleisterFeedAgent(Item):
             if body.decode() == 'END':
                 self.logger.info(f"[APPROVED] Get request MQ END call")
                 ch.stop_consuming()
-                self.channel.stop_consuming()
+                self.mq_privider.channel.stop_consuming()
                 self.logger.info(f"[STOP] RPC receiver stop from RPC")
 
             data = self.fetch_realtime_data()
-            ch.basic_publish(exchange='',
-                            routing_key=properties.reply_to,
-                            properties=pika.BasicProperties(correlation_id = corr_id),
-                            body=data)
-            ch.basic_ack(delivery_tag = method.delivery_tag)
-            self.logger.info(f"[RETURN] Returrn RPC request. ID={corr_id}")
+            if properties.reply_to is not None:
+                ch.basic_publish(exchange='',
+                                routing_key=properties.reply_to,
+                                properties=pika.BasicProperties(correlation_id = corr_id),
+                                body=data)
+                ch.basic_ack(delivery_tag = method.delivery_tag)
+                self.logger.info(f"[RETURN] Returrn RPC request. ID={corr_id}")
+            else:
+                self.logger.warning(f"[Skip] No Returrn address. Skip return RPC request. ID={corr_id}")
         except Exception as e:
-            self.logger.warning(f"[Failure] Fail to replay. ID={corr_id}")
+            self.logger.warning(f"[Failure] Fail to replay. ID={corr_id}. e={e}",exc_info=True)
 
     def start_realtime_fetch(self):
         """
         Provide master for  realtime to predict realtime
         """
         self.setup_realtime_data()
-        self.subscribe_realtime_data()
+        # self.subscribe_realtime_data()
         self.start_realtime_rpc_receiver()
         
     def stop_realtime_fetch(self):

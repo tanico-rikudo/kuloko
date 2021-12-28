@@ -1,4 +1,6 @@
 #!/bin/bash
+#load common setting
+eval 'source $BASE_DIR/geco_commons/shell/shell_config.conf'
 
 function usage() {
 cat <<_EOT_
@@ -10,7 +12,7 @@ Description:
 
 Options:
   -r    Feed reciever
-  -p    Data Sender
+  -s    Data Sender
   -k    Sender killer
 
 _EOT_
@@ -18,20 +20,20 @@ exit 1
 }
 
 if [ "$OPTIND" = 1 ]; then
-  while getopts abf:h OPT
+  while getopts rskh OPT
   do
     case $OPT in
       r)
         process="receiver"
-        echo "Lunch Receiver"
+        echo "Launch Receiver"
         ;;
-      p)
+      s)
         process="sender"
-        echo "Lunch Sender"
+        echo "Launch Sender"
         ;;
       k)
         process="killer"
-        echo "Lunch killer"
+        echo "Launch killer"
         ;;
       h)
         echo "h option. display help"       # for debug
@@ -47,27 +49,25 @@ else
   exit 1
 fi
 
-echo "before shift"                       # for debug
 shift $((OPTIND - 1))
-echo "display other arguments [$*]"       # for debug
-echo "after shift"                        # for debug
 
+source deactivate
 source activate py37
-
-PARENT_PATH=`dirname $0`
-SHELL_PATH="{PARENT_PATH}/execute"
-command="{SHELL_PATH}/feedAgentController.py"
-cd SHELL_PATH
-if [ process = "killer" ] then
+python_interpritor=python
+execute_path=`dirname $(pwd)`
+execute_path="${execute_path}/execute"
+cd ${execute_path}
+command="${python_interpritor} feedAgentController.py "
+if [ "$process" == "killer" ]; then
     command="${command} --process killer"
-if [ process = "provider" ] then
+fi
+if [ "$process" == "provider" ]; then
     command="${command} --process provider"
-if [ process = "sender" ] then
-    command="${command} --process sender"
+fi
+if [ "$process" == "receiver" ]; then
+    command="${command} --process receiver"
+fi
 
-eval command
-echo "DONE"
-
-
-
-
+command="${command} " 
+echo $command
+eval $command
