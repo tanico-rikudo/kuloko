@@ -11,8 +11,8 @@ Description:
   hogehogehoge
 
 Options:
-  -r    Feed reciever
-  -s    Data Sender
+  -r    Feed record
+  -p    Feed fetch and provider
   -k    Sender killer
 
 _EOT_
@@ -24,12 +24,12 @@ if [ "$OPTIND" = 1 ]; then
   do
     case $OPT in
       r)
-        process="receiver"
-        echo "Launch Receiver"
+        process="record"
+        echo "Launch record"
         ;;
-      s)
-        process="sender"
-        echo "Launch Sender"
+      p)
+        process="provider"
+        echo "Launch provider"
         ;;
       k)
         process="killer"
@@ -64,8 +64,8 @@ fi
 if [ "$process" == "provider" ]; then
     command="${command} --process provider"
 fi
-if [ "$process" == "receiver" ]; then
-    command="${command} --process receiver"
+if [ "$process" == "record" ]; then
+    command="${command} --process record"
 fi
 
 command="${command} " 

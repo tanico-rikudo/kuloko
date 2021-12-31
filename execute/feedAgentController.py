@@ -24,9 +24,9 @@ class realtimeFeedAgent:
         self.mq_rpc_client = RpcClient(self.mqserver_host,self.mqname, self.logger)
         self.logger.info("[DONE] New mq client")
         
-    def build_provider(self):
+    def start_fetch_feed(self):
         """
-        Start subbscribe market data
+        Start subbscribe market data and send it to MQ
         """
         self.init_mqclient()
         try:
@@ -41,14 +41,7 @@ class realtimeFeedAgent:
         except  Exception as e:
             self.logger.info(f"[STOP] AleisterFeedAgent Realtime Privide.e={e}")
             self.stop_fetch_feed()        
-            
-    def start_fetch_feed(self):
-        """
-        Luunch fethcing market data and send it to MQ
-        """
-        self.afa.start_realtime_fetch()
-        self.logger.info("[START] Realtime feed start.")
-        
+                
     def stop_fetch_feed(self):
         """
         Kill fethcing market data and send it to MQ
@@ -56,6 +49,12 @@ class realtimeFeedAgent:
         self.mq_rpc_client.end_call()
         del self.afa
         self.logger.info("[STOP] Realtime feed STOP")
+        
+    def start_record(self):
+        self.afa.start_record_realtime_data()
+
+    def stop_record(self):
+        self.afa.stop_record_realtime_data()()
         
 
 class histFeedAgent:
@@ -80,15 +79,15 @@ class histFeedAgent:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--process",
-                        type=str, choices=['receiver', 'provider', 'killer'],
+                        type=str, choices=['record', 'provider', 'killer'],
                         required=True,
                         help="Select process")
     opt = parser.parse_args()
     general_config_mode = "DEFAULT"
     #TODO: outside
     rfa  = realtimeFeedAgent(general_config_mode)
-    if opt.process == "receiver":
-        rfa.build_provider()
+    if opt.process == "record":
+        rfa.start_record()
     elif opt.process == "provider":
         rfa.start_fetch_feed()
     elif opt.process == "killer":

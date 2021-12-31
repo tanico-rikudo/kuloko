@@ -74,11 +74,13 @@ class AleisterFeedAgent(Item):
         self.logger.info(f"[STOP] Subscribe sockets.")
         
     def start_subscribe_socket(self):
-        # start subscribeb
+        """
+        Start subscrie in all set socket
+        """
         for obj_name in self.socket_handler.keys():
             self.socket_handler[obj_name].subscribe()
     
-        self.logger.info(f"[START] Subscribe sockets.")
+        self.logger.info(f"[START] Subscribe via socket handler.")
 
     def setup_realtime_data(self):
         """
@@ -96,20 +98,6 @@ class AleisterFeedAgent(Item):
         self.mq_privider.connect_mq()
         self.logger.info(f"[DONE] Init data fetch setup")
         
-    def subscribe_realtime_data(self):
-        self.logger.info("[START] Subscribe realtime data")
-        #  init connection and subscrieb
-        self.start_subscribe_socket()
-        
-        self.scheduler = BackgroundScheduler() 
-        self.scheduler.add_job(self.publish_realtime_data, 'interval', seconds=self.interval_sec, max_instances=self.max_feed_instance)  
-        self.scheduler.start()
-        self.logger.info("[START] Realtime data Subscription has been scheduled.")
-    
-    def stop_subscribe_realtime_data(self):
-        self.scheduler.shutdown() 
-        self.close_socket()
-        self.logger.info("[END] Realtime data Subscription scheduleder stopped.")
         
     def start_realtime_rpc_receiver(self):
         self.mq_privider.channel.basic_qos(prefetch_count=1)
@@ -120,6 +108,11 @@ class AleisterFeedAgent(Item):
 
                 
     def fetch_realtime_data(self):
+        """
+        Get data from queue and api
+        Returns:
+            result dict
+        """
         result = {}
         # fetch socket api
         cnt = 0
@@ -137,12 +130,19 @@ class AleisterFeedAgent(Item):
         json_result = json.dumps(result)
         # print(json_result)
         return json_result
-    
-    def publish_realtime_data(self):
-        data = self.fetch_realtime_data()            
-        self.mq_privider.publish_mq(data)
-        
+            
     def replay_realtime_data(self, ch, method, properties, body):
+        """
+        Event drivern fetch and puclish data
+        Args:
+            ch ([type]): [description]
+            method ([type]): [description]
+            properties ([type]): [description]
+            body ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         self.logger.info(f"[DONE] Get request MQ.")
         corr_id = properties.correlation_id
         corr_id = None if corr_id is None else corr_id
@@ -174,6 +174,23 @@ class AleisterFeedAgent(Item):
         # self.subscribe_realtime_data()
         self.start_realtime_rpc_receiver()
         
-    def stop_realtime_fetch(self):
-        self.stop_subscribe_realtime_data()
+    ### TData subscription test ###   
+    # note: only use for recording Db
+    def start_record_realtime_data(self):
+        self.logger.info("[START] Subscribe realtime data")
+        #  init connection and subscribe
+        self.setup_realtime_data()
+        self.start_subscribe_socket()
+        
+        # self.scheduler = BackgroundScheduler() 
+        self.scheduler = BlockingScheduler()
+        self.scheduler.add_job(self.fetch_realtime_data, 'interval', seconds=self.interval_sec, max_instances=self.max_feed_instance)  
+        self.scheduler.start()
+        self.logger.info(f"[START] Realtime data recording has been scheduled. Interval={self.interval}sec")
+    
+    def stop_record_realtime_data(self):
+        self.scheduler.shutdown() 
+        self.close_socket()
+        self.logger.info("[END] Realtime data recordingn scheduleder stopped.")
+        
         
