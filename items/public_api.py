@@ -20,7 +20,7 @@ class venueStatus(Item):
         try:
             res = self.vStatus_web_api.fetch(return_type='json')
         except Exception as e:
-            res = {"res_time":dl.currentTime(self.vStatus_web_api.tz_offset), "status":"INQUIRY_ERROR"}
+            res = {"res_time":dl.currentTime(self.vStatus_web_api.tz), "status":"INQUIRY_ERROR"}
         finally:
             self.mongo_db.insert_many(res)
             self.logger.info("[DONE] API venue status inquiry: {0}".format(res['status']))
@@ -50,6 +50,7 @@ class Orderbook(Item):
         insert_json =  copy.deepcopy(ret_json)
         if autosave_mongo:  
             self.mongo_db.insert_many(insert_json)
+        self.logger.error("Deque Orderbook:{0}".format(len(ret_json)))
         return ret_json
           
     def dequeue_forever(self):
@@ -100,6 +101,8 @@ class Ticker(Item):
         insert_json =  copy.deepcopy(ret_json)
         if  autosave_mongo:
             self.mongo_db.insert_many(insert_json)
+            
+        self.logger.error("Deque Ticker:{0}".format(len(ret_json)))
         return ret_json
                 
     def dequeue_forever(self):
@@ -148,6 +151,7 @@ class Trade(Item):
 
         if autosave_mongo:
             self.mongo_db.insert_many(insert_json)
+        self.logger.error("Deque Trade :{0}".format(len(ret_json)))
         return ret_json
       
     def dequeue_forever(self):

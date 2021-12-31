@@ -66,7 +66,7 @@ class Socket(object):
 
     def set_config(self):
         self.allow_sym = eval(self.general_config.get('ALLOW_SYM'))
-        self.tz_offset = self.general_config.getint('TIMEZONE_OFFSET_HOUR')
+        self.tz = self.general_config.get('TIMEZONE')
         self._logger.info('[DONE]Set Config from loaded config')
 
     def load_urls(self):
@@ -243,7 +243,7 @@ class Trade(Socket):
             return raw_data
         elif return_type in ['json','dataframe']:
             # print(raw_data)
-            data["time"] = dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset)
+            data["time"] = dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz)
             del data["timestamp"]
             data['price'] = float(raw_data['price'])   
             data['size'] = float(raw_data['size'])
@@ -267,7 +267,7 @@ class Orderbooks(Socket):
         #Filter Depth
         for _side in ['asks','bids']:
             raw_data[_side]= raw_data[_side][:depth]
-        time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
+        time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz)
         symbol = raw_data['symbol']
 
         if return_type is 'raw':
@@ -320,7 +320,7 @@ class Ticker(Socket):
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data[_item])
             data["time"] = dl.dt_to_strYMDHMSF(
-                dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset))
+                dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz))
             data['symbol'] = symbol
             return data
         else:

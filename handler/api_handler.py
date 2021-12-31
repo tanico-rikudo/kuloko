@@ -75,7 +75,7 @@ class API:
 
     def set_config(self):
         self.allow_sym = eval(self.general_config.get('ALLOW_SYM'))
-        self.tz_offset = self.general_config.getint('TIMEZONE_OFFSET_HOUR')
+        self.tz = self.general_config.get('TIMEZONE')
         self._logger.info('[DONE]Set Config from loaded config')
 
     def make_header(self,access_path, access_method,request_body=""):
@@ -105,7 +105,7 @@ class API:
             target_url = urllib.parse.urljoin(target_url, '?symbol={0}'.format(sym))
         else:
             pass
-        self._logger.info("[DONE] Get URL string={0}".format(target_url))
+        # self._logger.info("[DONE] Get URL string={0}".format(target_url))
         return target_url
     
     def fetch_data(self, target_url, headers=None, params=None):
@@ -115,7 +115,7 @@ class API:
             data = response.json()
             if data['status'] !=0:
                 raise RequestError(data['messages'])
-            self._logger.info("[DONE] Fetch Data. URL={0}".format(target_url))
+            # self._logger.info("[DONE] Fetch Data. URL={0}".format(target_url))
         except RequestError as e:
             self._logger.error(e,exc_info=True)
             data = None        
@@ -154,7 +154,7 @@ class venueStatus(API):
             data = {}
             data['status']  = raw_data['data']['status']
             data['res_time']  = dl.dt_to_strYMDHMSF(
-                dl.str_utc_to_dt_offset(raw_data["responsetime"],self.tz_offset))
+                dl.str_utc_to_dt_offset(raw_data["responsetime"],self.tz))
             return data
         else:
             raise InvalidArgumentError('Cannot accept in venueStatus. Return_type={0}'.format(return_type))
@@ -184,7 +184,7 @@ class Orderbook(API):
         for _side in ['asks','bids']:
                 raw_data['data'][_side]= raw_data['data'][_side][:depth]
         # self._logger.info(raw_data['responsetime'])
-        responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
+        responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz)
 
         if return_type is 'raw':
             return raw_data
@@ -249,7 +249,7 @@ class Ticks(API):
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data['data'][0][_item])
             data["timestamp"] = dl.dt_to_strYMDHMSF(
-                dl.str_utc_to_dt_offset(raw_data['data'][0]["timestamp"],self.tz_offset))
+                dl.str_utc_to_dt_offset(raw_data['data'][0]["timestamp"],self.tz))
             return data
         else:
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
@@ -262,8 +262,8 @@ class Trade(API):
         target_url = self.get_url("trade",self.sym)
         trade = self.fetch_data(target_url)
 
-        latest_time = dl.str_utc_to_dt_offset(trade['data']['list'][0]["timestamp"],self.tz_offset)
-        since_time = dl.str_utc_to_dt_offset(trade['data']['list'][-1]["timestamp"],self.tz_offset) if since_time is None else since_time
+        latest_time = dl.str_utc_to_dt_offset(trade['data']['list'][0]["timestamp"],self.tz)
+        since_time = dl.str_utc_to_dt_offset(trade['data']['list'][-1]["timestamp"],self.tz) if since_time is None else since_time
         data = self.convert_shape(trade, return_type, since_time)
         self._logger.info("[DONE] Fetch trade.  Return_type={0}".format(return_type))
         return data, latest_time
@@ -276,7 +276,7 @@ class Trade(API):
         elif return_type in ['json','dataframe']:
             data = []
             for _trade in raw_data['data']['list']:
-                _trade["timestamp"] = dl.str_utc_to_dt_offset(_trade["timestamp"],self.tz_offset)
+                _trade["timestamp"] = dl.str_utc_to_dt_offset(_trade["timestamp"],self.tz)
                 if _trade["timestamp"] > since_time:
                     _trade['price'] = float(_trade['price'])   
                     _trade['size'] = float(_trade['size'])
@@ -305,7 +305,7 @@ class Margin(API):
 
     def convert_shape(self, raw_data, return_type):
         responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],
-            self.tz_offset,is_Z=True,is_ms=True)
+            self.tz,is_Z=True,is_ms=True)
 
         if return_type is 'raw':
             return raw_data
@@ -339,7 +339,7 @@ class Assets(API):
         return assets
 
     def convert_shape(self, raw_data, return_type):
-        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
+        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz)
 
         if return_type is 'raw':
             return raw_data
@@ -389,7 +389,7 @@ class Orders(API):
         return activeOrders
 
     def convert_shape(self, raw_data, return_type):
-        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
+        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz)
 
         if return_type is 'raw':
             return raw_data
@@ -403,7 +403,7 @@ class Orders(API):
                     _order['price']= float(_order['price'])   
                     _order['rootOrderId']= int(_order['rootOrderId'])
                     _order['size']= float(_order['size'])   
-                    _order['timestamp']= dl.str_utc_to_dt_offset(_order["timestamp"],self.tz_offset)
+                    _order['timestamp']= dl.str_utc_to_dt_offset(_order["timestamp"],self.tz)
                     data.append(_order)
             if return_type in 'json':
                 for i in range(len(data)):
@@ -452,7 +452,7 @@ class Executions(API):
         return latestExecutions
 
     def convert_shape(self, raw_data, return_type):
-        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz_offset)
+        # responsetime_dt = dl.str_utc_to_dt_offset(raw_data['responsetime'],self.tz)
 
         if return_type is 'raw':
             return raw_data
@@ -466,7 +466,7 @@ class Executions(API):
                     _execution['size']= float(_execution['size'])   
                     _execution['lossGain']= float(_execution['lossGain'])   
                     _execution['fee']= float(_execution['fee'])   
-                    _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz_offset)
+                    _execution['timestamp']= dl.str_utc_to_dt_offset(_execution["timestamp"],self.tz)
                     data.append(_execution)
             if return_type in 'json':
                 for i in range(len(data)):
