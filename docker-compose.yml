@@ -1,0 +1,30 @@
+version: "3"
+services:
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ${BASE_DIR}
+    working_dir: ${BASE_DIR}
+    ports:
+      - "8080:8080"
+    environment:
+      HOME: ${KULOKO_DIR}
+    command: bash
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ${BASE_DIR}/mlflow/mlruns:${BASE_DIR}/mlflow
+    working_dir: ${BASE_DIR}
+    depends_on:
+      - jupyter
+    ports:
+      - "5000:5000"
+    environment:
+      HOME: ${BASE_DIR}
+    command: mlflow server --backend-store-uri sqlite:////${BASE_DIR}/mlflow/mlruns/mlruns.db --default-artifact-root ${BASE_DIR}/mlflow/mlruns --host 0.0.0.0 --port 5000
+    restart: always

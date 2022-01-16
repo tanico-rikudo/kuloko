@@ -8,7 +8,7 @@ from datetime import datetime as dt
 # Path
 KULOKO_DIR=os.environ['KULOKO_DIR'] 
 MONGO_DIR=os.environ['MONGO_DIR'] 
-LOGDIR=os.environ['LOGDIR'] 
+LOGDIR=os.environ['KULOKO_LOGDIR'] 
 
 # DB libs 
 from pymongo import MongoClient
@@ -46,7 +46,7 @@ class Item(object):
         self.db_hist = db_hist
 
         # Init Logger 
-        self.logger = cm.load_log_config(os.path.join(LOGDIR,'logging.log'),log_name="KULOKO")
+        self.logger = cm.load_log_config(os.path.join(KULOKO_DIR,'logging.log'),log_name="KULOKO")
 
         # Init mongo
         self.mongo_ini=cm.load_ini_config(path=None,config_name="mongo", mode=None)

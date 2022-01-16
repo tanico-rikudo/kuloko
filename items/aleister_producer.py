@@ -185,12 +185,20 @@ class AleisterFeedAgent(Item):
         # self.scheduler = BackgroundScheduler() 
         self.scheduler = BlockingScheduler()
         self.scheduler.add_job(self.fetch_realtime_data, 'interval', seconds=self.interval_sec, max_instances=self.max_feed_instance)  
-        self.scheduler.start()
-        self.logger.info(f"[START] Realtime data recording has been scheduled. Interval={self.interval}sec")
+        try:
+            self.logger.info(f"[START] Realtime data recording has been scheduled. Interval={self.interval_sec}sec")
+            self.scheduler.start()
+        except Exception as e:
+            self.logger.error(f"{e}", exc_info=True)            
+            self.stop_record_realtime_data()
     
     def stop_record_realtime_data(self):
-        self.scheduler.shutdown() 
-        self.close_socket()
+        try:
+            self.scheduler.shutdown() 
+        except:
+            pass
+        finally:
+            self.close_socket()
         self.logger.info("[END] Realtime data recordingn scheduleder stopped.")
         
         

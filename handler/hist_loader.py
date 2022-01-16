@@ -99,7 +99,7 @@ class HistDataHandler:
                 self._logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
         
         if  df is not None:
-            # time stamp format     
+            # localize and time stamp format     
             df['timestamp'] = df['timestamp'].apply(lambda x: dl.dt_to_strYMDHMSF(dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False)))
         
         return df
