@@ -130,16 +130,32 @@ class Socket(object):
             return_data[_i]['price'] =return_data[_i]['price']
             return_data[_i]['size'] =return_data[_i]['size']
         return return_data
+    
+    def reconnect(self):
+        try:
+            self.disconnect()
+        except:
+            pass
+        
+        try:
+            self.connect(self.url, self.sym)
+        except:
+            pass
+        
+        try:
+            self.subscribe()
+        except:
+            pass
 
     def on_message(self, ws,message):
         # self._logger.info('Received:{0}'.format(message))
-        # self._logger.info('Received: Channel={0}'.format(self.channel))
+        self._logger.debug('Received: Channel={0}'.format(self.channel))
         self.queue.append(json.loads(message))
         if len(self.queue) > self.maxlen:
             self._logger.warning(f"Message queue is full. Old item are discarded. Channel={self.channel}")
 
     def on_error(self, ws, error):
-        self._logger.error('Try reconnect {0}'.format(error),exc_info=True)
+        self._logger.error('Try reconnect... {0}'.format(error),exc_info=True)
         self.disconnect()
         time.sleep(0.5)
         self.connect(self.url , self.sym)
@@ -205,6 +221,7 @@ class Socket(object):
     
     def error_handle(self,raw_data):
         if "error" in raw_data.keys():
+            self._logger.warning("{0}".format(raw_data["error"]))
             return None
         else:
             return raw_data
