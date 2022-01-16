@@ -30,10 +30,12 @@ class Orderbook(Item):
     def __init__(self):
         super(Orderbook, self).__init__(name="orderbook",item_type="orderbook",currency="BTC")
         self.orderbook_skt_api = self.skt_api.Orderbooks(self.logger, self.general_config_ini, self.private_api_ini)
+        self.deque_none = 0
+        self.no_update_attmpt = 6 #1min. #TODO;set out side
         
         # Init mongo
         self.init_mongodb()
-      
+        
     def connect(self): 
         self.orderbook_skt_api.connect(
             self.orderbook_skt_api.get_public_socket_url(),self.currency)
@@ -44,13 +46,21 @@ class Orderbook(Item):
     def dequeue(self, autosave_mongo=True):
         data = self.orderbook_skt_api.get()
         if len(data)==0:
+            if self.no_update_attmpt < self.deque_none:
+                #NOTE: heatbeat. No heartbbeat  method 
+                self.logger.warning("Reconnect Orderbook Socket due to No data")
+                self.deque_none = 0
+                self.orderbook_skt_api.reconnect()
+            else:
+                self.deque_none += 1
             return None
         # self.logger.info("Dequeued Data:{0}".format(len(data)))
         ret_json =[ self.orderbook_skt_api.convert_shape(_data,5,"json") for _data in data ]
         insert_json =  copy.deepcopy(ret_json)
         if autosave_mongo:  
             self.mongo_db.insert_many(insert_json)
-        self.logger.error("Deque Orderbook:{0}".format(len(ret_json)))
+        self.logger.info("Deque Orderbook:{0}".format(len(ret_json)))
+        self.deque_none = 0
         return ret_json
           
     def dequeue_forever(self):
@@ -81,6 +91,8 @@ class Ticker(Item):
     def __init__(self):
         super(Ticker, self).__init__(name="ticker",item_type="ticker",currency="BTC")
         self.ticker_skt_api = self.skt_api.Ticker(self.logger, self.general_config_ini, self.private_api_ini)
+        self.deque_none = 0
+        self.no_update_attmpt = 6*10
         
         # Init mongo
         self.init_mongodb()
@@ -95,14 +107,21 @@ class Ticker(Item):
     def dequeue(self, autosave_mongo=True):
         data = self.ticker_skt_api.get()
         if len(data)==0:
-            return
+            if self.no_update_attmpt < self.deque_none:
+                self.logger.warning("Reconnect Ticker Socket due to No data")
+                self.deque_none = 0
+                self.ticker_skt_api.reconnect()
+            else:
+                self.deque_none += 1
+            return None
         # self.logger.info("Dequeued Data:{0}".format(len(data)))
         ret_json =[ self.ticker_skt_api.convert_shape(_data,"json") for _data in data ]
         insert_json =  copy.deepcopy(ret_json)
         if  autosave_mongo:
             self.mongo_db.insert_many(insert_json)
             
-        self.logger.error("Deque Ticker:{0}".format(len(ret_json)))
+        self.logger.info("Deque Ticker:{0}".format(len(ret_json)))
+        self.deque_none = 0
         return ret_json
                 
     def dequeue_forever(self):
@@ -130,6 +149,8 @@ class Trade(Item):
     def __init__(self):
         super(Trade, self).__init__(name="trade",item_type="trade",currency="BTC")
         self.trade_skt_api = self.skt_api.Trade(self.logger, self.general_config_ini, self.private_api_ini)
+        self.deque_none = 0
+        self.no_update_attmpt = 6*10
         
         # Init mongo
         self.init_mongodb()
@@ -144,14 +165,21 @@ class Trade(Item):
     def dequeue(self, autosave_mongo=True):
         data = self.trade_skt_api.get()
         if len(data)==0:
+            if self.no_update_attmpt < self.deque_none:
+                self.logger.warning("Reconnect Trade Socket due to No data")
+                self.deque_none = 0
+                self.trade_skt_api.reconnect()
+            else:
+                self.deque_none += 1
             return None
-        # self.logger.info("Dequeued Data:{0}".format(len(data)))
+        # self.logger.info("Dequed Tr: Data:{0}".format(len(data)))
         ret_json =[ self.trade_skt_api.convert_shape(_data,"json") for _data in data ]
         insert_json =  copy.deepcopy(ret_json)
 
         if autosave_mongo:
             self.mongo_db.insert_many(insert_json)
-        self.logger.error("Deque Trade :{0}".format(len(ret_json)))
+        self.logger.info("Deque Trade :{0}".format(len(ret_json)))
+        self.deque_none = 0
         return ret_json
       
     def dequeue_forever(self):
