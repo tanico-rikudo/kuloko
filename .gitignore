@@ -135,3 +135,4 @@ dmypy.json
 # sam psudo deploy files
 .aws-sam/
 *.conf
+db/
