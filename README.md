@@ -1,5 +1,5 @@
 # kuloko
-Handle encrypt coin
+Cryptocurrency Data Handler 
 
 ## Introduction
 1. Put INI files in place 
