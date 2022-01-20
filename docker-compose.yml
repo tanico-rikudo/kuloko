@@ -1,12 +1,36 @@
 version: "3"
-services:  
+services: 
+  mongo:
+    container_name: kuloko_mongo
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db:/data/db
+      - ./configdb:/data/configdb
+
+  mongo-express:
+    container_name: kuloko_mongo_express
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      
   kuloko_python:
     container_name: kuloko_python
     build:
       context: .
       dockerfile: kuloko_dockerfile
     volumes:
-      - ${BASE_DIR}:/root/src
+      - ${BASE_DIR}/kuloko:/root/src/kuloko
+      - ${BASE_DIR}/geco_commons:/root/src/geco_commons
     working_dir: ${BASE_DIR}
     environment:
       HOME: ${KULOKO_DIR}
