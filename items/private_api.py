@@ -4,9 +4,12 @@ import json
 from util.exceptions import *
 import copy
 class Margin(Item):
-    def __init__(self):
-        super(Margin, self).__init__(name="margin",item_type="margin",currency="BTC")
-        self.margin_web_api = self.web_api.Margin(self.currency, self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Margin, self).__init__(name="margin",item_type="margin",currency="BTC",
+                                     general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.margin_web_api = self.web_api.Margin(self.currency, self.logger,
+                                                  self.general_config_ini, self.private_api_ini,
+                                                  self.general_config_mode,self.private_api_mode)
         self.init_mongodb()
       
     def fetch(self, return_type="json"): 
@@ -18,9 +21,12 @@ class Margin(Item):
     
 
 class Assets(Item):
-    def __init__(self):
-        super(Assets, self).__init__(name="assets",item_type="assets",currency="BTC")
-        self.assets_web_api = self.web_api.Assets(self.currency, self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Assets, self).__init__(name="assets",item_type="assets",currency="BTC",
+                                     general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.assets_web_api = self.web_api.Assets(self.currency, self.logger, 
+                                                  self.general_config_ini, self.private_api_ini,
+                                                  self.general_config_mode,self.private_api_mode)
         self.init_mongodb()
       
     def fetch(self, return_type="json"): 
@@ -31,9 +37,12 @@ class Assets(Item):
         return v
         
 class Orders(Item):
-    def __init__(self):
-        super(Orders, self).__init__(name="orders",item_type="orders",currency="BTC")
-        self.orders_web_api = self.web_api.Orders(self.currency, self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Orders, self).__init__(name="orders",item_type="orders",currency="BTC",
+                                     general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.orders_web_api = self.web_api.Orders(self.currency, self.logger,
+                                                  self.general_config_ini, self.private_api_ini,
+                                                  self.general_config_mode,self.private_api_mode)
         self.init_mongodb()
       
     def fetch_sym(self, sym=None,  return_type="json"): 
@@ -47,9 +56,12 @@ class Orders(Item):
         return v
 
 class Executions(Item):
-    def __init__(self):
-        super(Executions, self).__init__(name="executions",item_type="executions",currency="BTC")
-        self.executions_web_api = self.web_api.Executions(self.currency, self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Executions, self).__init__(name="executions",item_type="executions",currency="BTC",
+                                        general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.executions_web_api = self.web_api.Executions(self.currency, self.logger,
+                                                          self.general_config_ini, self.private_api_ini,
+                                                          self.general_config_mode,self.private_api_mode)
         self.init_mongodb()
       
     def fetch_latest(self, sym=None, return_type="json"): 
@@ -65,9 +77,12 @@ class Executions(Item):
     #     return v
     
 class Order(Item):
-    def __init__(self):
-        super(Order, self).__init__(name="order",item_type="order",currency="BTC")
-        self.order_web_api = self.web_api.Order(self.currency, self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Order, self).__init__(name="order",item_type="order",currency="BTC",
+                                    general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.order_web_api = self.web_api.Order(self.currency, self.logger,
+                                                self.general_config_ini, self.private_api_ini,
+                                                self.general_config_mode,self.private_api_mode)
         self.init_mongodb()
         
     def create_entry_order(self, sym, side, executionType, timeInForce, price, losscutPrice,  size, cacnelBefore):

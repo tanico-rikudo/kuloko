@@ -38,15 +38,10 @@ class InvalidArgumentError(Exception):
     pass
 
 class Socket(object):
-    def __init__(self,channel,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
+    def __init__(self,channel,logger, 
+                 general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
         self._logger = logger
-        if general_config_ini is None:
-            general_config_ini = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
-        if private_api_ini is None:            
-            private_api_ini = cm.load_ini_config(path=None,config_name="private_api", mode=general_config_mode)
-            self._logger.info('[DONE]Load Private API Config.')
-
         self.load_config( general_config_ini,private_api_ini,general_config_mode,private_api_mode)
         self.set_config()
 
@@ -59,10 +54,17 @@ class Socket(object):
         self._logger.info('[DONE] Socket Instance deleted.')
         
     def load_config(self,general_config_ini,private_api_ini,general_config_mode,private_api_mode):
-        self.private_api_config = private_api_ini[private_api_mode]
-        self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. Private API:[{0}] General:[{1}]'
-            .format(private_api_mode,general_config_mode))
+        if general_config_ini is None:
+            self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+        else:
+            self.general_config = general_config_ini[general_config_mode]
+        self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
+        
+        if private_api_ini is None:            
+            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
+        else:
+            private_api_config = private_api_ini[private_api_mode]
+        self._logger.info(f'[DONE]Load Private API Config. Mode={private_api_mode}')
 
     def set_config(self):
         self.allow_sym = eval(self.general_config.get('ALLOW_SYM'))
@@ -247,8 +249,10 @@ class Socket(object):
         return 
 
 class Trade(Socket):
-    def __init__(self,logger, general_config_ini,private_api_ini):
-        super().__init__("trades",logger, general_config_ini,private_api_ini)
+    def __init__(self,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__("trades",logger, general_config_ini, private_api_ini,
+                         general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
     def convert_shape(self, raw_data, return_type):
         raw_data = self.error_handle(raw_data)
@@ -274,8 +278,10 @@ class Trade(Socket):
     
 
 class Orderbooks(Socket):
-    def __init__(self,logger, general_config_ini,private_api_ini):
-        super().__init__("orderbooks",logger, general_config_ini,private_api_ini)
+    def __init__(self,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__("orderbooks",logger, general_config_ini, private_api_ini,
+                         general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
     def convert_shape(self, raw_data, depth, return_type):
         raw_data = self.error_handle(raw_data)
@@ -322,7 +328,8 @@ class Orderbooks(Socket):
 
 class Ticker(Socket):
     def __init__(self,logger, general_config_ini,private_api_ini):
-        super().__init__("ticker",logger, general_config_ini,private_api_ini)
+        super().__init__("ticker",logger, general_config_ini, private_api_ini,
+                         general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
     def convert_shape(self, raw_data,return_type):
         raw_data = self.error_handle(raw_data)

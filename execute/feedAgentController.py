@@ -61,9 +61,9 @@ class histFeedAgent:
     
     def __init__(self):
         self.hd = hist_data.histData()
-        self.general_config_ini = self.hd.general_config_ini
+        self.general_config = self.hd.general_config
         self.dl = self.hd.dl
-        self.listed_syms = self.general_config_ini.get("LISTED_SYM")
+        self.listed_syms = self.general_config.get("LISTED_SYM")
         self.logger = self.hd._logger
         
     
@@ -82,10 +82,17 @@ if __name__ == "__main__":
                         type=str, choices=['record', 'provider', 'killer'],
                         required=True,
                         help="Select process")
+    parser.add_argument("-gcm", "--general_config_mode",
+                        type=str,
+                        required=True,
+                        help="Select general config mode")
+    parser.add_argument("-pam", "--private_api_mode",
+                        type=str,
+                        required=True,
+                        help="Select private api mode")
     opt = parser.parse_args()
-    general_config_mode = "DEFAULT"
-    #TODO: outside
-    rfa  = realtimeFeedAgent(general_config_mode)
+    general_config_mode = opt.general_config_mode # "DEFAULT"
+    rfa  = realtimeFeedAgent(general_config_mode, private_api_mode)
     if opt.process == "record":
         rfa.start_record()
     elif opt.process == "provider":

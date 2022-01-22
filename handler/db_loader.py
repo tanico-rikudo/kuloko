@@ -44,9 +44,11 @@ class DbLoadHandler:
         self._logger.info('[DONE]DB loader Initialized')
         
     def load_config(self,general_config_ini,general_config_mode):
-        self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. DB config:[{0}] General:[{1}]'
-            .format(general_config_ini,general_config_mode))
+        if general_config_ini is None:
+            self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+        else:
+            self.general_config = general_config_ini[general_config_mode]
+        self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
         
     def set_config(self):
         self.n_usable_core= self.general_config.getint('N_USABLE_CORE')

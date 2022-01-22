@@ -31,18 +31,9 @@ class API:
                 general_config_mode="DEFAULT",private_api_mode='DEFAULT'):
         self.sym=sym
         self._logger = logger
-
-        if general_config_ini is None:
-            general_config_ini=cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
-        if private_api_ini is None:            
-            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
-            self._logger.info('[DONE]Load Private API Config.')
-
         self.load_config( general_config_ini,private_api_ini,general_config_mode,private_api_mode)
         self.set_config()
         self.load_urls()
-
         self._logger.info('[DONE]API Initialized')
 
 
@@ -67,12 +58,18 @@ class API:
         self._logger.info('[DONE]Set URL parts')
 
     def load_config(self,general_config_ini,private_api_ini,general_config_mode,private_api_mode):
-        self.private_api_config = private_api_ini[private_api_mode]
-        self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. Private API:[{0}] General:[{1}]'
-            .format(private_api_mode,general_config_mode))
-
-
+        if general_config_ini is None:
+            self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+        else:
+            self.general_config = general_config_ini[general_config_mode]
+        self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
+        
+        if private_api_ini is None:            
+            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
+        else:
+            private_api_config = private_api_ini[private_api_mode]
+        self._logger.info(f'[DONE]Load Private API Config. Mode={private_api_mode}')
+        
     def set_config(self):
         self.allow_sym = eval(self.general_config.get('ALLOW_SYM'))
         self.tz = self.general_config.get('TIMEZONE')
@@ -137,8 +134,10 @@ class API:
                 raise Exception(e)
 
 class venueStatus(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini,private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def fetch(self, return_type='json', *args, **kwargs):
         target_url = self.get_url("venueStatus")
@@ -160,8 +159,10 @@ class venueStatus(API):
             raise InvalidArgumentError('Cannot accept in venueStatus. Return_type={0}'.format(return_type))
 
 class Orderbook(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym, logger, general_config_ini, private_api_ini, 
+                 general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
         self.__depth=-1 # default: no limit
 
     def fetch(self, depth=None, return_type='dataframe', *args, **kwargs):
@@ -231,8 +232,10 @@ class Orderbook(API):
         self.__depth = depth
 
 class Ticks(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini, 
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def fetch(self, depth=None, return_type='json', *args, **kwargs):
         target_url = self.get_url("tick",self.sym)
@@ -255,8 +258,10 @@ class Ticks(API):
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
 
 class Trade(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini, 
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def fetch(self, return_type='json', since_time=None, *args, **kwargs):
         target_url = self.get_url("trade",self.sym)
@@ -291,8 +296,10 @@ class Trade(API):
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
 
 class Margin(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def fetch(self, return_type='json', since_time=None, *args, **kwargs):
         target_url = self.get_url("margin")
@@ -326,8 +333,10 @@ class Margin(API):
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
 
 class Assets(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def fetch(self, return_type='json', *args, **kwargs):
         target_url = self.get_url("assets")
@@ -361,8 +370,10 @@ class Assets(API):
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
 
 class Orders(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini, 
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
         
     def fetch_by_orderId(self, orderId, return_type='json', *args, **kwargs):
         parameters = { "orderId": str(orderId) }
@@ -415,8 +426,10 @@ class Orders(API):
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
         
 class Executions(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini, 
+                 general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def fetch_by_id(self, orderId=None,executionId=None, return_type='json', *args, **kwargs):
 
@@ -478,8 +491,10 @@ class Executions(API):
             raise InvalidArgumentError('Cannot accept return_type={0}'.format(return_type))
       
 class Order(API):
-    def __init__(self,sym,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
-        super().__init__(sym,logger, general_config_ini,private_api_ini,general_config_mode,private_api_mode)
+    def __init__(self,sym,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__(sym,logger, general_config_ini, private_api_ini,
+                         general_config_mode, private_api_mode)
 
     def validate_order_params(self, reqBody):
         # Sym

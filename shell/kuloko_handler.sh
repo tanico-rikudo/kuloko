@@ -20,7 +20,7 @@ exit 1
 }
 
 if [ "$OPTIND" = 1 ]; then
-  while getopts rskh OPT
+  while getopts rskg:a:h OPT
   do
     case $OPT in
       r)
@@ -34,6 +34,12 @@ if [ "$OPTIND" = 1 ]; then
       k)
         process="killer"
         echo "Launch killer"
+        ;;
+      g)
+        gcm=$OPTARG
+        ;;
+      a)
+        pam=$OPTARG
         ;;
       h)
         echo "h option. display help"       # for debug
@@ -67,6 +73,11 @@ fi
 if [ "$process" == "record" ]; then
     command="${command} --process record"
 fi
+
+# general config
+command="${command} --general_config_mode ${gcm}"
+# private api
+command="${command} --private_api_mode ${pam}"
 
 command="${command} " 
 echo $command

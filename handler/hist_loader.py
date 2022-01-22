@@ -29,18 +29,16 @@ class HistDataHandler:
 
     def __init__(self,logger, general_config_ini=None,general_config_mode="DEFAULT"):
         self._logger = logger
-        if general_config_ini is None:
-            general_config_ini = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
-
         self.load_config(general_config_ini, general_config_mode)
         self.set_config()
         self._logger.info('[DONE]API Initialized')
         
     def load_config(self,general_config_ini,general_config_mode):
-        self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. Hist File loader:[{0}] General:[{1}]'
-            .format(general_config_ini,general_config_mode))
+        if general_config_ini is None:
+            self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+        else:
+            self.general_config = general_config_ini[general_config_mode]
+        self._logger.info(f'[DONE]Load General Config(Hist file). Mode={general_config_mode}')
 
     def set_config(self):
         self.remote_end_point = os.path.join(self.general_config.get('ENDPOINT_URL'),self.general_config.get('HISTDATA_URL'))

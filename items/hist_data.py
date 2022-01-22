@@ -7,8 +7,9 @@ dl = daylib.daylib()
 
 class histData(Item):
     def __init__(self):
-        super(histData, self).__init__(name="histData",item_type="histData",currency="BTC")
-        self.file_hist = self.file_hist.HistDataHandler(self.logger, self.general_config_ini)
+        super(histData, self).__init__(name="histData",item_type="histData",currency="BTC",
+                                       general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.file_hist = self.file_hist.HistDataHandler(self.logger, self.general_config_ini, self.general_config_mode)
         self.init_mongodb()
         self.db_hist = self.db_hist.DbLoadHandler(self.logger, self.general_config_ini,mongo_db= self.mongo_db)
         # self.db_hist.load_db_accessor()

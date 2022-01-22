@@ -8,10 +8,13 @@ dl = daylib.daylib()
 
 import  copy
 
-class venueStatus(Item):
+class venueStatus(Item, general_config_mode, private_api_mode):
     def __init__(self):
-        super(venueStatus, self).__init__(name="venueStatus",item_type="venueStatus",currency="BTC")
-        self.vStatus_web_api = self.web_api.venueStatus(self.logger, self.general_config_ini, self.private_api_ini)
+        super(venueStatus, self).__init__(name="venueStatus",item_type="venueStatus",currency="BTC",
+                                         general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.vStatus_web_api = self.web_api.venueStatus(self.logger,
+                                                        self.general_config_ini, self.private_api_ini,
+                                                        self.general_config_mode,self.private_api_mode)
         
         # Init mongo
         self.init_mongodb()
@@ -27,9 +30,12 @@ class venueStatus(Item):
             return res
         
 class Orderbook(Item):
-    def __init__(self):
-        super(Orderbook, self).__init__(name="orderbook",item_type="orderbook",currency="BTC")
-        self.orderbook_skt_api = self.skt_api.Orderbooks(self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Orderbook, self).__init__(name="orderbook",item_type="orderbook",currency="BTC",
+                                         general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.orderbook_skt_api = self.skt_api.Orderbooks(self.logger,
+                                                         self.general_config_ini, self.private_api_ini,
+                                                         self.general_config_mode,self.private_api_mode)
         self.deque_none = 0
         self.no_update_attmpt = 6 #1min. #TODO;set out side
         
@@ -88,9 +94,12 @@ class Orderbook(Item):
         self.orderbook_skt_api.disconnect()
         
 class Ticker(Item):
-    def __init__(self):
-        super(Ticker, self).__init__(name="ticker",item_type="ticker",currency="BTC")
-        self.ticker_skt_api = self.skt_api.Ticker(self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Ticker, self).__init__(name="ticker",item_type="ticker",currency="BTC",
+                                     general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.ticker_skt_api = self.skt_api.Ticker(self.logger, 
+                                                  self.general_config_ini, self.private_api_ini,
+                                                  self.general_config_mode,self.private_api_mode)
         self.deque_none = 0
         self.no_update_attmpt = 6*10
         
@@ -146,9 +155,12 @@ class Ticker(Item):
         self.ticker_skt_api.disconnect()
         
 class Trade(Item):
-    def __init__(self):
-        super(Trade, self).__init__(name="trade",item_type="trade",currency="BTC")
-        self.trade_skt_api = self.skt_api.Trade(self.logger, self.general_config_ini, self.private_api_ini)
+    def __init__(self, general_config_mode, private_api_mode):
+        super(Trade, self).__init__(name="trade",item_type="trade",currency="BTC",
+                                     general_config_mode="DEFAULT",private_api_mode="DEFAULT")
+        self.trade_skt_api = self.skt_api.Trade(self.logger, 
+                                                self.general_config_ini, self.private_api_ini,
+                                                self.general_config_mode,self.private_api_mode)
         self.deque_none = 0
         self.no_update_attmpt = 6*10
         
