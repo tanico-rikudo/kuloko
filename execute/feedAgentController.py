@@ -16,12 +16,12 @@ class realtimeFeedAgent:
         self.afa = AleisterFeedAgent(general_config_mode)
         self.general_config  =  self.afa.general_config
         self.mqserver_host = self.general_config.get("MQ_HOST")
-        self.mqname = self.general_config.get("MQ_NAME")
-        self.routing_key = self.general_config.get("MQ_ROUTING")
+        self.mqname = self.general_config.get("REALTIMEFEED_MQ_NAME")
+        self.routing_key = self.general_config.get("REALTIMEFEED_MQ_ROUTING")
         self.logger = self.afa.logger
         
     def init_mqclient(self):
-        self.mq_rpc_client = RpcClient(self.mqserver_host,self.mqname, self.logger)
+        self.mq_rpc_client = RpcClient(self.mqserver_host, self.mqname ,self.routing_key, self.logger)
         self.logger.info("[DONE] New mq client")
         
     def start_fetch_feed(self):
@@ -36,7 +36,7 @@ class realtimeFeedAgent:
             # # afa_provider_process.setDaemon(True)
             # afa_provider_process.start()
             
-            self.start_fetch_feed()
+            self.fetch_realtime_data()
             
         except  Exception as e:
             self.logger.info(f"[STOP] AleisterFeedAgent Realtime Privide.e={e}")

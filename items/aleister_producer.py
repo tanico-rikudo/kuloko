@@ -23,11 +23,9 @@ class AleisterFeedAgent(Item):
         self.hd = hist_data.histData()
         
         #MQ
-        self.mqserver_host = self.general_config.get("MQ_HOST")
-        self.mqname = self.general_config.get("MQ_NAME")
-        self.routing_key = self.general_config.get("MQ_ROUTING")
         self.interval_sec = 10  #todo: outside
         self.max_feed_instance =4 #todo: outside
+        self.load_mq_settings()
         
         #db
         self.mongo_util = None
@@ -35,6 +33,17 @@ class AleisterFeedAgent(Item):
     # def __del__(self):
     #     self.close_socket()
     #     self.db_accesser.dao.close()
+    
+    def load_mq_settings(self):
+        self.mqserver_host = self.general_config.get("MQ_HOST")
+        self.mqnames = {
+            "realtime": self.general_config.get("REALTIMEFEED_MQ_NAME"),
+            "historical": self.general_config.get("HISTORICAL_MQ_NAME")
+        }
+        self.routing_keys = {
+            "realtime": self.general_config.get("REALTIMEFEED_MQ_ROUTING") ,
+            "historical": self.general_config.get("HISTORICAL_MQ_ROUTING")   
+        }
     
     """" Initilize  """
     def init_db(self):
@@ -92,7 +101,7 @@ class AleisterFeedAgent(Item):
         self.logger.info(f"[START] Subscribe via socket handler.")
 
 
-    def setup_data_provider(self):
+    def setup_data_provider(self,  routing_key, mqname):
         """ Init/Connect all data endpoint
         
         """
@@ -104,7 +113,7 @@ class AleisterFeedAgent(Item):
         self.init_rest()
         
         #mq
-        self.mq_privider = MqProvider( self.mqserver_host, self.mqname, self.routing_key, self.logger)
+        self.mq_privider = MqProvider( self.mqserver_host, mqname, routing_key, self.logger)
         self.mq_privider.connect_mq()
         self.logger.info(f"[DONE] Init data fetch setup")
         
@@ -112,10 +121,14 @@ class AleisterFeedAgent(Item):
     def start_rpc_receiver(self, process_name):
         self.mq_privider.channel.basic_qos(prefetch_count=1)
         if process_name == "replay_realtime_data":
-            self.mq_privider.channel.basic_consume(on_message_callback= lambda ch, method, properties, body: self.replay_realtime_data(ch, method, properties, body), queue=self.mqname
+            self.mq_privider.channel.basic_consume(on_message_callback= 
+                                                   lambda ch, method, properties, body: self.replay_realtime_data(ch, method, properties, body), 
+                                                   queue=self.mqname)
 
         elif  process_name == "replay_hist_data":
-            self.mq_privider.channel.basic_consume(on_message_callback= lambda ch, method, properties, body: self.replay_hist_data(ch, method, properties, body), queue=self.mqname
+            self.mq_privider.channel.basic_consume(on_message_callback= 
+                                                   lambda ch, method, properties, body: self.replay_hist_data(ch, method, properties, body), 
+                                                   queue=self.mqname)
         else:
             raise Exception(f"Fail to launch RPC receiver. Process={process_name}.")
             
@@ -164,7 +177,7 @@ class AleisterFeedAgent(Item):
         """
         Provide master for  realtime to predict realtime
         """
-        self.setup_data_provider()
+        self.setup_data_provider(self.routing_keys["realtime"], self.mqnames["realtime"])
         self.start_subscribe_socket()
         self.start_rpc_receiver(process_name="replay_realtime_data")
         
@@ -205,7 +218,7 @@ class AleisterFeedAgent(Item):
             
     ### Get hist data and Provide aleister ###
     def init_histdata_fetch(self):
-        self.setup_data_provider()
+        self.setup_data_provider(self.routing_key["historical"], self.mqnames["historical"])
         self.start_rpc_receiver(process_name="replay_hist_data")
         
     def replay_hist_data(self, ch, method, properties, body):
@@ -258,7 +271,7 @@ class AleisterFeedAgent(Item):
     def start_record_realtime_data(self):
         self.logger.info("[START] Subscribe realtime data")
         #  init connection and subscribe
-        self.setup_data_provider()
+        self.setup_data_provider(self.routing_keys["realtime"], self.mqnames["realtime"])
         self.start_subscribe_socket()
         
         # self.scheduler = BackgroundScheduler() 
