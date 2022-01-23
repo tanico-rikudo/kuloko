@@ -5,15 +5,28 @@ services:
     image: mongo
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+        - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
+        - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/MONGO_INITDB_ROOT_PASSWORD
+        - MONGO_INITDB_DATABASE=local
+    # environment:
+    #     MONGO_INITDB_ROOT_USERNAME: admin
+    #     MONGO_INITDB_ROOT_PASSWORD: pw
     ports:
       - 27017:27017
     volumes:
       - ./db:/data/db
       - ./configdb:/data/configdb
+      - ${HOST_BASE_DIR}/geco_commons/mongodb/init/:/docker-entrypoint-initdb.d
     env_file:
       .env
+    command: --auth
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.1
+    privileged: true
+    secrets:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
 
   mongo-express:
     container_name: kuloko_mongo_express
@@ -26,6 +39,11 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
     env_file:
       .env
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.2
+    depends_on:
+      - mongo
       
   kuloko_python:
     container_name: kuloko_python
@@ -42,3 +60,21 @@ services:
       .env
     restart: always
     tty: true
+
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.3
+
+networks:
+    default:
+      external:
+          name: bridge
+    # Connection  among conntianers
+    shared-nw:
+      external: true
+
+secrets:
+  MONGO_INITDB_ROOT_USERNAME:
+    file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/.MONGO_INITDB_ROOT_USERNAME
+  MONGO_INITDB_ROOT_PASSWORD:
+    file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/.MONGO_INITDB_ROOT_PASSWORD
