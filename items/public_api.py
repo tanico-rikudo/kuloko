@@ -8,7 +8,7 @@ dl = daylib.daylib()
 
 import  copy
 
-class venueStatus(Item, general_config_mode, private_api_mode):
+class venueStatus(Item):
     def __init__(self):
         super(venueStatus, self).__init__(name="venueStatus",item_type="venueStatus",currency="BTC",
                                          general_config_mode="DEFAULT",private_api_mode="DEFAULT")

@@ -12,8 +12,8 @@ from mq.mq_handler import  *
 
 class realtimeFeedAgent:
     
-    def __init__(self, general_config_mode):
-        self.afa = AleisterFeedAgent(general_config_mode)
+    def __init__(self, general_config_mode,private_api_mode):
+        self.afa = AleisterFeedAgent(general_config_mode,private_api_mode)
         self.general_config  =  self.afa.general_config
         self.mqserver_host = self.general_config.get("MQ_HOST")
         self.mqname = self.general_config.get("REALTIMEFEED_MQ_NAME")
@@ -92,6 +92,7 @@ if __name__ == "__main__":
                         help="Select private api mode")
     opt = parser.parse_args()
     general_config_mode = opt.general_config_mode # "DEFAULT"
+    private_api_mode = opt.private_api_mode # "DEFAULT"
     rfa  = realtimeFeedAgent(general_config_mode, private_api_mode)
     if opt.process == "record":
         rfa.start_record()

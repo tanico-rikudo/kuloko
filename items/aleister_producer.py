@@ -1,9 +1,12 @@
+import  sys,os
 import pika
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
-from item import Item
+from .item import Item
 import public_api
 import private_api
+
+sys.path.append(os.environ['COMMON_DIR'])
 from mongodb.src.mongo_handler import *
 import json
 from mq.mq_handler import MqProvider

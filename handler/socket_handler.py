@@ -327,7 +327,8 @@ class Orderbooks(Socket):
     
 
 class Ticker(Socket):
-    def __init__(self,logger, general_config_ini,private_api_ini):
+    def __init__(self,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
         super().__init__("ticker",logger, general_config_ini, private_api_ini,
                          general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
