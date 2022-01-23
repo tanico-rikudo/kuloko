@@ -136,3 +136,10 @@ dmypy.json
 .aws-sam/
 *.conf
 db/
+
+# Docker 
+.python_history
+.bash_history
+
+# Mac
+.DS_Store
