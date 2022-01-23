@@ -38,15 +38,10 @@ class InvalidArgumentError(Exception):
     pass
 
 class Socket(object):
-    def __init__(self,channel,logger, general_config_ini,private_api_ini,general_config_mode="DEFAULT",private_api_mode="DEFAULT"):
+    def __init__(self,channel,logger, 
+                 general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
         self._logger = logger
-        if general_config_ini is None:
-            general_config_ini = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
-        if private_api_ini is None:            
-            private_api_ini = cm.load_ini_config(path=None,config_name="private_api", mode=general_config_mode)
-            self._logger.info('[DONE]Load Private API Config.')
-
         self.load_config( general_config_ini,private_api_ini,general_config_mode,private_api_mode)
         self.set_config()
 
@@ -59,14 +54,21 @@ class Socket(object):
         self._logger.info('[DONE] Socket Instance deleted.')
         
     def load_config(self,general_config_ini,private_api_ini,general_config_mode,private_api_mode):
-        self.private_api_config = private_api_ini[private_api_mode]
-        self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. Private API:[{0}] General:[{1}]'
-            .format(private_api_mode,general_config_mode))
+        if general_config_ini is None:
+            self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+        else:
+            self.general_config = general_config_ini[general_config_mode]
+        self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
+        
+        if private_api_ini is None:            
+            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
+        else:
+            private_api_config = private_api_ini[private_api_mode]
+        self._logger.info(f'[DONE]Load Private API Config. Mode={private_api_mode}')
 
     def set_config(self):
         self.allow_sym = eval(self.general_config.get('ALLOW_SYM'))
-        self.tz_offset = self.general_config.getint('TIMEZONE_OFFSET_HOUR')
+        self.tz = self.general_config.get('TIMEZONE')
         self._logger.info('[DONE]Set Config from loaded config')
 
     def load_urls(self):
@@ -94,14 +96,14 @@ class Socket(object):
             url,
             on_message = self.on_message,on_open=self.on_open,
             on_error = self.on_error, on_close = self.on_close)
-        self._logger.info("Socket Connected")
+        self._logger.info(f"Socket Connected. Channel={self.channel}")
     
     def subscribe(self):
         self.ws.keep_running = True 
         self.thread = threading.Thread(target=lambda: self.ws.run_forever())
         self.thread.daemon = True
         self.thread.start()
-        self._logger.info("Start to subscribe")
+        self._logger.info(f"Start to subscribe. Channel={self.channel}")
 
     def is_connected(self):
         flag = False
@@ -113,7 +115,7 @@ class Socket(object):
     def disconnect(self):
         self.ws.keep_running = False
         self.ws.close()
-        self._logger.info("Socket closed")
+        self._logger.info(f"Socket closed. Channel={self.channel}")
 
     def get(self):
         """ DeQue data possesing at present 
@@ -130,37 +132,53 @@ class Socket(object):
             return_data[_i]['price'] =return_data[_i]['price']
             return_data[_i]['size'] =return_data[_i]['size']
         return return_data
+    
+    def reconnect(self):
+        try:
+            self.disconnect()
+        except:
+            pass
+        
+        try:
+            self.connect(self.url, self.sym)
+        except:
+            pass
+        
+        try:
+            self.subscribe()
+        except:
+            pass
 
-    def on_message(self, message):
+    def on_message(self, ws,message):
         # self._logger.info('Received:{0}'.format(message))
-        self._logger.info('Received: Channel={0}'.format(self.channel))
+        self._logger.debug('Received: Channel={0}'.format(self.channel))
         self.queue.append(json.loads(message))
         if len(self.queue) > self.maxlen:
-            self._logger.warn("Message queue is full. Old item are discarded")
+            self._logger.warning(f"Message queue is full. Old item are discarded. Channel={self.channel}")
 
-    def on_error(self, error):
-        self._logger.error('Try reconnect {0}'.format(error),exc_info=True)
+    def on_error(self, ws, error):
+        self._logger.error('Try reconnect... {0}'.format(error),exc_info=True)
         self.disconnect()
         time.sleep(0.5)
         self.connect(self.url , self.sym)
 
-    def on_close(self):
+    def on_close(self,ws, close_status_code, close_msg):
         message = {
             "command": "disconnected",
             "channel": self.channel,
             "symbol": self.sym 
         }
         self.ws.send(json.dumps(message))
-        self._logger.info('Websocket disconnected')
+        self._logger.info(f'Websocket disconnected. Channel={self.channel}')
 
-    def on_open(self):
+    def on_open(self,ws):
         message = {
             "command": "subscribe",
             "channel": self.channel,
             "symbol": self.sym 
         }
         self.ws.send(json.dumps(message))
-        self._logger.info('Socket opened')
+        self._logger.info(f'Socket opened. Channel={self.channel}')
 
 
     def make_header(self,access_path, access_method,request_body=""):
@@ -202,6 +220,13 @@ class Socket(object):
             raise Exception(e)
 
         return 
+    
+    def error_handle(self,raw_data):
+        if "error" in raw_data.keys():
+            self._logger.warning("{0}".format(raw_data["error"]))
+            return None
+        else:
+            return raw_data
 
     def extend_access_token(self):
         reqBody = {'token':self.token}
@@ -224,20 +249,27 @@ class Socket(object):
         return 
 
 class Trade(Socket):
-    def __init__(self,logger, general_config_ini,private_api_ini):
-        super().__init__("trades",logger, general_config_ini,private_api_ini)
+    def __init__(self,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__("trades",logger, general_config_ini, private_api_ini,
+                         general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
     def convert_shape(self, raw_data, return_type):
+        raw_data = self.error_handle(raw_data)
+        if raw_data is None:
+            return {}
+        
         data = raw_data
         if return_type is 'raw':
             return raw_data
         elif return_type in ['json','dataframe']:
-            data["time"] = dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset)
+            # print(raw_data)
+            data["time"] = dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz)
             del data["timestamp"]
             data['price'] = float(raw_data['price'])   
             data['size'] = float(raw_data['size'])
             if return_type in 'json':
-                data["time"] = dl.dt_to_intYMDHMSF(data["time"])
+                data["time"] = dl.dt_to_strYMDHMSF(data["time"])
                 return data
             if return_type in 'dataframe':
                 return pd.DataFrame(data)
@@ -246,15 +278,19 @@ class Trade(Socket):
     
 
 class Orderbooks(Socket):
-    def __init__(self,logger, general_config_ini,private_api_ini):
-        super().__init__("orderbooks",logger, general_config_ini,private_api_ini)
+    def __init__(self,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__("orderbooks",logger, general_config_ini, private_api_ini,
+                         general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
     def convert_shape(self, raw_data, depth, return_type):
-
+        raw_data = self.error_handle(raw_data)
+        if raw_data is None:
+            return {}
         #Filter Depth
         for _side in ['asks','bids']:
-                raw_data[_side]= raw_data[_side][:depth]
-        time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz_offset)
+            raw_data[_side]= raw_data[_side][:depth]
+        time_dt = dl.str_utc_to_dt_offset(raw_data['timestamp'],self.tz)
         symbol = raw_data['symbol']
 
         if return_type is 'raw':
@@ -280,7 +316,7 @@ class Orderbooks(Socket):
             
             if return_type is 'json':
                 data = {_key :_value for _key, _value in zip(keys, values)}
-                data['time'] = dl.dt_to_intYMDHMSF(data['time'])
+                data['time'] = dl.dt_to_strYMDHMSF(data['time'])
             elif return_type is 'seq':
                 data = values         
 
@@ -291,19 +327,25 @@ class Orderbooks(Socket):
     
 
 class Ticker(Socket):
-    def __init__(self,logger, general_config_ini,private_api_ini):
-        super().__init__("ticker",logger, general_config_ini,private_api_ini)
+    def __init__(self,logger, general_config_ini, private_api_ini,
+                 general_config_mode="DEFAULT", private_api_mode="DEFAULT"):
+        super().__init__("ticker",logger, general_config_ini, private_api_ini,
+                         general_config_mode="DEFAULT", private_api_mode="DEFAULT")
 
     def convert_shape(self, raw_data,return_type):
+        raw_data = self.error_handle(raw_data)
+        if raw_data is None:
+            return {}
         symbol = raw_data['symbol']
+        
         if return_type is 'raw':
             return raw_data
         elif return_type is 'json':
             data = {}
             for _item in ['ask','bid','high','last','low','volume']:
                 data[_item] =float(raw_data[_item])
-            data["time"] = dl.dt_to_intYMDHMSF(
-                dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz_offset))
+            data["time"] = dl.dt_to_strYMDHMSF(
+                dl.str_utc_to_dt_offset(raw_data["timestamp"],self.tz))
             data['symbol'] = symbol
             return data
         else:

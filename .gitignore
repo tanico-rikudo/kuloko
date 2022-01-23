@@ -128,8 +128,18 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#ini
+# ini
 *.ini
+*.yaml
 
 # sam psudo deploy files
 .aws-sam/
+*.conf
+db/
+
+# Docker 
+.python_history
+.bash_history
+
+# Mac
+.DS_Store

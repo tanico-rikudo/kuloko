@@ -29,18 +29,16 @@ class HistDataHandler:
 
     def __init__(self,logger, general_config_ini=None,general_config_mode="DEFAULT"):
         self._logger = logger
-        if general_config_ini is None:
-            general_config_ini = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
-
         self.load_config(general_config_ini, general_config_mode)
         self.set_config()
         self._logger.info('[DONE]API Initialized')
         
     def load_config(self,general_config_ini,general_config_mode):
-        self.general_config = general_config_ini[general_config_mode]
-        self._logger.info('[DONE]Load Config. Private API:[{0}] General:[{1}]'
-            .format(general_config_ini,general_config_mode))
+        if general_config_ini is None:
+            self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
+        else:
+            self.general_config = general_config_ini[general_config_mode]
+        self._logger.info(f'[DONE]Load General Config(Hist file). Mode={general_config_mode}')
 
     def set_config(self):
         self.remote_end_point = os.path.join(self.general_config.get('ENDPOINT_URL'),self.general_config.get('HISTDATA_URL'))
@@ -74,21 +72,22 @@ class HistDataHandler:
         # self._logger.info("[DONE]Get local  taget url:{0}".format(target_url))
         return target_url
 
-    def get_hist(self,sym, kind, int_date, is_save=False, mode="auto"):
+    def get_file_hist(self,sym, kind, int_date, is_save=False, mode="auto"):
         str_date = dl.intD_to_strD(int_date)
         local_path = self.get_local_target_url(sym, kind, int_date)
         remote_path = self.get_remote_target_url(sym, kind, int_date)
         save_path = local_path if is_save else None
+        self.item_validation(kind, mode)
         if mode == 'local':
             if not os.path.isfile(local_path):
-                self._logger.error("Fail to get hist data. path{0}:{1}".format(local_path, e))
+                self._logger.error("Fail to get hist data. path{0}".format(local_path))
             df = self.read_local_hist(local_path)
             self._logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
             
-        if mode == 'remote':
+        elif mode == 'remote':
             df = self.download_remote_hist( remote_path, save_path=save_path)
             self._logger.info("[DONE] Get remote hist data. Path={0}".format(remote_path))
-        if mode == 'auto':
+        elif mode == 'auto':
             if not os.path.isfile(local_path):
                 self._logger.info("No local hist data. Try: remote.  path{0}".format(local_path))
                 df = self.download_remote_hist(remote_path, save_path=save_path)
@@ -97,9 +96,10 @@ class HistDataHandler:
                 df = self.read_local_hist(local_path)
                 self._logger.info("[DONE] Get local hist data. Path={0}".format(local_path))
         
-        # time stamp format        
-        df['timestamp'] = df['timestamp'].apply(lambda x: dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False))
-                
+        if  df is not None:
+            # localize and time stamp format     
+            df['timestamp'] = df['timestamp'].apply(lambda x: dl.dt_to_strYMDHMSF(dl.str_utc_to_dt_offset(x,is_Z=False, is_T=False)))
+        
         return df
 
         
@@ -133,7 +133,7 @@ class HistDataHandler:
             
     def save_hist(self, data, save_path):
         if os.path.isfile(save_path):
-            self._logger.warn("Filepath={0} is already exist. "
+            self._logger.warning("Filepath={0} is already exist. "
                         "However, download and overwirte forcefully".format(save_path))
         save_dir = os.path.dirname(save_path)
         if not os.path.isdir(save_dir):
@@ -144,9 +144,12 @@ class HistDataHandler:
         self._logger.info("[DONE] Save historical data. path:{0}".format(save_path))
         
     def read_local_hist(self, read_local_path):
-        
-        df = pd.read_csv(read_local_path, compression='gzip')
-        self._logger.info("[DONE] Readed data. Path={0}".format(read_local_path))
+        df=None
+        try:
+            df = pd.read_csv(read_local_path, compression='gzip')
+            self._logger.info("[DONE] Readed data. Path={0}".format(read_local_path))
+        except Exception as e:
+            self._logger.warning("[Fialure] Reading hist data. Path={0}:{1} ".format(read_local_path,e))
         return df
     
     def convert_gzip_binary_to_plain(self,  data):
@@ -165,9 +168,27 @@ class HistDataHandler:
 
     def bulk_load(self,sym, kind, since_int_date, until_int_date, is_save=True, mode='auto'):
         target_dates = dl.get_between_date(since_int_date, until_int_date)
-        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_hist)(sym, kind, _target_date,  is_save, mode) for _target_date in target_dates)
+        dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_file_hist)(sym, kind, _target_date,  is_save, mode) for _target_date in target_dates)
+        dfs = [ df for  df in dfs if df is not None]
+        if len(dfs) ==  0:
+            self._logger.warning("ALL object is failure.")
+            return None
         return pd.concat(dfs, axis=0)
-
+    
+    def item_validation(self,kind, mode):
+        assert kind in ['trades','orderbooks'] ,"No such option. Mode={kind}"
+        assert mode in ['local','remote','auto'] ,"{kind} has no such option. Mode={mode}"
+        if kind == 'trades':
+            pass
+        elif kind == 'orderbooks':
+            if mode == 'auto':
+                mode == 'local'
+                self._logger(f"{kind} fetch mode is changed to local mode.")
+            else:
+                pass
+        else:
+            pass
+            
     def send_dynamo(self):
         pass
 
