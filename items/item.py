@@ -70,4 +70,5 @@ class Item(object):
             self.logger.info("[DONE] mongo_config_mode is filled with general_config_mode.")
             mongo_config_mode = self.general_config_mode 
         self.mongo_db = MongoHandler(self.mongo_ini[mongo_config_mode],self.item_type)
-        self.logger.info(f"[DONE] Init mongo DB. Mode={mongo_config_mode}")
+        #todo: hide here
+        self.logger.info(f"[DONE] Init mongo DB. Mode={mongo_config_mode}. Ur={self.mongo_db.connect_url}")
