@@ -143,3 +143,8 @@ db/
 
 # Mac
 .DS_Store
+
+#jupyter
+.jupyter
+.local
+.ipython
