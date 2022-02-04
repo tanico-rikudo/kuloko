@@ -16,12 +16,13 @@ Options:
   -k    Sender killer
   -g   general config mode
   -a   private api mode
+  -s   symbol
 _EOT_
 exit 1
 }
 
 if [ "$OPTIND" = 1 ]; then
-  while getopts rskg:a:h OPT
+  while getopts rkg:a:s:h OPT
   do
     case $OPT in
       r)
@@ -41,6 +42,9 @@ if [ "$OPTIND" = 1 ]; then
         ;;
       a)
         pam=$OPTARG
+        ;;
+      s)
+        sym=$OPTARG
         ;;
       h)
         echo "h option. display help"       # for debug
@@ -79,6 +83,8 @@ fi
 command="${command} --general_config_mode ${gcm}"
 # private api
 command="${command} --private_api_mode ${pam}"
+# symbol 
+command="${command} --symbol ${sym}"
 
 command="${command} " 
 echo $command

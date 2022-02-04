@@ -31,7 +31,7 @@ class venueStatus(Item):
         # Init mongo
         self.init_mongodb()
 
-    def get(self):
+    def fetch(self):
         try:
             res = self.vStatus_web_api.fetch(return_type="json")
         except Exception as e:
@@ -127,20 +127,6 @@ class Orderbook(Item):
         self.orderbook_skt_api.disconnect()
 
 
-class Ticks(Item):
-    def __init__(self):
-        super(venueStatus, self).__init__(
-            name="ticker",
-            item_type="ticker",
-            symbol=symbol,
-            general_config_mode=general_config_mode,
-            private_api_mode=private_api_mode,
-        )
-
-        # Init mongo
-        self.init_mongodb()
-
-
 class Ticker(Item):
     def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Ticker, self).__init__(
@@ -173,20 +159,19 @@ class Ticker(Item):
         self.init_mongodb()
 
     ## API
-    def get(self):
+    def fetch(self, return_type="json"):
         try:
-            res = self.ticks_web_api.fetch(return_type="json")
+            res = self.ticks_web_api.fetch(return_type)
+            insert_json = copy.deepcopy(res)
+            if return_type == "json":
+                self.mongo_db.insert_one(insert_json)
         except Exception as e:
             res = {
                 "res_time": dl.currentTime(self.ticks_web_api.tz),
                 "status": "INQUIRY_ERROR",
             }
-        finally:
-            self.mongo_db.insert_many(res)
-            self.logger.info(
-                "[DONE] API venue status inquiry: {0}".format(res["status"])
-            )
-            return res
+
+        return res
 
     ## Socket
     def connect(self):

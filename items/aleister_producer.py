@@ -28,7 +28,7 @@ class AleisterFeedAgent(Item):
         self.socket_handler = {}
         self.rest_handler = {}
         self.db_accesser = None
-        self.hd = hist_data.histData(general_config_mode, private_api_mode)
+        self.hd = hist_data.histData(symbol, general_config_mode, private_api_mode)
 
         # MQ
         self.interval_sec = 10  # todo: outside
@@ -71,16 +71,19 @@ class AleisterFeedAgent(Item):
             "trade": public_api.Trade(
                 self.symbol, self.general_config_mode, self.private_api_mode
             ),
-            "ticker": public_api.Ticker(
-                self.symbol, self.general_config_mode, self.private_api_mode
-            ),
+            # "ticker": public_api.Ticker(
+            #     self.symbol, self.general_config_mode, self.private_api_mode
+            # ),
         }
 
     def init_rest(self):
         self.rest_handler = {
             "margin": private_api.Margin(
                 self.symbol, self.general_config_mode, self.private_api_mode
-            )
+            ),
+            "ticker": public_api.Ticker(
+                self.symbol, self.general_config_mode, self.private_api_mode
+            ),
         }
 
     """ Socker Handle """
