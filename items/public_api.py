@@ -15,11 +15,12 @@ class venueStatus(Item):
         super(venueStatus, self).__init__(
             name="venueStatus",
             item_type="venueStatus",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
         self.vStatus_web_api = self.web_api.venueStatus(
+            self.symbol,
             self.logger,
             self.general_config_ini,
             self.private_api_ini,
@@ -47,11 +48,11 @@ class venueStatus(Item):
 
 
 class Orderbook(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Orderbook, self).__init__(
             name="orderbook",
             item_type="orderbook",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
@@ -70,7 +71,7 @@ class Orderbook(Item):
 
     def connect(self):
         self.orderbook_skt_api.connect(
-            self.orderbook_skt_api.get_public_socket_url(), self.currency
+            self.orderbook_skt_api.get_public_socket_url(), self.symbol
         )
 
     def subscribe(self):
@@ -131,7 +132,7 @@ class Ticker(Item):
         super(Ticker, self).__init__(
             name="ticker",
             item_type="ticker",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
@@ -150,7 +151,7 @@ class Ticker(Item):
 
     def connect(self):
         self.ticker_skt_api.connect(
-            self.ticker_skt_api.get_public_socket_url(), self.currency
+            self.ticker_skt_api.get_public_socket_url(), self.symbol
         )
 
     def subscribe(self):
@@ -203,11 +204,11 @@ class Ticker(Item):
 
 
 class Trade(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Trade, self).__init__(
             name="trade",
             item_type="trade",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
@@ -226,7 +227,7 @@ class Trade(Item):
 
     def connect(self):
         self.trade_skt_api.connect(
-            self.trade_skt_api.get_public_socket_url(), self.currency
+            self.trade_skt_api.get_public_socket_url(), self.symbol
         )
 
     def subscribe(self):

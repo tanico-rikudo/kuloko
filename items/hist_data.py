@@ -8,11 +8,11 @@ dl = daylib.daylib()
 
 
 class histData(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(histData, self).__init__(
             name="histData",
             item_type="histData",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )

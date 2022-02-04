@@ -15,12 +15,12 @@ import hist_data
 
 #  stand alone from ITEM
 class AleisterFeedAgent(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         # Note: No specific private spi
         super(AleisterFeedAgent, self).__init__(
             name="AleisterFeedAgent",
             item_type="AleisterFeedAgent",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
@@ -66,18 +66,20 @@ class AleisterFeedAgent(Item):
     def init_skt(self):
         self.socket_handler = {
             "orderbook": public_api.Orderbook(
-                self.general_config_mode, self.private_api_mode
+                self.symbol, self.general_config_mode, self.private_api_mode
             ),
-            "trade": public_api.Trade(self.general_config_mode, self.private_api_mode),
+            "trade": public_api.Trade(
+                self.symbol, self.general_config_mode, self.private_api_mode
+            ),
             "ticker": public_api.Ticker(
-                self.general_config_mode, self.private_api_mode
+                self.symbol, self.general_config_mode, self.private_api_mode
             ),
         }
 
     def init_rest(self):
         self.rest_handler = {
             "margin": private_api.Margin(
-                self.general_config_mode, self.private_api_mode
+                self.symbol, self.general_config_mode, self.private_api_mode
             )
         }
 

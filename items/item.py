@@ -35,7 +35,7 @@ class Item(object):
         self,
         name,
         item_type,
-        currency,
+        symbol,
         general_config_mode="DEFAULT",
         private_api_mode="DEFAULT",
     ):
@@ -46,7 +46,7 @@ class Item(object):
         # Metas
         self.name = name
         self.item_type = item_type
-        self.currency = currency
+        self.symbol = symbol
 
         # Handlers
         self.skt_api = skt_api

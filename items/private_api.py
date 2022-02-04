@@ -6,16 +6,16 @@ import copy
 
 
 class Margin(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Margin, self).__init__(
             name="margin",
             item_type="margin",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
         self.margin_web_api = self.web_api.Margin(
-            self.currency,
+            self.symbol,
             self.logger,
             self.general_config_ini,
             self.private_api_ini,
@@ -37,12 +37,12 @@ class Assets(Item):
         super(Assets, self).__init__(
             name="assets",
             item_type="assets",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
         self.assets_web_api = self.web_api.Assets(
-            self.currency,
+            self.symbol,
             self.logger,
             self.general_config_ini,
             self.private_api_ini,
@@ -60,16 +60,16 @@ class Assets(Item):
 
 
 class Orders(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Orders, self).__init__(
             name="orders",
             item_type="orders",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
         self.orders_web_api = self.web_api.Orders(
-            self.currency,
+            self.symbol,
             self.logger,
             self.general_config_ini,
             self.private_api_ini,
@@ -80,7 +80,7 @@ class Orders(Item):
 
     def fetch_sym(self, sym=None, return_type="json"):
         if sym is None:
-            sym = self.currency
+            sym = self.symbol
         v = self.orders_web_api.fetch_active(sym, return_type)
         return v
 
@@ -90,16 +90,16 @@ class Orders(Item):
 
 
 class Executions(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Executions, self).__init__(
             name="executions",
             item_type="executions",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
         self.executions_web_api = self.web_api.Executions(
-            self.currency,
+            self.symbol,
             self.logger,
             self.general_config_ini,
             self.private_api_ini,
@@ -110,7 +110,7 @@ class Executions(Item):
 
     def fetch_latest(self, sym=None, return_type="json"):
         if sym is None:
-            sym = self.currency
+            sym = self.symbol
         v = self.executions_web_api.fetch_latestExecutions(
             sym, count=100, return_type=return_type
         )
@@ -119,22 +119,22 @@ class Executions(Item):
     # TODO by order
     # def fetch(self, sym=None, return_type="json"):
     #     if sym is None:
-    #         sym = self.currency
+    #         sym = self.symbol
     #     v = self.executions_web_api.fetch_latestExecutions(sym,count=100, return_type=return_type)
     #     return v
 
 
 class Order(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Order, self).__init__(
             name="order",
             item_type="order",
-            currency="BTC",
+            symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )
         self.order_web_api = self.web_api.Order(
-            self.currency,
+            self.symbol,
             self.logger,
             self.general_config_ini,
             self.private_api_ini,
