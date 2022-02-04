@@ -128,7 +128,7 @@ class Orderbook(Item):
 
 
 class Ticker(Item):
-    def __init__(self, general_config_mode, private_api_mode):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Ticker, self).__init__(
             name="ticker",
             item_type="ticker",
