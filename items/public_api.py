@@ -127,6 +127,20 @@ class Orderbook(Item):
         self.orderbook_skt_api.disconnect()
 
 
+class Ticks(Item):
+    def __init__(self):
+        super(venueStatus, self).__init__(
+            name="ticker",
+            item_type="ticker",
+            symbol=symbol,
+            general_config_mode=general_config_mode,
+            private_api_mode=private_api_mode,
+        )
+
+        # Init mongo
+        self.init_mongodb()
+
+
 class Ticker(Item):
     def __init__(self, symbol, general_config_mode, private_api_mode):
         super(Ticker, self).__init__(
@@ -143,12 +157,38 @@ class Ticker(Item):
             self.general_config_mode,
             self.private_api_mode,
         )
+
+        self.ticks_web_api = self.web_api.Ticks(
+            self.symbol,
+            self.logger,
+            self.general_config_ini,
+            self.private_api_ini,
+            self.general_config_mode,
+            self.private_api_mode,
+        )
         self.deque_none = 0
         self.no_update_attmpt = 6 * 10
 
         # Init mongo
         self.init_mongodb()
 
+    ## API
+    def get(self):
+        try:
+            res = self.ticks_web_api.fetch(return_type="json")
+        except Exception as e:
+            res = {
+                "res_time": dl.currentTime(self.ticks_web_api.tz),
+                "status": "INQUIRY_ERROR",
+            }
+        finally:
+            self.mongo_db.insert_many(res)
+            self.logger.info(
+                "[DONE] API venue status inquiry: {0}".format(res["status"])
+            )
+            return res
+
+    ## Socket
     def connect(self):
         self.ticker_skt_api.connect(
             self.ticker_skt_api.get_public_socket_url(), self.symbol
