@@ -65,9 +65,9 @@ class API:
         self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
         
         if private_api_ini is None:            
-            private_api_ini=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
+            self.private_api_config=cm.load_ini_config(path=None,config_name="private_api", mode=private_api_mode)
         else:
-            private_api_config = private_api_ini[private_api_mode]
+            self.private_api_config = private_api_ini[private_api_mode]
         self._logger.info(f'[DONE]Load Private API Config. Mode={private_api_mode}')
         
     def set_config(self):
