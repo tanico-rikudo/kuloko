@@ -38,7 +38,7 @@ class HistDataHandler:
             self.general_config = cm.load_ini_config(path=None,config_name="general", mode=general_config_mode)
         else:
             self.general_config = general_config_ini[general_config_mode]
-        self._logger.info(f'[DONE]Load General Config(Hist file). Mode={general_config_mode}')
+        self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
 
     def set_config(self):
         self.remote_end_point = os.path.join(self.general_config.get('ENDPOINT_URL'),self.general_config.get('HISTDATA_URL'))

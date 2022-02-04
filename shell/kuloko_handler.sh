@@ -14,7 +14,8 @@ Options:
   -r    Feed record
   -p    Feed fetch and provider
   -k    Sender killer
-
+  -g   general config mode
+  -a   private api mode
 _EOT_
 exit 1
 }
