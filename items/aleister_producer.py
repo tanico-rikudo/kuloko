@@ -1,4 +1,5 @@
 import sys, os
+import time
 import pika
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -113,6 +114,9 @@ class AleisterFeedAgent(Item):
         Start subscrie in all set socket
         """
         for obj_name in self.socket_handler.keys():
+            # Measure for "ERR-5003 Request too many
+            # GMO rejects subscription request more than 1 per second
+            time.sleep(1.01)
             self.socket_handler[obj_name].subscribe()
 
         self.logger.info(f"[START] Subscribe via socket handler.")
