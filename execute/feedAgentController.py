@@ -119,7 +119,7 @@ if __name__ == "__main__":
     symbol = opt.symbol
     general_config_mode = opt.general_config_mode
     private_api_mode = opt.private_api_mode
-    rfa = realtimeFeedAgent(realtimeFeedAgent, general_config_mode, private_api_mode)
+    rfa = realtimeFeedAgent(symbol, general_config_mode, private_api_mode)
     if opt.process == "record":
         rfa.start_record()
     elif opt.process == "provider":
