@@ -28,13 +28,13 @@ dl = daylib.daylib()
 
 class API:
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini=None,
-        private_api_ini=None,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini=None,
+            private_api_ini=None,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         self.sym = sym
         self._logger = logger
@@ -66,7 +66,7 @@ class API:
         self._logger.info("[DONE]Set URL parts")
 
     def load_config(
-        self, general_config_ini, private_api_ini, general_config_mode, private_api_mode
+            self, general_config_ini, private_api_ini, general_config_mode, private_api_mode
     ):
         if general_config_ini is None:
             self.general_config = cm.load_ini_config(
@@ -151,13 +151,13 @@ class API:
 
 class venueStatus(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -173,7 +173,7 @@ class venueStatus(API):
         res = self.fetch_data(target_url)
         data = self.convert_shape(res, return_type)
         self._logger.info(
-            "[DONE] Fetch venue status. Return_type={1}".format(return_type)
+            "[DONE] Fetch venue status. Return_type={0}".format(return_type)
         )
         return data
 
@@ -195,13 +195,13 @@ class venueStatus(API):
 
 class Orderbook(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -287,13 +287,13 @@ class Orderbook(API):
 
 class Ticks(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -336,13 +336,13 @@ class Ticks(API):
 
 class Trade(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -400,13 +400,13 @@ class Trade(API):
 
 class Margin(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -454,13 +454,13 @@ class Margin(API):
 
 class Assets(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -507,13 +507,13 @@ class Assets(API):
 
 class Orders(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -587,13 +587,13 @@ class Orders(API):
 
 class Executions(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -605,7 +605,7 @@ class Executions(API):
         )
 
     def fetch_by_id(
-        self, orderId=None, executionId=None, return_type="json", *args, **kwargs
+            self, orderId=None, executionId=None, return_type="json", *args, **kwargs
     ):
 
         parameters = {}
@@ -634,7 +634,7 @@ class Executions(API):
         return executions
 
     def fetch_latestExecutions(
-        self, sym, count=100, return_type="json", *args, **kwargs
+            self, sym, count=100, return_type="json", *args, **kwargs
     ):
         parameters = {"symbol": sym, "page": 1, "count": 100}
         target_url = self.get_url("latestExecutions")
@@ -686,13 +686,13 @@ class Executions(API):
 
 class Order(API):
     def __init__(
-        self,
-        sym,
-        logger,
-        general_config_ini,
-        private_api_ini,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            sym,
+            logger,
+            general_config_ini,
+            private_api_ini,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         super().__init__(
             sym,
@@ -798,8 +798,8 @@ class Order(API):
             if reqBody["price"] is None:
                 raise OrderParamException("Price must be set.")
             if not (
-                utils.is_type(reqBody["price"], float)
-                or utils.is_type(reqBody["price"], int)
+                    utils.is_type(reqBody["price"], float)
+                    or utils.is_type(reqBody["price"], int)
             ):
                 raise OrderParamException(
                     "Price must be int/float. you set type={0}".format(
@@ -826,8 +826,8 @@ class Order(API):
                     "losscutPrice can be set when executionType is in LIMIT or STOP"
                 )
             if not (
-                utils.is_type(reqBody["losscutPrice"], float)
-                or utils.is_type(reqBody["losscutPrice"], int)
+                    utils.is_type(reqBody["losscutPrice"], float)
+                    or utils.is_type(reqBody["losscutPrice"], int)
             ):
                 raise OrderParamException(
                     "losscutPrice must be int/float. you set type={0}".format(
@@ -847,7 +847,7 @@ class Order(API):
         if reqBody["size"] is None:
             raise OrderParamException("size must be set")
         if not (
-            utils.is_type(reqBody["size"], float) or utils.is_type(reqBody["size"], int)
+                utils.is_type(reqBody["size"], float) or utils.is_type(reqBody["size"], int)
         ):
             raise OrderParamException(
                 "size must be int/float. you set type={0}".format(type(reqBody["size"]))
@@ -902,8 +902,8 @@ class Order(API):
         if reqBody["price"] is None:
             raise OrderParamException("Price must be set.")
         if not (
-            utils.is_type(reqBody["price"], float)
-            or utils.is_type(reqBody["price"], int)
+                utils.is_type(reqBody["price"], float)
+                or utils.is_type(reqBody["price"], int)
         ):
             raise OrderParamException(
                 "Price must be int/float. you set type={0}".format(
@@ -917,8 +917,8 @@ class Order(API):
 
         if reqBody["losscutPrice"] is not None:
             if not (
-                utils.is_type(reqBody["losscutPrice"], float)
-                or utils.is_type(reqBody["losscutPrice"], int)
+                    utils.is_type(reqBody["losscutPrice"], float)
+                    or utils.is_type(reqBody["losscutPrice"], int)
             ):
                 raise OrderParamException(
                     "losscutPrice must be int/float. you set type={0}".format(

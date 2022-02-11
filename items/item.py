@@ -32,12 +32,12 @@ cm = ConfigManager(os.environ["KULOKO_INI"])
 
 class Item(object):
     def __init__(
-        self,
-        name,
-        item_type,
-        symbol,
-        general_config_mode="DEFAULT",
-        private_api_mode="DEFAULT",
+            self,
+            name,
+            item_type,
+            symbol,
+            general_config_mode="DEFAULT",
+            private_api_mode="DEFAULT",
     ):
         import configparser
         import logging

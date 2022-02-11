@@ -144,15 +144,15 @@ class Order(Item):
         self.init_mongodb()
 
     def create_entry_order(
-        self,
-        sym,
-        side,
-        executionType,
-        timeInForce,
-        price,
-        losscutPrice,
-        size,
-        cacnelBefore,
+            self,
+            sym,
+            side,
+            executionType,
+            timeInForce,
+            price,
+            losscutPrice,
+            size,
+            cacnelBefore,
     ):
         reqBody = {
             "symbol": sym,

@@ -65,7 +65,7 @@ services:
     ports:
       - 9898:9898
     expose:
-      - "9898"
+      - 9898
     command: jupyter lab --allow-root --ip=0.0.0.0 --port=9898 --no-browser --NotebookApp.token=''
     tty: true
     networks:
