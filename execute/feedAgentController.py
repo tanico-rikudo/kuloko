@@ -26,9 +26,11 @@ class realtimeFeedAgent:
         )
         self.logger.info("[DONE] New mq client")
 
+    """ Subscribe market data and send it to MQ  """
+
     def start_fetch_feed(self):
         """
-        Start subbscribe market data and send it to MQ
+        Init and Subscribe
         """
         self.init_mqclient()
         try:
@@ -37,8 +39,7 @@ class realtimeFeedAgent:
             # afa_provider_process = threading.Thread(target=self.start_fetch_feed)
             # # afa_provider_process.setDaemon(True)
             # afa_provider_process.start()
-
-            self.fetch_realtime_data()
+            self.afa.start_realtime_fetch()
 
         except Exception as e:
             self.logger.info(f"[STOP] AleisterFeedAgent Realtime Privide.e={e}")
@@ -50,13 +51,17 @@ class realtimeFeedAgent:
         """
         self.mq_rpc_client.end_call()
         del self.afa
-        self.logger.info("[STOP] Realtime feed STOP")
+        self.logger.info("[STOP] AleisterFeedAgent Realtime Privide")
+
+    """ Subscribe market data and Record """
 
     def start_record(self):
+        self.logger.info("[START] AleisterFeedAgent Recording.")
         self.afa.start_record_realtime_data()
 
     def stop_record(self):
-        self.afa.stop_record_realtime_data()()
+        self.logger.info("[STOP] AleisterFeedAgent Recording.")
+        self.afa.stop_record_realtime_data()
 
 
 class histFeedAgent:
@@ -64,7 +69,6 @@ class histFeedAgent:
         self.hd = hist_data.histData(general_config_mode, private_api_mode)
         self.general_config = self.hd.general_config
         self.dl = self.hd.dl
-        self.listed_syms = self.general_config.get("LISTED_SYM")
         self.logger = self.hd._logger
 
     def download_hist(self, kinds=None, since_date=None, until_date=None):
@@ -77,10 +81,45 @@ class histFeedAgent:
             since_date if since_date is not None else self.dl.add_day(until_date, 3)
         )
         kinds = trades if trades is not None else ["trades"]
+
+        self.listed_syms = self.general_config.get("LISTED_SYM")
         for _kind in kinds:
             for _sym in self.listed_syms:
                 _ = self.hd.load(_sym, _kind, since_date, until_date)
                 self.logger.info(f"[DONE] Download hist. Kind={_kind}, Sym={_sym}")
+
+    def init_mqclient(self):
+        self.mq_rpc_client = RpcClient(
+            self.mqserver_host, self.mqname, self.routing_key, self.logger
+        )
+        self.logger.info("[DONE] New mq client")
+
+    """ Puck hist data and send it via MQ """
+
+    def start_liaison(self):
+        """
+        Init and Subscribe
+        """
+        self.init_mqclient()
+        try:
+            #  Backgroud process=>no
+            self.logger.info("[START] AleisterFeedAgent Histdata Provide.")
+            # afa_provider_process = threading.Thread(target=self.start_fetch_feed)
+            # # afa_provider_process.setDaemon(True)
+            # afa_provider_process.start()
+            self.afa.start_histdata_liaison()
+
+        except Exception as e:
+            self.logger.info(f"[STOP] AleisterFeedAgent Histdata Privide.e={e}")
+            self.stop_fetch_feed()
+
+    def stop_fetch_feed(self):
+        """
+        Kill fethcing hist data and send it to MQ
+        """
+        self.mq_rpc_client.end_call()
+        del self.afa
+        self.logger.info("[STOP] AleisterFeedAgent Histdata Privide")
 
 
 if __name__ == "__main__":
@@ -101,6 +140,14 @@ if __name__ == "__main__":
         required=True,
         help="Select process",
     )
+    # parser.add_argument(
+    #     "-type",
+    #     "--data_type",
+    #     type=str,
+    #     choices=["REAL","HIST"],
+    #     required=True,
+    #     help="Select fetch data type. Hist data or Realtime data",
+    # )
     parser.add_argument(
         "-gcm",
         "--general_config_mode",
@@ -119,12 +166,15 @@ if __name__ == "__main__":
     symbol = opt.symbol
     general_config_mode = opt.general_config_mode
     private_api_mode = opt.private_api_mode
+    # data_type = opt.data_type
     rfa = realtimeFeedAgent(symbol, general_config_mode, private_api_mode)
     if opt.process == "record":
         rfa.start_record()
+    elif opt.process == "rkiller":
+        rfa.stop_record()
     elif opt.process == "provider":
         rfa.start_fetch_feed()
-    elif opt.process == "killer":
+    elif opt.process == "pkiller":
         rfa.stop_fetch_feed()
     else:
         raise Exception(f"Cannont recogninze option : {opt.process}")

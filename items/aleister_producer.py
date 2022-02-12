@@ -138,6 +138,14 @@ class AleisterFeedAgent(Item):
         self.logger.info(f"[DONE] Init data fetch setup")
 
     def start_rpc_receiver(self, process_name):
+        """Start standby remote procedure
+
+        Args:
+            process_name ([type]): [description]
+
+        Raises:
+            Exception: [description]
+        """
         self.mq_privider.channel.basic_qos(prefetch_count=1)
         if process_name == "replay_realtime_data":
             self.mq_privider.channel.basic_consume(
@@ -185,25 +193,31 @@ class AleisterFeedAgent(Item):
         # print(json_result)
         return json_result
 
-    def fetch_hist_data(self, kind, sym, sd, ed):
+    def fetch_hist_data(self, ch, sym, sd, ed):
         """
         Get hist data from DB or file
         Returns:
             result dict
         """
-        result = self.hd.get_data(kind, sym, sd, ed)
+        result = self.hd.get_data(ch, sym, sd, ed)
         json_result = json.dumps(result)
         return json_result
 
     ###  Get realtime data and Provide aleister  ###
     def start_realtime_fetch(self):
         """
-        Provide master for  realtime to predict realtime
+        Provide master for realtime to predict realtime
         """
+
+        # init all  connection
         self.setup_data_provider(
             self.routing_keys["realtime"], self.mqnames["realtime"]
         )
+
+        # Start subscribing from all socket
         self.start_subscribe_socket()
+
+        # Standby RPC client
         self.start_rpc_receiver(process_name="replay_realtime_data")
 
     def replay_realtime_data(self, ch, method, properties, body):
@@ -248,10 +262,14 @@ class AleisterFeedAgent(Item):
             )
 
     ### Get hist data and Provide aleister ###
-    def init_histdata_fetch(self):
+    def start_histdata_liaison(self):
+
+        # Start subscribing from all socket
         self.setup_data_provider(
             self.routing_key["historical"], self.mqnames["historical"]
         )
+
+        # Standby RPC client
         self.start_rpc_receiver(process_name="replay_hist_data")
 
     def replay_hist_data(self, ch, method, properties, body):
@@ -281,7 +299,6 @@ class AleisterFeedAgent(Item):
             # fetch data
             try:
                 producer_command_dict = ast.literal_eval(producer_command_str)
-
                 data = self.fetch_hist_data(**producer_command_dict)
             except Exception as e:
                 data = json.dumps({})
@@ -304,6 +321,15 @@ class AleisterFeedAgent(Item):
             self.logger.warning(
                 f"[Failure] Fail to replay. ID={corr_id}. e={e}", exc_info=True
             )
+
+    def stop_histdata_liaison(self):
+        try:
+            self.scheduler.shutdown()
+        except:
+            pass
+        finally:
+            self.close_socket()
+        self.logger.info("[END] Histdata liaison stopped.")
 
     ###  Get realtime data. Use for test.  ###
     def start_record_realtime_data(self):
