@@ -126,7 +126,9 @@ class histFeedAgent(baseFeedAgent):
             self.ap.start_histdata_liaison()
 
         except Exception as e:
-            self.logger.info(f"[STOP] AleisterFeedAgent Histdata Privide.e={e}")
+            self.logger.warning(
+                f"[STOP] AleisterFeedAgent Histdata Privide.e={e}", exc_info=True
+            )
             self.stop_liaison()
 
     def stop_liaison(self):

@@ -88,6 +88,17 @@ class AleisterProducer(Item):
             ),
         }
 
+    """ MQ """
+
+    def init_rpc_client(self, routing_key, mqname):
+        self.mq_privider = MqProvider(
+            self.mqserver_host, mqname, routing_key, self.logger
+        )
+        self.mq_privider.connect_mq()
+
+    def close_rpc_client(self, routing_key, mqname):
+        self.mq_privider.close_mq()
+
     """ Socker Handle """
 
     def connect_sockets(self):
@@ -132,10 +143,8 @@ class AleisterProducer(Item):
         self.init_rest()
 
         # mq
-        self.mq_privider = MqProvider(
-            self.mqserver_host, mqname, routing_key, self.logger
-        )
-        self.mq_privider.connect_mq()
+        self.init_rpc_client(routing_key, mqname)
+
         self.logger.info(f"[DONE] Init data fetch setup")
 
     def start_rpc_receiver(self, process_name, mqname):
@@ -333,6 +342,9 @@ class AleisterProducer(Item):
             pass
         finally:
             self.close_socket()
+            self.close_rpc_client(
+                self.routing_key["historical"], self.mqname["historical"]
+            )
         self.logger.info("[END] Histdata liaison stopped.")
 
     ###  Get realtime data. Use for test.  ###
@@ -366,4 +378,5 @@ class AleisterProducer(Item):
             pass
         finally:
             self.close_socket()
+            self.close_rpc_client(self.routing_key["realtime"], self.mqname["realtime"])
         self.logger.info("[END] Realtime data recordingn scheduleder stopped.")
