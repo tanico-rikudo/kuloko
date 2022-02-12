@@ -15,12 +15,12 @@ import hist_data
 
 
 #  stand alone from ITEM
-class AleisterFeedAgent(Item):
+class AleisterProducer(Item):
     def __init__(self, symbol, general_config_mode, private_api_mode):
         # Note: No specific private spi
-        super(AleisterFeedAgent, self).__init__(
-            name="AleisterFeedAgent",
-            item_type="AleisterFeedAgent",
+        super(AleisterProducer, self).__init__(
+            name="AleisterProducer",
+            item_type="AleisterProducer",
             symbol=symbol,
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,

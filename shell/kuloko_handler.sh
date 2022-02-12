@@ -13,6 +13,7 @@ Description:
 Options:
   -r    Feed record
   -p    Feed fetch and provider
+  -l    Feed hist data
   -k    Sender killer
   -g   general config mode
   -a   private api mode
@@ -22,19 +23,20 @@ _EOT_
 }
 
 if [ "$OPTIND" = 1 ]; then
-  while getopts rkg:a:s:h OPT; do
+  while getopts rklg:a:s:h OPT; do
     case $OPT in
     r)
       process="record"
-      echo "Launch record"
       ;;
     p)
       process="provider"
-      echo "Launch provider"
+      ;;
+    l)
+      process="liaison"
       ;;
     k)
-      process="killer"
-      echo "Launch killer"
+      kill=true
+      echo "Launch killer mode"
       ;;
     g)
       gcm=$OPTARG
@@ -68,14 +70,26 @@ execute_path=$(dirname $(pwd))
 execute_path="${execute_path}/execute"
 cd ${execute_path}
 command="${python_interpritor} feedAgentController.py "
-if [ "$process" == "killer" ]; then
-  command="${command} --process killer"
+if [ "$process" == "liaison" ]; then
+  if [ "${kill}" ]; then
+    command="${command} --process ${process}"
+  else
+    command="${command} --process lkiller"
+  if 
 fi
 if [ "$process" == "provider" ]; then
-  command="${command} --process provider"
+  if [ "${kill}" ]; then
+    command="${command} --process ${process}"
+  else
+    command="${command} --process pkiller"
+  if 
 fi
 if [ "$process" == "record" ]; then
-  command="${command} --process record"
+  if [ "${kill}" ]; then
+    command="${command} --process ${process}"
+  else
+    command="${command} --process rkiller"
+  if 
 fi
 
 # general config
