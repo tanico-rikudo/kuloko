@@ -10,7 +10,7 @@ import private_api
 sys.path.append(os.environ["COMMON_DIR"])
 from mongodb.src.mongo_handler import *
 import json
-from mq.mq_handler import MqProvider
+from mq.mq_handler import *
 import hist_data
 
 
@@ -44,15 +44,16 @@ class AleisterProducer(Item):
     #     self.db_accesser.dao.close()
 
     def load_mq_settings(self):
-        self.mqserver_host = self.general_config.get("MQ_HOST")
-        self.mqnames = {
-            "realtime": self.general_config.get("REALTIMEFEED_MQ_NAME"),
-            "historical": self.general_config.get("HISTORICAL_MQ_NAME"),
-        }
-        self.routing_keys = {
-            "realtime": self.general_config.get("REALTIMEFEED_MQ_ROUTING"),
-            "historical": self.general_config.get("HISTORICAL_MQ_ROUTING"),
-        }
+
+        mq_settings = load_mq_settings(self.general_config)
+        if mq_settings["mqserver_host"] is not None:
+            self.mqserver_host = mq_settings["mqserver_host"]
+            self.mqname = mq_settings["mqname"]
+            self.routing_key = mq_settings["routing_key"]
+        else:
+            self.mqserver_host = None
+            self.mqname = {}
+            self.routing_key = {}
 
     """" Initilize  """
 
@@ -137,7 +138,7 @@ class AleisterProducer(Item):
         self.mq_privider.connect_mq()
         self.logger.info(f"[DONE] Init data fetch setup")
 
-    def start_rpc_receiver(self, process_name):
+    def start_rpc_receiver(self, process_name, mqname):
         """Start standby remote procedure
 
         Args:
@@ -152,7 +153,7 @@ class AleisterProducer(Item):
                 on_message_callback=lambda ch, method, properties, body: self.replay_realtime_data(
                     ch, method, properties, body
                 ),
-                queue=self.mqname,
+                queue=mqname,
             )
 
         elif process_name == "replay_hist_data":
@@ -160,7 +161,7 @@ class AleisterProducer(Item):
                 on_message_callback=lambda ch, method, properties, body: self.replay_hist_data(
                     ch, method, properties, body
                 ),
-                queue=self.mqname,
+                queue=mqname,
             )
         else:
             raise Exception(f"Fail to launch RPC receiver. Process={process_name}.")
@@ -200,7 +201,7 @@ class AleisterProducer(Item):
             result dict
         """
         result = self.hd.get_data(ch, sym, sd, ed)
-        json_result = json.dumps(result)
+        json_result = result.reset_index().to_json()
         return json_result
 
     ###  Get realtime data and Provide aleister  ###
@@ -210,15 +211,15 @@ class AleisterProducer(Item):
         """
 
         # init all  connection
-        self.setup_data_provider(
-            self.routing_keys["realtime"], self.mqnames["realtime"]
-        )
+        self.setup_data_provider(self.routing_key["realtime"], self.mqname["realtime"])
 
         # Start subscribing from all socket
         self.start_subscribe_socket()
 
         # Standby RPC client
-        self.start_rpc_receiver(process_name="replay_realtime_data")
+        self.start_rpc_receiver(
+            process_name="replay_realtime_data", mqname=self.mqname["realtime"]
+        )
 
     def replay_realtime_data(self, ch, method, properties, body):
         """
@@ -251,7 +252,7 @@ class AleisterProducer(Item):
                     body=data,
                 )
                 ch.basic_ack(delivery_tag=method.delivery_tag)
-                self.logger.info(f"[RETURN] Returrn RPC request. ID={corr_id}")
+                self.logger.info(f"[RETURN] Returrn RPC request(real). ID={corr_id}")
             else:
                 self.logger.warning(
                     f"[Skip] No Returrn address. Skip return RPC request. ID={corr_id}"
@@ -263,14 +264,15 @@ class AleisterProducer(Item):
 
     ### Get hist data and Provide aleister ###
     def start_histdata_liaison(self):
-
         # Start subscribing from all socket
         self.setup_data_provider(
-            self.routing_key["historical"], self.mqnames["historical"]
+            self.routing_key["historical"], self.mqname["historical"]
         )
 
         # Standby RPC client
-        self.start_rpc_receiver(process_name="replay_hist_data")
+        self.start_rpc_receiver(
+            process_name="replay_hist_data", mqname=self.mqname["historical"]
+        )
 
     def replay_hist_data(self, ch, method, properties, body):
         """
@@ -300,7 +302,9 @@ class AleisterProducer(Item):
             try:
                 producer_command_dict = ast.literal_eval(producer_command_str)
                 data = self.fetch_hist_data(**producer_command_dict)
+                self.logger.debug(f"Get hist data.")
             except Exception as e:
+                self.logger.warning(f"Fail to get hist data. e={e}", exc_info=True)
                 data = json.dumps({})
 
             #  return data
@@ -312,7 +316,7 @@ class AleisterProducer(Item):
                     body=data,
                 )
                 ch.basic_ack(delivery_tag=method.delivery_tag)
-                self.logger.info(f"[RETURN] Returrn RPC request. ID={corr_id}")
+                self.logger.info(f"[RETURN] Returrn RPC request(hist). ID={corr_id}")
             else:
                 self.logger.warning(
                     f"[Skip] No Returrn address. Skip return RPC request. ID={corr_id}"
@@ -335,9 +339,7 @@ class AleisterProducer(Item):
     def start_record_realtime_data(self):
         self.logger.info("[START] Subscribe realtime data")
         #  init connection and subscribe
-        self.setup_data_provider(
-            self.routing_keys["realtime"], self.mqnames["realtime"]
-        )
+        self.setup_data_provider(self.routing_key["realtime"], self.mqname["realtime"])
         self.start_subscribe_socket()
 
         # self.scheduler = BackgroundScheduler()

@@ -1,4 +1,5 @@
 import time
+import pandas as pd
 from item import Item
 
 from util import daylib
@@ -44,13 +45,13 @@ class histData(Item):
         if ch == "trades":
             data = self.get_hist_trades(sym, sd, ed)
         elif ch == "orderbooks":
-            data = self.get_hist_trades(sym, sd, ed)
+            data = self.get_hist_orderbooks(sym, sd, ed)
         else:
             raise Exception(f"Not support channel={ch}")
         return data
 
     def get_hist_trades(self, sym, sd, ed):
-        trades = self.hd.load(sym, "trades", sd, ed)
+        trades = self.load(sym, "trades", sd, ed)
         # print(trades.timestamp)
         trades.timestamp = pd.to_datetime(trades.timestamp, format="%Y%m%d%H%M%S%f")
         if (trades is None) or (trades.shape[0] == 0):
@@ -61,7 +62,7 @@ class histData(Item):
 
     def get_hist_orderbooks(self, sym, sd, ed):
         # only local
-        orderbooks = self.hd.load(sym, "orderbooks", sd, ed, "local")
+        orderbooks = self.load(sym, "orderbooks", sd, ed, "local")
         if (orderbooks is None) or (orderbooks.shape[0] == 0):
             self.logger.warning("[Failure] Orderbook fethcing.")
             return None

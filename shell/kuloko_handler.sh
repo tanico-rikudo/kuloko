@@ -71,25 +71,27 @@ execute_path="${execute_path}/execute"
 cd ${execute_path}
 command="${python_interpritor} feedAgentController.py "
 if [ "$process" == "liaison" ]; then
-  if [ "${kill}" ]; then
+  if [ ! "${kill}" ]; then
     command="${command} --process ${process}"
   else
     command="${command} --process lkiller"
-  if 
+  fi
 fi
+
 if [ "$process" == "provider" ]; then
-  if [ "${kill}" ]; then
+  if [ ! "${kill}" ]; then
     command="${command} --process ${process}"
   else
     command="${command} --process pkiller"
-  if 
+  fi
 fi
+
 if [ "$process" == "record" ]; then
-  if [ "${kill}" ]; then
+  if [ ! "${kill}" ]; then
     command="${command} --process ${process}"
   else
     command="${command} --process rkiller"
-  if 
+  fi
 fi
 
 # general config
