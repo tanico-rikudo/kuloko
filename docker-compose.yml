@@ -11,7 +11,7 @@ services:
     ports:
       - 27018:27018
     volumes:
-      - ./db:/data/db
+      - ${HOST_DATA_BASE_DIR}/kuloko_db:/data/db
       - ./configdb:/data/configdb
       - ${HOST_BASE_DIR}/geco_commons/mongodb/init/:/docker-entrypoint-initdb.d:ro
     env_file: .env
