@@ -56,6 +56,8 @@ class HistDataHandler:
     def get_remote_target_url(self, sym, kind, int_date=None):
         int_date = dl.dt_to_intD(dl.currentTime(0)) if int_date is None else int_date
         str_date = dl.intD_to_strD(int_date)
+        if kind == "trade":
+            kind = "trades"
         target_url = os.path.join(
             self.remote_end_point,
             kind,
@@ -215,15 +217,15 @@ class HistDataHandler:
         return pd.concat(dfs, axis=0)
 
     def item_validation(self, kind, mode):
-        assert kind in ["trades", "orderbooks"], "No such option. Mode={kind}"
+        assert kind in ["trade", "orderbooks"], "No such option. Mode={kind}"
         assert mode in [
             "local",
             "remote",
             "auto",
         ], "{kind} has no such option. Mode={mode}"
-        if kind == "trades":
+        if kind == "trade":
             pass
-        elif kind == "orderbooks":
+        elif kind == "orderbook":
             if mode == "auto":
                 mode == "local"
                 self._logger(f"{kind} fetch mode is changed to local mode.")

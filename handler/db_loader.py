@@ -99,6 +99,9 @@ class DbLoadHandler:
             # raw_data["date"] = _date
             datas.append(raw_data)
 
-        datas = pd.concat(datas)
+        datas = pd.concat(datas, ignore_index=True)
+        datas["datetime"] = datas["time"].apply(lambda x: dl.strYMDHMSF_to_dt(x))
+        del datas["time"]
+        datas.set_index("datetime", inplace=True)
 
         return datas

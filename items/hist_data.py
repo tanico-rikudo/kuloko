@@ -27,14 +27,14 @@ class histData(Item):
         # self.db_hist.load_db_accessor()
 
     def load(self, sym, kind, since_int_date, until_int_date, mode=None):
-        if kind in ["trades"]:
-            # file  hist
+        if kind in ["trade"]:
+            ## file  hist
             mode = "auto" if mode is None else mode
             data = self.file_hist.bulk_load(
                 sym, kind, since_int_date, until_int_date, is_save=True, mode=mode
             )
-        elif kind in ["orderbooks"]:
-            # Db hist
+        elif kind in ["orderbook", "ticker"]:
+            ## Db hist
             data = self.db_hist.bulk_load(sym, kind, since_int_date, until_int_date)
         else:
             raise Exception(f"Invalid  data kind={kind}")
@@ -42,16 +42,16 @@ class histData(Item):
 
     #### Fetch hist data ###
     def get_data(self, ch, sym, sd, ed):
-        if ch == "trades":
+        if ch == "trade":
             data = self.get_hist_trades(sym, sd, ed)
-        elif ch == "orderbooks":
+        elif ch == "orderbook":
             data = self.get_hist_orderbooks(sym, sd, ed)
         else:
             raise Exception(f"Not support channel={ch}")
         return data
 
     def get_hist_trades(self, sym, sd, ed):
-        trades = self.load(sym, "trades", sd, ed)
+        trades = self.load(sym, "trade", sd, ed)
         # print(trades.timestamp)
         trades.timestamp = pd.to_datetime(trades.timestamp, format="%Y%m%d%H%M%S%f")
         if (trades is None) or (trades.shape[0] == 0):
@@ -62,12 +62,16 @@ class histData(Item):
 
     def get_hist_orderbooks(self, sym, sd, ed):
         # only local
-        orderbooks = self.load(sym, "orderbooks", sd, ed, "local")
+        orderbooks = self.load(sym, "orderbook", sd, ed, "local")
         if (orderbooks is None) or (orderbooks.shape[0] == 0):
             self.logger.warning("[Failure] Orderbook fethcing.")
             return None
-        orderbooks.timestamp = pd.to_datetime(
-            orderbooks.timestamp, format="%Y%m%d%H%M%S%f"
-        )
-        orderbooks.set_index("timestamp", inplace=True)
         return orderbooks
+
+    def get_hist_tickers(self, sym, sd, ed):
+        # only local
+        tickers = self.load(sym, "ticker", sd, ed, "local")
+        if (tickers is None) or (tickers.shape[0] == 0):
+            self.logger.warning("[Failure] Orderbook fethcing.")
+            return None
+        return tickers
