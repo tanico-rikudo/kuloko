@@ -148,3 +148,6 @@ db/
 .jupyter
 .local
 .ipython
+
+#vscode
+.vscode
