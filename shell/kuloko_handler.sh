@@ -23,7 +23,7 @@ _EOT_
 }
 
 if [ "$OPTIND" = 1 ]; then
-  while getopts rklg:a:s:h OPT; do
+  while getopts rkplg:a:s:h OPT; do
     case $OPT in
     r)
       process="record"
