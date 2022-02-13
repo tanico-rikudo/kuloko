@@ -26,34 +26,43 @@ from util.config import ConfigManager
 
 from mongodb.src.mongo_handler import *
 
-cm = ConfigManager(os.environ['KULOKO_INI'])
+cm = ConfigManager(os.environ["KULOKO_INI"])
 dl = daylib.daylib()
 
 
 class DbLoadHandler:
-
-    def __init__(self, logger, general_config_ini=None, general_config_mode="DEFAULT", mongo_db=None):
+    def __init__(
+        self,
+        logger,
+        general_config_ini=None,
+        general_config_mode="DEFAULT",
+        mongo_db=None,
+    ):
         self._logger = logger
         if general_config_ini is None:
-            general_config_ini = cm.load_ini_config(path=None, config_name="general", mode=general_config_mode)
-            self._logger.info('[DONE]Load General Config.')
+            general_config_ini = cm.load_ini_config(
+                path=None, config_name="general", mode=general_config_mode
+            )
+            self._logger.info("[DONE]Load General Config.")
 
         self.load_config(general_config_ini, general_config_mode)
         self.set_config()
         self.mongo_db = mongo_db
         self.load_db_accessor()
-        self._logger.info('[DONE]DB loader Initialized')
+        self._logger.info("[DONE]DB loader Initialized")
 
     def load_config(self, general_config_ini, general_config_mode):
         if general_config_ini is None:
-            self.general_config = cm.load_ini_config(path=None, config_name="general", mode=general_config_mode)
+            self.general_config = cm.load_ini_config(
+                path=None, config_name="general", mode=general_config_mode
+            )
         else:
             self.general_config = general_config_ini[general_config_mode]
-        self._logger.info(f'[DONE]Load General Config. Mode={general_config_mode}')
+        self._logger.info(f"[DONE]Load General Config. Mode={general_config_mode}")
 
     def set_config(self):
-        self.n_usable_core = self.general_config.getint('N_USABLE_CORE')
-        self._logger.info('[DONE]Set Config from loaded config')
+        self.n_usable_core = self.general_config.getint("N_USABLE_CORE")
+        self._logger.info("[DONE]Set Config from loaded config")
 
     def load_db_accessor(self):
         self.db_accesser = MongoUtil(self.mongo_db, self._logger)
@@ -81,7 +90,9 @@ class DbLoadHandler:
         datas = []
         date_list = dl.get_between_date(start_date, end_date)
         for _date in date_list:
-            raw_data = pd.DataFrame(self.db_accesser.find_at_date(table_name, str(_date)))
+            raw_data = pd.DataFrame(
+                self.db_accesser.find_at_date(table_name, str(_date))
+            )
             for _key in ["_id", "channel"]:
                 if _key in raw_data.keys():
                     del raw_data[_key]
