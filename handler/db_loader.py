@@ -32,11 +32,11 @@ dl = daylib.daylib()
 
 class DbLoadHandler:
     def __init__(
-        self,
-        logger,
-        general_config_ini=None,
-        general_config_mode="DEFAULT",
-        mongo_db=None,
+            self,
+            logger,
+            general_config_ini=None,
+            general_config_mode="DEFAULT",
+            mongo_db=None,
     ):
         self._logger = logger
         if general_config_ini is None:
@@ -71,7 +71,6 @@ class DbLoadHandler:
         target_dates = dl.get_between_date(since_int_date, until_int_date)
         table_name = kind
         # Note:  Thread object inhibit multiproicesss...
-        # dfs = Parallel(n_jobs=self.n_usable_core)(delayed(self.get_db_hist)(sym, table_name, _target_date) for _target_date in target_dates)
         dfs = []
         for _target_date in target_dates:
             df = self.get_db_hist(sym, table_name, _target_date, _target_date)
@@ -91,7 +90,7 @@ class DbLoadHandler:
         date_list = dl.get_between_date(start_date, end_date)
         for _date in date_list:
             raw_data = pd.DataFrame(
-                self.db_accesser.find_at_date(table_name, str(_date))
+                self.db_accesser.find_at_date(table_name, date=str(_date), symbol=sym)
             )
             for _key in ["_id", "channel"]:
                 if _key in raw_data.keys():
@@ -100,8 +99,10 @@ class DbLoadHandler:
             datas.append(raw_data)
 
         datas = pd.concat(datas, ignore_index=True)
-        datas["datetime"] = datas["time"].apply(lambda x: dl.strYMDHMSF_to_dt(x))
-        del datas["time"]
-        datas.set_index("datetime", inplace=True)
+
+        if datas.shape[0] > 0 and table_name in ["trade", "orderbook", 'ticker']:
+            datas["datetime"] = datas["time"].apply(lambda x: dl.strYMDHMSF_to_dt(x))
+            del datas["time"]
+            datas.set_index("datetime", inplace=True)
 
         return datas

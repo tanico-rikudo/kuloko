@@ -90,6 +90,7 @@ class HistDataHandler:
         remote_path = self.get_remote_target_url(sym, kind, int_date)
         save_path = local_path if is_save else None
         self.item_validation(kind, mode)
+        df = None
         if mode == "local":
             if not os.path.isfile(local_path):
                 self._logger.error("Fail to get hist data. path{0}".format(local_path))
@@ -118,12 +119,12 @@ class HistDataHandler:
 
         if df is not None:
             # localize and time stamp format
-            df["timestamp"] = df["timestamp"].apply(
-                lambda x: dl.dt_to_strYMDHMSF(
+            df["datetime"] = df["timestamp"].apply(
+                lambda x: dl.strYMDHMSF_to_dt(dl.dt_to_strYMDHMSF(
                     dl.str_utc_to_dt_offset(x, is_Z=False, is_T=False)
-                )
-            )
-
+                )))
+            del df["timestamp"]
+            df.set_index("datetime", inplace=True)
         return df
 
     def download_remote_hist(self, url, save_path=None):
