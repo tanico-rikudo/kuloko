@@ -37,6 +37,12 @@ class FeatureDB(Item):
     """ Download trades daily """
 
     def download_update_trade(self, symbol, until_date=None):
+        """
+        Download trade data in Advace
+        :param symbol:
+        :param until_date:
+        :return:
+        """
         until_date = dl.dt_to_intD(dl.currentTime()) if until_date is None else until_date
         since_date = dl.add_day(until_date, -3)
         df = self.hd.file_hist.bulk_load(symbol, "trade", since_date, until_date)
@@ -51,7 +57,15 @@ class FeatureDB(Item):
         else:
             self.logger.info(f"[DONE] Download trade. Sym={symbol}, Date={since_date}~{until_date}")
 
+    """ Create features"""
+
     def create_volatility(self, symbol, until_date=None):
+        """
+        Create volatility from trade ad ticker
+        :param symbol:
+        :param until_date:
+        :return:
+        """
         # Fixed
         VOLATILITY_VAR_DAYS = 30
         VOLATILITY_DAYS = 1
@@ -95,6 +109,14 @@ class FeatureDB(Item):
 
     @staticmethod
     def calc_daily_volatility(daily_close, variance_days, volatility_days, close_time="00:00"):
+        """
+        Calc volatility
+        :param daily_close:
+        :param variance_days:
+        :param volatility_days:
+        :param close_time:
+        :return: dataframe
+        """
 
         # Create molt
         ls_date = [int(_date) for _date in daily_close.index.strftime("%Y%m%d")]
