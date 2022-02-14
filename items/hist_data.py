@@ -48,7 +48,7 @@ class histData(Item):
         file_fetched_date = set(file_data.timestamp.apply(lambda x: dl.strYMDHMSF_to_dt(x)))
         left_dates = target_dates - file_fetched_date
 
-        # Fill by db
+        # Fill by db (index is datetime)
         db_data = pd.concat(
             [self.db_hist.bulk_load(sym, "trade", target_date, target_date) for target_date in target_dates],
             axis=0)
