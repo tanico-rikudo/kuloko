@@ -230,6 +230,15 @@ class Ticker(Item):
 
 class Trade(Item):
     def __init__(self, symbol, general_config_mode, private_api_mode):
+        """_summary_
+        Trade
+        Args:
+            symbol (_type_): _description_
+            general_config_mode (_type_): _description_
+            private_api_mode (_type_): _description_
+
+        Fetch TAKER ONLY.
+        """
         super(Trade, self).__init__(
             name="trade",
             item_type="trade",
@@ -252,7 +261,9 @@ class Trade(Item):
 
     def connect(self):
         self.trade_skt_api.connect(
-            self.trade_skt_api.get_public_socket_url(), self.symbol
+            self.trade_skt_api.get_public_socket_url(),
+            self.symbol,
+            opt_open_message={"option": "TAKER_ONLY"},
         )
 
     def subscribe(self):
