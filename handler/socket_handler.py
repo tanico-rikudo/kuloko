@@ -102,10 +102,11 @@ class Socket(object):
     def get_private_socket_url(self):
         return self.url_parts["private"]
 
-    def connect(self, url, sym, maxlen=100):
+    def connect(self, url, sym, maxlen=100, opt_open_message={}):
         self.url = url
         self.maxlen = maxlen
         self.sym = sym
+        self.opt_open_message = opt_open_message
         self.queue = deque([], self.maxlen)
         self.ws = websocket.WebSocketApp(
             url,
@@ -160,7 +161,7 @@ class Socket(object):
             pass
 
         try:
-            self.connect(self.url, self.sym)
+            self.connect(self.url, self.sym, self.opt_open_message)
         except:
             pass
 
@@ -182,7 +183,7 @@ class Socket(object):
         self._logger.error("Try reconnect... {0}".format(error), exc_info=True)
         self.disconnect()
         time.sleep(0.5)
-        self.connect(self.url, self.sym)
+        self.connect(self.url, self.sym, self.opt_open_message)
 
     def on_close(self, ws, close_status_code, close_msg):
         message = {
@@ -195,8 +196,9 @@ class Socket(object):
 
     def on_open(self, ws):
         message = {"command": "subscribe", "channel": self.channel, "symbol": self.sym}
+        message.update(self.opt_open_message)
         self.ws.send(json.dumps(message))
-        self._logger.info(f"Socket opened. Channel={self.channel}")
+        self._logger.info(f"Socket opened. Open messge={message}")
 
     def make_header(self, access_path, access_method, request_body=""):
         timestamp = "{0}000".format(int(time.mktime(dt.now().timetuple())))
