@@ -32,12 +32,13 @@ cm = ConfigManager(os.environ["KULOKO_INI"])
 
 class Item(object):
     def __init__(
-            self,
-            name,
-            item_type,
-            symbol,
-            general_config_mode="DEFAULT",
-            private_api_mode="DEFAULT",
+        self,
+        name,
+        item_type,
+        symbol,
+        general_config_mode="DEFAULT",
+        private_api_mode="DEFAULT",
+        logger=None,
     ):
         import configparser
         import logging
@@ -55,9 +56,12 @@ class Item(object):
         self.db_hist = db_hist
 
         # Init Logger
-        self.logger = cm.load_log_config(
-            os.path.join(KULOKO_DIR, "logging.log"), log_name="KULOKO"
-        )
+        if logger is None:
+            self.logger = cm.load_log_config(
+                os.path.join(KULOKO_DIR, "logging.log"), log_name="KULOKO"
+            )
+        else:
+            self.logger = logger
 
         # Init mongo
         self.mongo_ini = cm.load_ini_config(path=None, config_name="mongo", mode=None)
