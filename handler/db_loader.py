@@ -32,11 +32,11 @@ dl = daylib.daylib()
 
 class DbLoadHandler:
     def __init__(
-            self,
-            logger,
-            general_config_ini=None,
-            general_config_mode="DEFAULT",
-            mongo_db=None,
+        self,
+        logger,
+        general_config_ini=None,
+        general_config_mode="DEFAULT",
+        mongo_db=None,
     ):
         self._logger = logger
         if general_config_ini is None:
@@ -86,21 +86,18 @@ class DbLoadHandler:
         """
         Get realtime feed data from DB
         """
-        datas = []
-        date_list = dl.get_between_date(start_date, end_date)
-        for _date in date_list:
-            raw_data = pd.DataFrame(
-                self.db_accesser.find_at_date(table_name, date=str(_date), symbol=sym)
+        dastas = pd.DataFrame(
+            self.db_accesser.find_between_dates(
+                table_name, sd=str(start_date), ed=str(end_date), symbol=sym
             )
-            for _key in ["_id", "channel"]:
-                if _key in raw_data.keys():
-                    del raw_data[_key]
-            # raw_data["date"] = _date
-            datas.append(raw_data)
+        )
+        for _key in ["_id", "channel"]:
+            if _key in raw_data.keys():
+                del raw_data[_key]
+        # raw_data["date"] = _date
+        datas.append(raw_data)
 
-        datas = pd.concat(datas, ignore_index=True)
-
-        if datas.shape[0] > 0 and table_name in ["trade", "orderbook", 'ticker']:
+        if datas.shape[0] > 0 and table_name in ["trade", "orderbook", "ticker"]:
             datas["datetime"] = datas["time"].apply(lambda x: dl.strYMDHMSF_to_dt(x))
             del datas["time"]
             datas.set_index("datetime", inplace=True)
