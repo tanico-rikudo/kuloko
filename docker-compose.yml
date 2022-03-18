@@ -1,5 +1,48 @@
 version: "3"
 services:
+
+  postgres:
+    container_name: kuloko_pg
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_INIT_USERNAME
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_INIT_PASSWORD
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_INIT_DBNAME
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: "Asia/Tokyo"
+    tty: true
+    ports:
+      - 5432:5432
+    volumes:
+      - ${HOST_DATA_BASE_DIR}/kuloko_pg:/var/lib/postgresql/data
+      - ${HOST_BASE_DIR}/kuloko/postgres/init:/docker-entrypoint-initdb.d
+    secrets:
+      - POSTGRES_INIT_USERNAME
+      - POSTGRES_INIT_PASSWORD
+      - POSTGRES_INIT_DBNAME
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.4
+
+  pgadmin:
+    container_name: kuloko_pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 81:80
+    # Better to outside 
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kazuyo.rikudo@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - ${HOST_DATA_BASE_DIR}/kuloko_pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.5
+
   mongo:
     container_name: kuloko_mongo
     image: mongo
@@ -12,7 +55,7 @@ services:
       - 27018:27018
     volumes:
       - ${HOST_DATA_BASE_DIR}/kuloko_db:/data/db
-      - ./configdb:/data/configdb
+      - ${HOST_DATA_BASE_DIR}/kuloko_db/configdb:/data/configdb
       - ${HOST_BASE_DIR}/geco_commons/mongodb/init/:/docker-entrypoint-initdb.d:ro
     env_file: .env
     command: mongod --port 27018 --auth
@@ -85,3 +128,9 @@ secrets:
     file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/MONGO_INITDB_ROOT_USERNAME
   MONGO_INITDB_ROOT_PASSWORD:
     file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/MONGO_INITDB_ROOT_PASSWORD
+  POSTGRES_INIT_USERNAME:
+    file: ${HOST_BASE_DIR}/kuloko/postgres/secret/POSTGRES_INIT_USERNAME
+  POSTGRES_INIT_PASSWORD:
+    file: ${HOST_BASE_DIR}/kuloko/postgres/secret/POSTGRES_INIT_PASSWORD
+  POSTGRES_INIT_DBNAME:
+    file: ${HOST_BASE_DIR}/kuloko/postgres/secret/POSTGRES_INIT_DBNAME
