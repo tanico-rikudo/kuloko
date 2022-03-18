@@ -40,7 +40,7 @@ class venueStatus(Item):
                 "status": "INQUIRY_ERROR",
             }
         finally:
-            self.mongo_db.insert_many(res)
+            self.mongodb.insert_many(res)
             self.logger.info(
                 "[DONE] API venue status inquiry: {0}".format(res["status"])
             )
@@ -94,7 +94,7 @@ class Orderbook(Item):
         ]
         insert_json = copy.deepcopy(ret_json)
         if autosave_mongo:
-            self.mongo_db.insert_many(insert_json)
+            self.mongodb.insert_many(insert_json)
         self.logger.info("Deque Orderbook:{0}".format(len(ret_json)))
         self.deque_none = 0
         return ret_json
@@ -164,7 +164,7 @@ class Ticker(Item):
             res = self.ticks_web_api.fetch(return_type)
             insert_json = copy.deepcopy(res)
             if return_type == "json":
-                self.mongo_db.insert_one(insert_json)
+                self.mongodb.insert_one(insert_json)
         except Exception as e:
             res = {
                 "res_time": dl.currentTime(self.ticks_web_api.tz),
@@ -196,7 +196,7 @@ class Ticker(Item):
         ret_json = [self.ticker_skt_api.convert_shape(_data, "json") for _data in data]
         insert_json = copy.deepcopy(ret_json)
         if autosave_mongo:
-            self.mongo_db.insert_many(insert_json)
+            self.mongodb.insert_many(insert_json)
 
         self.logger.info("Deque Ticker:{0}".format(len(ret_json)))
         self.deque_none = 0
@@ -284,7 +284,7 @@ class Trade(Item):
         insert_json = copy.deepcopy(ret_json)
 
         if autosave_mongo:
-            self.mongo_db.insert_many(insert_json)
+            self.mongodb.insert_many(insert_json)
         self.logger.info("Deque Trade :{0}".format(len(ret_json)))
         self.deque_none = 0
         return ret_json

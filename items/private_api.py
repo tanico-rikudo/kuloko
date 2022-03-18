@@ -28,7 +28,7 @@ class Margin(Item):
         v = self.margin_web_api.fetch(return_type)
         insert_json = copy.deepcopy(v)
         if return_type == "json":
-            self.mongo_db.insert_one(insert_json)
+            self.mongodb.insert_one(insert_json)
         return v
 
 
@@ -55,7 +55,7 @@ class Assets(Item):
         v = self.assets_web_api.fetch(return_type)
         insert_json = copy.deepcopy(v)
         if return_type == "json":
-            self.mongo_db.insert_one(insert_json)
+            self.mongodb.insert_one(insert_json)
         return v
 
 
@@ -144,15 +144,15 @@ class Order(Item):
         self.init_mongodb()
 
     def create_entry_order(
-            self,
-            sym,
-            side,
-            executionType,
-            timeInForce,
-            price,
-            losscutPrice,
-            size,
-            cacnelBefore,
+        self,
+        sym,
+        side,
+        executionType,
+        timeInForce,
+        price,
+        losscutPrice,
+        size,
+        cacnelBefore,
     ):
         reqBody = {
             "symbol": sym,
@@ -208,7 +208,7 @@ class Order(Item):
         finally:
             reqBody["orderId"] = orderId
             reqBody["eventType"] = eventType
-            self.mongo_db.insert_one(reqBody)
+            self.mongodb.insert_one(reqBody)
             return orderId
 
     def amend(self, reqBody):
@@ -260,7 +260,7 @@ class Order(Item):
             )
         finally:
             reqBody["eventType"] = eventType
-            self.mongo_db.insert_one(reqBody)
+            self.mongodb.insert_one(reqBody)
             return orderId
 
     def cancel(self, reqBody):
@@ -306,7 +306,7 @@ class Order(Item):
             )
         finally:
             reqBody["eventType"] = eventType
-            self.mongo_db.insert_one(reqBody)
+            self.mongodb.insert_one(reqBody)
             return orderId
 
     def bulkCancel(self, reqBody):
@@ -349,5 +349,5 @@ class Order(Item):
             self.logger.warning("Fail to order bulk cancel:Reason={0}".format(e))
         finally:
             reqBody["eventType"] = eventType
-            self.mongo_db.insert_one(reqBody)
+            self.mongodb.insert_one(reqBody)
             return orderIds

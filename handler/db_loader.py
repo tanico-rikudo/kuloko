@@ -37,7 +37,7 @@ class DbLoadHandler:
         logger,
         general_config_ini=None,
         general_config_mode="DEFAULT",
-        mongo_db=None,
+        mongodb=None,
         postgres=None,
     ):
         self._logger = logger
@@ -49,7 +49,7 @@ class DbLoadHandler:
 
         self.load_config(general_config_ini, general_config_mode)
         self.set_config()
-        self.mongo_db = mongo_db
+        self.mongodb = mongodb
         self.postgres = postgres
         self.load_db_accessor()
         self._logger.info("[DONE]DB loader Initialized")
@@ -68,7 +68,7 @@ class DbLoadHandler:
         self._logger.info("[DONE]Set Config from loaded config")
 
     def load_db_accessor(self):
-        self.db_accesser = MongoUtil(self.mongo_db, self._logger)
+        self.db_accesser = MongoUtil(self.mongodb, self._logger)
 
     def bulk_load(self, sym, kind, since_int_date, until_int_date):
         target_dates = dl.get_between_date(since_int_date, until_int_date)

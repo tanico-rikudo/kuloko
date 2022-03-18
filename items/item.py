@@ -97,22 +97,22 @@ class Item(object):
                 f"[DONE] mongo_config_mode is filled with general_config_mode:{self.general_config_mode}"
             )
             mongo_config_mode = self.general_config_mode
-        self.mongo_db = MongoHandler(self.mongo_ini[mongo_config_mode], self.item_type)
+        self.mongodb = MongoHandler(self.mongo_ini[mongo_config_mode], self.item_type)
         # todo: hide here
         self.logger.info(
-            f"[DONE] Init mongo DB. Mode={mongo_config_mode}. Url={self.mongo_db.connect_url}"
+            f"[DONE] Init mongo DB. Mode={mongo_config_mode}. Url={self.mongodb.connect_url}"
         )
 
-    def init_postgress(self, postgress_config_mode=None):
-        if postgress_config_mode is None:
+    def init_postgres(self, postgres_config_mode=None):
+        if postgres_config_mode is None:
             self.logger.info(
-                f"[DONE] postgress_config_mode is filled with general_config_mode:{self.general_config_mode}"
+                f"[DONE] postgres_config_mode is filled with general_config_mode:{self.general_config_mode}"
             )
-            postgress_config_mode = self.general_config_mode
-        self.postgress = PostgressHandler(
+            postgres_config_mode = self.general_config_mode
+        self.postgres = PostgressHandler(
             self.mongo_ini[mongo_config_mode], self.item_type
         )
         # todo: hide here
         self.logger.info(
-            f"[DONE] Init Postgress. Mode={postgress_config_mode}. Url={self.postgress.connect_url}"
+            f"[DONE] Init Postgress. Mode={postgres_config_mode}. Url={self.postgres.connect_url}"
         )

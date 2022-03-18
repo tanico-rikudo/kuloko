@@ -62,7 +62,7 @@ class AleisterProducer(Item):
         self.init_mongodb()
 
         # wrap util
-        self.db_accesser = MongoUtil(self.mongo_db, self.logger)
+        self.db_accesser = MongoUtil(self.mongodb, self.logger)
         self.logger.info("[DONE] Init mongo DB wrpper")
 
     def init_skt(self):

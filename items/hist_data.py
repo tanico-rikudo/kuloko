@@ -25,7 +25,7 @@ class histData(Item):
         )
         self.init_mongodb()
         self.db_hist = self.db_hist.DbLoadHandler(
-            self.logger, self.general_config_ini, mongo_db=self.mongo_db
+            self.logger, self.general_config_ini, mongodb=self.mongodb
         )
         # self.db_hist.load_db_accessor()
 
