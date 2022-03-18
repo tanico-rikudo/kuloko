@@ -15,6 +15,7 @@ from pymongo import MongoClient
 
 sys.path.append(os.environ["COMMON_DIR"])
 from mongodb.src.mongo_handler import MongoHandler
+from postgres.sec.postgres_handler import postgres_handler
 
 # Handlers
 sys.path.append(os.path.join(os.environ["KULOKO_DIR"], "handler"))
@@ -100,4 +101,18 @@ class Item(object):
         # todo: hide here
         self.logger.info(
             f"[DONE] Init mongo DB. Mode={mongo_config_mode}. Url={self.mongo_db.connect_url}"
+        )
+
+    def init_postgress(self, postgress_config_mode=None):
+        if postgress_config_mode is None:
+            self.logger.info(
+                f"[DONE] postgress_config_mode is filled with general_config_mode:{self.general_config_mode}"
+            )
+            postgress_config_mode = self.general_config_mode
+        self.postgress = PostgressHandler(
+            self.mongo_ini[mongo_config_mode], self.item_type
+        )
+        # todo: hide here
+        self.logger.info(
+            f"[DONE] Init Postgress. Mode={postgress_config_mode}. Url={self.postgress.connect_url}"
         )

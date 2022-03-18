@@ -25,6 +25,7 @@ from util import utils
 from util.config import ConfigManager
 
 from mongodb.src.mongo_handler import *
+from postgres.src.postgres_handler import *
 
 cm = ConfigManager(os.environ["KULOKO_INI"])
 dl = daylib.daylib()
@@ -37,6 +38,7 @@ class DbLoadHandler:
         general_config_ini=None,
         general_config_mode="DEFAULT",
         mongo_db=None,
+        postgres=None,
     ):
         self._logger = logger
         if general_config_ini is None:
@@ -48,6 +50,7 @@ class DbLoadHandler:
         self.load_config(general_config_ini, general_config_mode)
         self.set_config()
         self.mongo_db = mongo_db
+        self.postgres = postgres
         self.load_db_accessor()
         self._logger.info("[DONE]DB loader Initialized")
 
