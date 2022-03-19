@@ -27,7 +27,7 @@ cm = ConfigManager(os.environ["KULOKO_INI"])
 dl = daylib.daylib()
 
 
-class HistDataHandler:
+class HistFileHandler:
     def __init__(self, logger, general_config_ini=None, general_config_mode="DEFAULT"):
         self._logger = logger
         self.load_config(general_config_ini, general_config_mode)

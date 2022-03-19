@@ -15,14 +15,14 @@ from pymongo import MongoClient
 
 sys.path.append(os.environ["COMMON_DIR"])
 from mongodb.src.mongo_handler import MongoHandler
-from postgres.sec.postgres_handler import postgres_handler
+from postgres.src.postgres_handler import PostgresHandler
 
 # Handlers
 sys.path.append(os.path.join(os.environ["KULOKO_DIR"], "handler"))
 import socket_handler as skt_api
 import api_handler as web_api
-import hist_loader as file_hist
-import db_loader as db_hist
+import hist_file_handler as hist_file_handler
+import db_handler as db_handler
 
 # util
 from util.config import ConfigManager
@@ -53,8 +53,8 @@ class Item(object):
         # Handlers
         self.skt_api = skt_api
         self.web_api = web_api
-        self.file_hist = file_hist
-        self.db_hist = db_hist
+        self.hist_file_handler = hist_file_handler
+        self.db_handler = db_handler
 
         # Init Logger
         if logger is None:

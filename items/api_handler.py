@@ -17,10 +17,10 @@ from datetime import timedelta, timezone
 import hmac
 import hashlib
 
-from util.exceptions import *
-from util import daylib
-from util import utils
-from util.config import ConfigManager
+from utils.exceptions import *
+from utils import daylib
+from utils import utils
+from utils.config import ConfigManager
 
 cm = ConfigManager(os.environ["KULOKO_INI"])
 dl = daylib.daylib()

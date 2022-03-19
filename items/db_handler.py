@@ -19,10 +19,12 @@ from joblib import Parallel, delayed
 import hmac
 import hashlib
 
-from util.exceptions import *
-from util import daylib
-from util import utils
-from util.config import ConfigManager
+from utils.exceptions import *
+
+from geco_commons.mongodb.src.mongo_handler import MongoUtil
+from utils import daylib
+from utils import utils
+from utils.config import ConfigManager
 
 from mongodb.src.mongo_handler import *
 from postgres.src.postgres_handler import *
@@ -31,7 +33,7 @@ cm = ConfigManager(os.environ["KULOKO_INI"])
 dl = daylib.daylib()
 
 
-class DbLoadHandler:
+class DbHandler:
     def __init__(
         self,
         logger,
@@ -53,6 +55,7 @@ class DbLoadHandler:
         self.postgres = postgres
         self.load_db_accessor()
         self._logger.info("[DONE]DB loader Initialized")
+
 
     def load_config(self, general_config_ini, general_config_mode):
         if general_config_ini is None:
@@ -106,3 +109,9 @@ class DbLoadHandler:
             datas.set_index("datetime", inplace=True)
 
         return datas
+
+    def update_table(self):
+        pass
+
+    def insert_table(self):
+        pass
