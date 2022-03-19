@@ -19,12 +19,12 @@ from joblib import Parallel, delayed
 import hmac
 import hashlib
 
-from utils.exceptions import *
+from util.exceptions import *
 
-from geco_commons.mongodb.src.mongo_handler import MongoUtil
-from utils import daylib
-from utils import utils
-from utils.config import ConfigManager
+from mongodb.src.mongo_handler import MongoUtil
+from util import daylib
+from util import utils
+from util.config import ConfigManager
 
 from mongodb.src.mongo_handler import *
 from postgres.src.postgres_handler import *
@@ -55,7 +55,6 @@ class DbHandler:
         self.postgres = postgres
         self.load_db_accessor()
         self._logger.info("[DONE]DB loader Initialized")
-
 
     def load_config(self, general_config_ini, general_config_mode):
         if general_config_ini is None:

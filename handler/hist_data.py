@@ -5,11 +5,10 @@ import copy
 from item import Item
 
 from util import daylib
-from util import utils
 
 dl = daylib.daylib()
 
-from .processed_data_handler import *
+from processed_data_handler import *
 
 
 class histData(Item):
@@ -31,7 +30,6 @@ class histData(Item):
             self.logger, self.general_config_ini, mongodb=self.mongodb
         )
         # self.db_handler.load_db_accessor()
-
 
     def download_update_trade(self, symbol, until_date=None):
         """
@@ -62,6 +60,7 @@ class histData(Item):
         else:
             self.logger.info(
                 f"[DONE] Download trade. Sym={symbol}, Date={since_date}~{until_date}"
+            )
 
     #### Fetch hist data ###
     def get_data(self, ch, sym, sd, ed):
@@ -185,7 +184,7 @@ class histData(Item):
 
     def get_hist_ohlcv(self, sym, sd, ed):
 
-        df = self.db_handler.bulk_load(sym, "ticker", sd, ed)
+        df = self.hist_file_handler.bulk_load(sym, "trade", sd, ed)
         df_empty = self.create_dataframe(
             columns=[
                 "symbol",
@@ -235,7 +234,6 @@ class histData(Item):
 
         # Get data:
 
-
         daily_close_trade = (
             trades.price.resample("T", label="left", closed="left")
             .ohlc()
@@ -272,5 +270,3 @@ class histData(Item):
         #     }
         #     insert_json.append(record)
         # self.hd.mongodb.dao.insert_many(insert_json)
-
-

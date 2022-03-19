@@ -66,6 +66,7 @@ class Item(object):
 
         # Init mongo
         self.mongo_ini = cm.load_ini_config(path=None, config_name="mongo", mode=None)
+        self.postgres_ini = cm.load_ini_config(path=None, config_name="postgres", mode=None)
 
         # Init API
         self.general_config_mode = general_config_mode
@@ -109,10 +110,9 @@ class Item(object):
                 f"[DONE] postgres_config_mode is filled with general_config_mode:{self.general_config_mode}"
             )
             postgres_config_mode = self.general_config_mode
-        self.postgres = PostgressHandler(
-            self.mongo_ini[mongo_config_mode], self.item_type
-        )
+        self.postgres = PostgresHandler(
+            self.postgres_ini[postgres_config_mode]        )
         # todo: hide here
         self.logger.info(
-            f"[DONE] Init Postgress. Mode={postgres_config_mode}. Url={self.postgres.connect_url}"
+            f"[DONE] Init Postgress. Mode={postgres_config_mode}. Url={self.postgres.host+':'+self.postgres.port}"
         )

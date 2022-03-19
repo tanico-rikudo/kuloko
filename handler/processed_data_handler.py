@@ -1,8 +1,22 @@
 import pandas as pd
 import numpy as np
 
-from utils import daylib
+from util import daylib
+
 dl = daylib.daylib()
+
+
+def calc_ohlcv(trade):
+    """
+    Clac ohlcv
+    :param trade:
+    :return:
+    """
+    ohlc = data.price.resample("T", label="left", closed="left").ohlc()
+    ohlc.loc[:, ["open", "high", "low", "close"]] = ohlc.loc[
+        :, ["open", "high", "low", "close"]
+    ].fillna(method="ffill")
+    return ohlc
 
 
 def calc_daily_volatility(
@@ -27,9 +41,7 @@ def calc_daily_volatility(
     )
     del df_date["date"]
 
-    df_close = pd.merge_asof(
-        df_date, daily_close, on="datetime", direction="nearest"
-    )
+    df_close = pd.merge_asof(df_date, daily_close, on="datetime", direction="nearest")
     df_close["volatility"] = df_close.pct_change().rolling(
         variance_days
     ).std() * np.sqrt(volatility_days)
