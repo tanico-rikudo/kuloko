@@ -14,8 +14,8 @@ LOGDIR = os.environ["KULOKO_LOGDIR"]
 from pymongo import MongoClient
 
 sys.path.append(os.environ["COMMON_DIR"])
-from mongodb.src.mongo_handler import MongoHandler
-from postgres.src.postgres_handler import PostgresHandler
+from mongodb.src.mongo_handler import *
+from postgres.src.postgres_handler import *
 
 # Handlers
 sys.path.append(os.path.join(os.environ["KULOKO_DIR"], "handler"))
@@ -66,7 +66,9 @@ class Item(object):
 
         # Init mongo
         self.mongo_ini = cm.load_ini_config(path=None, config_name="mongo", mode=None)
-        self.postgres_ini = cm.load_ini_config(path=None, config_name="postgres", mode=None)
+        self.postgres_ini = cm.load_ini_config(
+            path=None, config_name="postgres", mode=None
+        )
 
         # Init API
         self.general_config_mode = general_config_mode
@@ -110,8 +112,8 @@ class Item(object):
                 f"[DONE] postgres_config_mode is filled with general_config_mode:{self.general_config_mode}"
             )
             postgres_config_mode = self.general_config_mode
-        self.postgres = PostgresHandler(
-            self.postgres_ini[postgres_config_mode]        )
+        self.postgres = PostgresHandler(self.postgres_ini[postgres_config_mode])
+        self.postgres_util = PostgresUtil(self.postgres, self.logger)
         # todo: hide here
         self.logger.info(
             f"[DONE] Init Postgress. Mode={postgres_config_mode}. Url={self.postgres.host+':'+self.postgres.port}"

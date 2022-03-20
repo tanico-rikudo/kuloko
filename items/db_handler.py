@@ -108,6 +108,3 @@ class DbHandler:
             datas.set_index("datetime", inplace=True)
 
         return datas
-
-    def insert_ohlcv(self):
-        pass

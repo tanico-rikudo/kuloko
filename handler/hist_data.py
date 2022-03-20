@@ -187,10 +187,11 @@ class histData(Item):
     def get_hist_ohlcv(self, sym, sd, ed):
 
         df = self.hist_file_handler.bulk_load(sym, "trade", sd, ed)
+        self.logger.warning(f"[DONE] trade fetching. Size={df.shape}")
         df_empty = self.create_dataframe(
             columns=[
                 "symbol",
-                "dateime",
+                "datetime",
                 "open",
                 "high",
                 "low",
@@ -202,13 +203,14 @@ class histData(Item):
         df = pd.concat([df_empty, df], axis=0)
         if (df is None) or (df.shape[0] == 0):
             self.logger.warning("[Failure] Orderbook fetching.")
-
+        self.logger.warning(f"[DONE] trade shaping. Size={df.shape}")
         df_ohlcv = calc_ohlcv(df)
         datetime_col = "datetime"
         df_ohlcv.reset_index(inplace=True)
         df_ohlcv.loc[:, datetime_col] = df_ohlcv.loc[:, datetime_col].apply(
             lambda x: dl.dt_to_strYMDHMSFformat(x)
         )
+        self.logger.warning(f"[DONE] ohlcv chaping. Size={df_ohlcv.shape}")
         return df_ohlcv
 
     def create_dataframe(self, columns, index_col=None):
