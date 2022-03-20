@@ -16,7 +16,7 @@ services:
       - 5432:5432
     volumes:
       - ${HOST_DATA_BASE_DIR}/kuloko_pg:/var/lib/postgresql/data
-      - ${HOST_BASE_DIR}/kuloko/postgres/init:/docker-entrypoint-initdb.d
+      - ${HOST_BASE_DIR}/geco_commons/postgres/init:/docker-entrypoint-initdb.d:ro
     secrets:
       - POSTGRES_INIT_USERNAME
       - POSTGRES_INIT_PASSWORD
@@ -129,8 +129,8 @@ secrets:
   MONGO_INITDB_ROOT_PASSWORD:
     file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/MONGO_INITDB_ROOT_PASSWORD
   POSTGRES_INIT_USERNAME:
-    file: ${HOST_BASE_DIR}/kuloko/postgres/secret/POSTGRES_INIT_USERNAME
+    file: ${HOST_BASE_DIR}/geco_commons/postgres/secret/POSTGRES_INIT_USERNAME
   POSTGRES_INIT_PASSWORD:
-    file: ${HOST_BASE_DIR}/kuloko/postgres/secret/POSTGRES_INIT_PASSWORD
+    file: ${HOST_BASE_DIR}/geco_commons/postgres/secret/POSTGRES_INIT_PASSWORD
   POSTGRES_INIT_DBNAME:
-    file: ${HOST_BASE_DIR}/kuloko/postgres/secret/POSTGRES_INIT_DBNAME
+    file: ${HOST_BASE_DIR}/geco_commons/postgres/secret/POSTGRES_INIT_DBNAME
