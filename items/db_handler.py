@@ -109,8 +109,5 @@ class DbHandler:
 
         return datas
 
-    def update_table(self):
-        pass
-
-    def insert_table(self):
+    def insert_ohlcv(self):
         pass

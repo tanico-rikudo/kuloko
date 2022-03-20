@@ -6,17 +6,30 @@ from util import daylib
 dl = daylib.daylib()
 
 
-def calc_ohlcv(trade):
+def calc_ohlcv(trade, granuity="T", datetime_col="datetime"):
     """
     Clac ohlcv
     :param trade:
     :return:
     """
-    ohlc = data.price.resample("T", label="left", closed="left").ohlc()
+    syms = list(set(trade.symbol))
+    assert len(syms) == 1, f"data must have only one sym. syms={syms}"
+
+    sym = syms[0]
+    ohlc = trade.loc[:, "price"].resample(granuity, label="left", closed="left").ohlc()
     ohlc.loc[:, ["open", "high", "low", "close"]] = ohlc.loc[
         :, ["open", "high", "low", "close"]
     ].fillna(method="ffill")
-    return ohlc
+    v = (
+        trade.loc[:, ["size"]]
+        .resample(granuity)
+        .sum()
+        .rename(columns={"size": "volume"})
+    )
+
+    ohlcv = pd.concat([ohlc, v], axis=1)
+    ohlcv["symbol"] = sym
+    return ohlcv
 
 
 def calc_daily_volatility(

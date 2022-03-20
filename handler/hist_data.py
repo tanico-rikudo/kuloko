@@ -62,7 +62,7 @@ class histData(Item):
                 f"[DONE] Download trade. Sym={symbol}, Date={since_date}~{until_date}"
             )
 
-    #### Fetch hist data ###
+    #### Fetch and Send hist data ###
     def get_data(self, ch, sym, sd, ed):
         if ch == "trade":
             data = self.get_hist_trades(sym, sd, ed)
@@ -75,6 +75,8 @@ class histData(Item):
         else:
             raise Exception(f"Not support channel={ch}")
         return data
+
+    ### Create or Get data ###
 
     def get_hist_trades(self, sym, sd, ed):
         target_dates = set(dl.get_between_date(sd, ed))
@@ -188,21 +190,26 @@ class histData(Item):
         df_empty = self.create_dataframe(
             columns=[
                 "symbol",
-                "ask",
-                "bid",
+                "dateime",
                 "open",
                 "high",
                 "low",
-                "last",
+                "close",
                 "volume",
-                "datetime",
             ],
             index_col="datetime",
         )
         df = pd.concat([df_empty, df], axis=0)
         if (df is None) or (df.shape[0] == 0):
             self.logger.warning("[Failure] Orderbook fetching.")
-        return df
+
+        df_ohlcv = calc_ohlcv(df)
+        datetime_col = "datetime"
+        df_ohlcv.reset_index(inplace=True)
+        df_ohlcv.loc[:, datetime_col] = df_ohlcv.loc[:, datetime_col].apply(
+            lambda x: dl.dt_to_strYMDHMSFformat(x)
+        )
+        return df_ohlcv
 
     def create_dataframe(self, columns, index_col=None):
         """Create Empty DataFrame
