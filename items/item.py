@@ -1,9 +1,5 @@
 import os
 import sys
-import logging
-import logging.config
-
-from datetime import datetime as dt
 
 # Path
 KULOKO_DIR = os.environ["KULOKO_DIR"]
@@ -11,7 +7,6 @@ MONGO_DIR = os.environ["MONGO_DIR"]
 LOGDIR = os.environ["KULOKO_LOGDIR"]
 
 # DB libs
-from pymongo import MongoClient
 
 sys.path.append(os.environ["COMMON_DIR"])
 from mongodb.src.mongo_handler import *
@@ -41,9 +36,6 @@ class Item(object):
         private_api_mode="DEFAULT",
         logger=None,
     ):
-        import configparser
-        import logging
-        import logging.config
 
         # Metas
         self.name = name

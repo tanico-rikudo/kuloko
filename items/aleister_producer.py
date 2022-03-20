@@ -2,8 +2,7 @@ import sys, os
 import time
 import pika
 from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
-from .item import Item
+from item import Item
 import public_api
 import private_api
 
