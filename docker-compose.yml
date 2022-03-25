@@ -13,7 +13,7 @@ services:
       TZ: "Asia/Tokyo"
     tty: true
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - ${HOST_DATA_BASE_DIR}/kuloko_pg:/var/lib/postgresql/data
       - ${HOST_BASE_DIR}/geco_commons/postgres/init:/docker-entrypoint-initdb.d:ro
