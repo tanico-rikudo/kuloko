@@ -304,13 +304,13 @@ class Ticks(API):
             private_api_mode,
         )
 
-    def fetch(self, depth=None, return_type="json", *args, **kwargs):
+    def fetch(self, return_type="json", *args, **kwargs):
         target_url = self.get_url("tick", self.sym)
         self._logger.debug(f"Ticker Query.. {target_url}")
         tick = self.fetch_data(target_url)
         data = self.convert_shape(tick, return_type)
         self._logger.info(
-            "[DONE] Fetch ticks. Depth={0}, Return_type={1}".format(depth, return_type)
+            f"[DONE] Fetch ticks. Return_type={return_type}"
         )
         return data
 
@@ -320,7 +320,7 @@ class Ticks(API):
             return raw_data
         elif return_type is "json":
             data = {}
-            for _item in ["ask", "bid", "open", "high", "last", "low", "volume"]:
+            for _item in ["ask", "bid", "high", "last", "low", "volume"]:
                 data[_item] = float(raw_data["data"][0][_item])
             data["timestamp"] = dl.dt_to_strYMDHMSF(
                 dl.str_utc_to_dt_offset(raw_data["data"][0]["timestamp"], self.tz)

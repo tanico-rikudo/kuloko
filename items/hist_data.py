@@ -2,13 +2,13 @@ import time
 import pandas as pd
 import copy
 
-from item import Item
+from .item import Item
 
 from util import daylib
 
 dl = daylib.daylib()
 
-from calc_data import *
+from .calc_data import *
 
 
 class histData(Item):
@@ -90,7 +90,7 @@ class histData(Item):
             sym, "trade", sd, ed, is_save=True, mode="auto"
         )
         file_data = pd.concat([df_empty, file_data], axis=0)
-        self.logger.warning(f"[DONE] file_data fetching. Size={file_data.shape}")
+        self.logger.info(f"[DONE] file_data fetching. Size={file_data.shape}")
 
         # Fill by db (index is datetime)
         db_data = pd.concat(
@@ -101,7 +101,7 @@ class histData(Item):
             axis=0,
         )
         db_data = pd.concat([df_empty, db_data], axis=0)
-        self.logger.warning(f"[DONE] db_data fetching. Size={db_data.shape}")
+        self.logger.info(f"[DONE] db_data fetching. Size={db_data.shape}")
 
         # _columns = file_data.reset_index().columns
         # if file_data.shape[0] > 0 and db_data.shape[0] > 0:
@@ -123,7 +123,7 @@ class histData(Item):
         if (trade_data is None) or (trade_data.shape[0] == 0):
             self.logger.warning("[Failure] trades fetching.")
             return None
-        self.logger.warning(f"[DONE] trades fetching. Size={trade_data.shape}")
+        self.logger.info(f"[DONE] trades fetching. Size={trade_data.shape}")
         return trade_data
 
     def get_hist_orderbooks(self, sym, sd, ed):
@@ -157,7 +157,7 @@ class histData(Item):
             index_col="datetime",
         )
         df = pd.concat([df_empty, df], axis=0)
-        self.logger.warning(f"[DONE] orderbook fetching. Size={df.shape}")
+        self.logger.info(f"[DONE] orderbook fetching. Size={df.shape}")
         if df.shape[0] == 0:
             self.logger.warning("Orderbook is None.")
         return df

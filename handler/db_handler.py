@@ -91,20 +91,20 @@ class DbHandler:
         """
         Get realtime feed data from DB
         """
-        dastas = pd.DataFrame(
+        df = pd.DataFrame(
             self.db_accesser.find_between_dates(
                 table_name, sd=str(start_date), ed=str(end_date), symbol=sym
             )
         )
         for _key in ["_id", "channel"]:
-            if _key in raw_data.keys():
-                del raw_data[_key]
+            if _key in df.keys():
+                del df[_key]
         # raw_data["date"] = _date
-        datas.append(raw_data)
+        # datas.append(raw_data)
 
-        if datas.shape[0] > 0 and table_name in ["trade", "orderbook", "ticker"]:
-            datas["datetime"] = datas["time"].apply(lambda x: dl.strYMDHMSF_to_dt(x))
-            del datas["time"]
-            datas.set_index("datetime", inplace=True)
+        if df.shape[0] > 0 and table_name in ["trade", "orderbook", "ticker"]:
+            df["datetime"] = df["time"].apply(lambda x: dl.strYMDHMSF_to_dt(x))
+            del df["time"]
+            df.set_index("datetime", inplace=True)
 
-        return datas
+        return df

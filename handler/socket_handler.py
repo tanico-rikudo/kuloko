@@ -55,6 +55,8 @@ class Socket(object):
         )
         self.set_config()
 
+        self.private_api_ini = private_api_ini
+
         self.channel = channel
         self.load_urls()
         self.ws = None
@@ -102,11 +104,11 @@ class Socket(object):
     def get_private_socket_url(self):
         return self.url_parts["private"]
 
-    def connect(self, url, sym, maxlen=100, opt_open_message={}):
+    def connect(self, url, sym, maxlen=100, opt_open_message=None):
         self.url = url
         self.maxlen = maxlen
         self.sym = sym
-        self.opt_open_message = opt_open_message
+        self.opt_open_message = opt_open_message if opt_open_message is not None else {}
         self.queue = deque([], self.maxlen)
         self.ws = websocket.WebSocketApp(
             url,
@@ -186,12 +188,19 @@ class Socket(object):
         self.connect(self.url, self.sym, self.opt_open_message)
 
     def on_close(self, ws, close_status_code, close_msg):
-        message = {
-            "command": "disconnected",
-            "channel": self.channel,
-            "symbol": self.sym,
-        }
-        self.ws.send(json.dumps(message))
+        """
+        Post process after close
+        :param ws: web socket
+        :param close_status_code:
+        :param close_msg:
+        :return:
+        """
+        # message = {
+        #     "command": "disconnected",
+        #     "channel": self.channel,
+        #     "symbol": self.sym,
+        # }
+        # self.ws.send(json.dumps(message))
         self._logger.info(f"Websocket disconnected. Channel={self.channel}")
 
     def on_open(self, ws):
@@ -205,13 +214,13 @@ class Socket(object):
         send_text = timestamp + access_method + access_path + request_body
 
         sign = hmac.new(
-            bytes(self.private_api_config.get("API_SEC").encode("ascii")),
+            bytes(self.private_api_ini.get("API_SEC").encode("ascii")),
             bytes(send_text.encode("ascii")),
             hashlib.sha256,
         ).hexdigest()
 
         headers = {
-            "API-KEY": self.private_api_config.get("API_KEY"),
+            "API-KEY": self.private_api_ini.get("API_KEY"),
             "API-TIMESTAMP": timestamp,
             "API-SIGN": sign,
         }
@@ -412,7 +421,7 @@ class Ticker(Socket):
             return raw_data
         elif return_type is "json":
             data = {}
-            for _item in ["ask", "bid", "open", "high", "last", "low", "volume"]:
+            for _item in ["ask", "bid", "high", "last", "low", "volume"]:
                 data[_item] = float(raw_data[_item])
             data["time"] = dl.dt_to_strYMDHMSF(
                 dl.str_utc_to_dt_offset(raw_data["timestamp"], self.tz)

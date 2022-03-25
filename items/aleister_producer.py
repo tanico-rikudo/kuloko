@@ -2,15 +2,16 @@ import sys, os
 import time
 import pika
 from apscheduler.schedulers.blocking import BlockingScheduler
-from item import Item
-import public_api
-import private_api
+
+from .item import Item
+from . import public_api
+from . import private_api
 
 sys.path.append(os.environ["COMMON_DIR"])
 from mongodb.src.mongo_handler import *
 import json
 from mq.mq_handler import *
-import hist_data
+from . import hist_data
 
 
 #  stand alone from ITEM
@@ -55,14 +56,14 @@ class AleisterProducer(Item):
             self.routing_key = {}
 
     """" Initilize  """
-
-    def init_db(self):
-        # Init mongo
-        self.init_mongodb()
-
-        # wrap util
-        self.db_accesser = MongoUtil(self.mongodb, self.logger)
-        self.logger.info("[DONE] Init mongo DB wrpper")
+    #
+    # def init_db(self):
+    #     # Init mongo
+    #     self.init_mongodb()
+    #
+    #     # wrap util
+    #     self.db_accesser = MongoUtil(self.mongodb, self.logger)
+    #     self.logger.info("[DONE] Init mongo DB wrpper")
 
     def init_skt(self):
         self.socket_handler = {

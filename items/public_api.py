@@ -1,6 +1,6 @@
 import time
 from datetime import datetime as dt
-from item import Item
+from .item import Item
 
 from util import daylib
 from util import utils
@@ -11,7 +11,7 @@ import copy
 
 
 class venueStatus(Item):
-    def __init__(self):
+    def __init__(self, symbol, general_config_mode, private_api_mode):
         super(venueStatus, self).__init__(
             name="venueStatus",
             item_type="venueStatus",
@@ -161,7 +161,7 @@ class Ticker(Item):
     ## API
     def fetch(self, return_type="json"):
         try:
-            res = self.ticks_web_api.fetch(return_type)
+            res = self.ticks_web_api.fetch(return_type=return_type)
             insert_json = copy.deepcopy(res)
             if return_type == "json":
                 self.mongodb.insert_one(insert_json)

@@ -1,12 +1,11 @@
 import argparse
 import os, sys
 
-sys.path.append(os.path.join(os.environ["KULOKO_DIR"], "items"))
-sys.path.append(os.path.join(os.path.dirname("__file__"), ".."))
+sys.path.append(os.environ["KULOKO_DIR"])
 sys.path.append(os.environ["COMMON_DIR"])
 
 from items.aleister_producer import AleisterProducer
-import hist_data
+from items import hist_data
 from mq.mq_handler import *
 
 

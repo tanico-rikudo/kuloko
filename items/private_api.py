@@ -1,5 +1,5 @@
 import time
-from item import Item
+from .item import Item
 import json
 from util.exceptions import *
 import copy
@@ -37,7 +37,7 @@ class Assets(Item):
         super(Assets, self).__init__(
             name="assets",
             item_type="assets",
-            symbol=symbol,
+            symbol='MYWALLET',
             general_config_mode=general_config_mode,
             private_api_mode=private_api_mode,
         )

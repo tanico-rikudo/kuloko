@@ -51,7 +51,7 @@ class Item(object):
         # Init Logger
         if logger is None:
             self.logger = cm.load_log_config(
-                os.path.join(KULOKO_DIR, "logging.log"), log_name="KULOKO"
+                os.path.join(LOGDIR, "logging.log"), log_name="KULOKO"
             )
         else:
             self.logger = logger
