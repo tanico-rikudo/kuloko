@@ -1,8 +1,12 @@
 import time
-from .item import Item
+import os,sys
+
 import json
-from util.exceptions import *
 import copy
+sys.path.append(os.environ["KULOKO_DIR"])
+from items.item import Item
+from util.exceptions import *
+
 
 
 class Margin(Item):

@@ -3,7 +3,9 @@ import time
 import pika
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from .item import Item
+
+sys.path.append(os.environ["KULOKO_DIR"])
+from items.item import Item
 from . import public_api
 from . import private_api
 
@@ -126,9 +128,10 @@ class AleisterProducer(Item):
         Start subscrie in all set socket
         """
         for obj_name in self.socket_handler.keys():
+            # Note:
             # Measure for "ERR-5003 Request too many
             # GMO rejects subscription request more than 1 per second
-            time.sleep(1.01)
+            time.sleep(1.5)
             self.socket_handler[obj_name].subscribe()
 
         self.logger.info(f"[START] Subscribe via socket handler.")

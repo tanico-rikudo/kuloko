@@ -1,8 +1,10 @@
+import sys,os
 import time
 import pandas as pd
 import copy
 
-from .item import Item
+sys.path.append(os.environ["KULOKO_DIR"])
+from items.item import Item
 
 from util import daylib
 

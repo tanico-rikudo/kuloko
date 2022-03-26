@@ -101,12 +101,12 @@ class histFeedAgent(baseFeedAgent):
         since_date = (
             since_date if since_date is not None else self.dl.add_day(until_date, 3)
         )
-        kinds = trades if trades is not None else ["trades"]
+        kinds = kinds if kinds is not None else ["trades"]
 
         self.listed_syms = self.general_config.get("LISTED_SYM")
         for _kind in kinds:
             for _sym in self.listed_syms:
-                _ = self.hd.load(_sym, _kind, since_date, until_date)
+                _ = self.hd.get_data(_sym, _kind, since_date, until_date)
                 self.logger.info(f"[DONE] Download hist. Kind={_kind}, Sym={_sym}")
 
     """ Puck hist data and send it via MQ """
