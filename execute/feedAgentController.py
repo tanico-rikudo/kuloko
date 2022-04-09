@@ -6,7 +6,7 @@ sys.path.append(os.environ["COMMON_DIR"])
 
 from items.aleister_producer import AleisterProducer
 from items import hist_data
-from mq.mq_handler import *
+from mq import mq_handler as mq_handler
 
 
 class baseFeedAgent(object):
@@ -21,7 +21,7 @@ class baseFeedAgent(object):
         self.routing_key = self.ap.routing_key[feed_type]
 
     def init_mqclient(self):
-        self.mq_rpc_client = RpcClient(
+        self.mq_rpc_client = mq_handler.init_mqclient(
             self.mqserver_host, self.mqname, self.routing_key, self.logger
         )
         self.logger.info("[DONE] New mq client")
