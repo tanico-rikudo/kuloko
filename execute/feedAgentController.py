@@ -20,10 +20,11 @@ class baseFeedAgent(object):
         self.mqname = self.ap.mqname[feed_type]
         self.routing_key = self.ap.routing_key[feed_type]
 
-    def init_mqclient(self):
+    def open_mqclient(self):
         self.mq_rpc_client = mq_handler.init_mqclient(
             self.mqserver_host, self.mqname, self.routing_key, self.logger
         )
+        self.mq_rpc_client.connect_mq()
         self.logger.info("[DONE] New mq client")
 
 
@@ -58,7 +59,7 @@ class realtimeFeedAgent(baseFeedAgent):
         """
         Kill fethcing market data and send it to MQ
         """
-        self.init_mqclient()
+        self.open_mqclient()
         self.mq_rpc_client.end_call()
         del self.ap
         self.logger.info("[STOP] AleisterFeedAgent Realtime Privide")
@@ -133,7 +134,7 @@ class histFeedAgent(baseFeedAgent):
         """
         Kill fethcing hist data and send it to MQ
         """
-        self.init_mqclient()
+        self.open_mqclient()
         self.mq_rpc_client.end_call()
         del self.ap
         self.logger.info("[STOP] AleisterFeedAgent Histdata Privide")

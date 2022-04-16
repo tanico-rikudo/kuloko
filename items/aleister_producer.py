@@ -190,18 +190,16 @@ class AleisterProducer(Item):
         """
         result = {}
         # fetch socket api
-        cnt = 0
         for obj_name in self.socket_handler.keys():
             result[obj_name] = self.socket_handler[obj_name].dequeue()
-            cnt += len(result[obj_name]) if result[obj_name] is not None else 0
-        self.logger.info(f"[DONE] Fetch data from socket. Count={cnt}")
+            cnt = len(result[obj_name]) if result[obj_name] is not None else 0
+            self.logger.info(f"[DONE] Fetch data from socket. Object={obj_name}, Count={cnt}")
 
         # fetch rest api
-        cnt = 0
         for obj_name in self.rest_handler.keys():
             result[obj_name] = self.rest_handler[obj_name].fetch("json")
-            cnt += len(result[obj_name])
-        self.logger.info(f"[DONE] Fetch data from api. Count={cnt}")
+            cnt = len(result[obj_name])
+            self.logger.info(f"[DONE] Fetch data from api. Object={obj_name}, Count={cnt}")
         json_result = json.dumps(result)
         # print(json_result)
         return json_result
@@ -264,7 +262,7 @@ class AleisterProducer(Item):
                     body=data,
                 )
                 ch.basic_ack(delivery_tag=method.delivery_tag)
-                self.logger.info(f"[RETURN] Returrn RPC request(real). ID={corr_id}")
+                self.logger.info(f"[RETURN] Returrn RPC request(real). ID={corr_id}. Return to {properties.reply_to}")
             else:
                 self.logger.warning(
                     f"[Skip] No Returrn address. Skip return RPC request. ID={corr_id}"
