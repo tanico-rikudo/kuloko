@@ -1,32 +1,77 @@
 version: "3"
-services: 
+services:
+
+  postgres:
+    container_name: kuloko_pg
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_INIT_USERNAME
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_INIT_PASSWORD
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_INIT_DBNAME
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: "Asia/Tokyo"
+    tty: true
+    ports:
+      - 5433:5432
+    volumes:
+      - ${HOST_DATA_BASE_DIR}/kuloko_pg:/var/lib/postgresql/data
+      - ${HOST_BASE_DIR}/geco_commons/postgres/init:/docker-entrypoint-initdb.d:ro
+    secrets:
+      - POSTGRES_INIT_USERNAME
+      - POSTGRES_INIT_PASSWORD
+      - POSTGRES_INIT_DBNAME
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.4
+
+  pgadmin:
+    container_name: kuloko_pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 81:80
+    # Better to outside 
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kazuyo.rikudo@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - ${HOST_DATA_BASE_DIR}/kuloko_pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      shared-nw:
+        ipv4_address: 172.30.0.5
+
   mongo:
     container_name: kuloko_mongo
     image: mongo
     restart: always
     environment:
-        - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/MONGO_INITDB_ROOT_USERNAME
-        - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/MONGO_INITDB_ROOT_PASSWORD
-        - MONGO_INITDB_DATABASE=local
-    # environment:
-    #     MONGO_INITDB_ROOT_USERNAME: admin
-    #     MONGO_INITDB_ROOT_PASSWORD: pw
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGO_INITDB_ROOT_PASSWORD
     ports:
-      - 27017:27017
+      - 27018:27018
     volumes:
-      - ./db:/data/db
-      - ./configdb:/data/configdb
-      - ${HOST_BASE_DIR}/geco_commons/mongodb/init/:/docker-entrypoint-initdb.d
-    env_file:
-      .env
-    command: --auth
+      - ${HOST_DATA_BASE_DIR}/kuloko_db:/data/db
+      - ${HOST_DATA_BASE_DIR}/kuloko_db/configdb:/data/configdb
+      - ${HOST_BASE_DIR}/geco_commons/mongodb/init/:/docker-entrypoint-initdb.d:ro
+    env_file: .env
+    command: mongod --port 27018 --auth
     networks:
       shared-nw:
         ipv4_address: 172.30.0.1
-    privileged: true
+    # privileged: true
     secrets:
       - MONGO_INITDB_ROOT_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27018/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   mongo-express:
     container_name: kuloko_mongo_express
@@ -35,16 +80,18 @@ services:
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-    env_file:
-      .env
+      ME_CONFIG_MONGODB_SERVER: kuloko_mongo
+      ME_CONFIG_MONGODB_PORT: 27018
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo_admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo_pw
+    env_file: .env
     networks:
       shared-nw:
         ipv4_address: 172.30.0.2
     depends_on:
-      - mongo
-      
+      mongo:
+        condition: service_healthy
+
   kuloko_python:
     container_name: kuloko_python
     build:
@@ -56,25 +103,34 @@ services:
     working_dir: ${BASE_DIR}
     environment:
       HOME: ${KULOKO_DIR}
-    env_file:
-      .env
+    env_file: .env
     restart: always
+    ports:
+      - 9898:9898
+    expose:
+      - 9898
+    command: jupyter lab --allow-root --ip=0.0.0.0 --port=9898 --no-browser --NotebookApp.token=''
     tty: true
-
     networks:
       shared-nw:
         ipv4_address: 172.30.0.3
 
 networks:
-    default:
-      external:
-          name: bridge
-    # Connection  among conntianers
-    shared-nw:
-      external: true
+  default:
+    external:
+      name: bridge
+  # Connection  among conntianers
+  shared-nw:
+    external: true
 
 secrets:
   MONGO_INITDB_ROOT_USERNAME:
-    file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/.MONGO_INITDB_ROOT_USERNAME
+    file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/MONGO_INITDB_ROOT_USERNAME
   MONGO_INITDB_ROOT_PASSWORD:
-    file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/.MONGO_INITDB_ROOT_PASSWORD
+    file: ${HOST_BASE_DIR}/geco_commons/mongodb/secret/MONGO_INITDB_ROOT_PASSWORD
+  POSTGRES_INIT_USERNAME:
+    file: ${HOST_BASE_DIR}/geco_commons/postgres/secret/POSTGRES_INIT_USERNAME
+  POSTGRES_INIT_PASSWORD:
+    file: ${HOST_BASE_DIR}/geco_commons/postgres/secret/POSTGRES_INIT_PASSWORD
+  POSTGRES_INIT_DBNAME:
+    file: ${HOST_BASE_DIR}/geco_commons/postgres/secret/POSTGRES_INIT_DBNAME

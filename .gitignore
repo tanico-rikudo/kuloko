@@ -143,3 +143,15 @@ db/
 
 # Mac
 .DS_Store
+
+#jupyter
+.jupyter
+.local
+.ipython
+
+#vscode
+.vscode
+
+#mongo secret
+postgres/secret/*
+postgres/init/*
